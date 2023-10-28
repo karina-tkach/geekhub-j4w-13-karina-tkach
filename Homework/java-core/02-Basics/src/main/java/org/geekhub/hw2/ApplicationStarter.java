@@ -13,7 +13,8 @@ public class ApplicationStarter {
                 System.out.println("The number of students must greater than zero");
                 System.exit(0);
             } else {
-               //
+                String[] studentsInfo = collectStudentsInfo(numberOfStudents);
+                displayAverageGrades(studentsInfo, numberOfStudents);
             }
         }
     }
@@ -48,5 +49,33 @@ public class ApplicationStarter {
             }
         } while (isWrong);
         return property;
+    }
+
+    public static void displayAverageGrades(String[] studentsInfo, int numberOfStudents) {
+        double sumOfMathGrades = 0;
+        double sumOfScienceGrades = 0;
+        double sumOfHistoryGrades = 0;
+        System.out.println();
+        System.out.println("Average Grades for Each Student:");
+        for (int i = 0; i < studentsInfo.length; i += 4) {
+            int mathGrade = Integer.parseInt(studentsInfo[i + 1]);
+            sumOfMathGrades += mathGrade;
+            int scienceGrade = Integer.parseInt(studentsInfo[i + 2]);
+            sumOfScienceGrades += scienceGrade;
+            int historyGrade = Integer.parseInt(studentsInfo[i + 3]);
+            sumOfHistoryGrades += historyGrade;
+            double average = calculateAverage(mathGrade, scienceGrade, historyGrade);
+            System.out.printf("%s: %f%n", studentsInfo[i], average);
+        }
+        System.out.println();
+        System.out.println("Average Grades for Each Subject:");
+        System.out.printf("Math: %f%n", sumOfMathGrades / numberOfStudents);
+        System.out.printf("Science: %f%n", sumOfScienceGrades / numberOfStudents);
+        System.out.printf("History: %f%n", sumOfHistoryGrades / numberOfStudents);
+    }
+
+    public static double calculateAverage(int firstNumber, int secondNumber, int thirdNumber) {
+        final double COUNT_OF_NUMBERS = 3.0;
+        return (firstNumber + secondNumber + thirdNumber) / COUNT_OF_NUMBERS;
     }
 }
