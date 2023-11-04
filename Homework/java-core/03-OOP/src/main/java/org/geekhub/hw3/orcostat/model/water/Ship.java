@@ -1,16 +1,16 @@
-package org.geekhub.hw3.orcostat.model.ground;
+package org.geekhub.hw3.orcostat.model.water;
 
 import org.geekhub.hw3.orcostat.model.Collection;
 import org.geekhub.hw3.orcostat.model.Orc;
 import org.geekhub.hw3.orcostat.model.SimpleCollection;
 import org.geekhub.hw3.orcostat.model.Technique;
 
-public class Tank implements Technique {
+public class Ship implements Technique {
     private final Collection equipage;
-    private static final int TANK_PRICE = 3_000_000;
+    private static final int SHIP_PRICE = 50_000_000;
     private final int maxEquipageSize;
 
-    public Tank(int maxEquipageSize) {
+    public Ship(int maxEquipageSize) {
         equipage = new SimpleCollection(maxEquipageSize);
         this.maxEquipageSize = maxEquipageSize;
     }
@@ -40,11 +40,11 @@ public class Tank implements Technique {
 
     @Override
     public int getPrice() {
-        return TANK_PRICE;
+        return SHIP_PRICE;
     }
 
     @Override
     public String shoot() {
-        return "Bam!";
+        return "Bang!";
     }
 }

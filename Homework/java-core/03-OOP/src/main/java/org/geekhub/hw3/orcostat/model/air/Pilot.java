@@ -6,7 +6,7 @@ public class Pilot extends Orc {
     private final int flewHours;
 
     public Pilot() {
-        this.flewHours = 0;
+        this(0);
     }
 
     public Pilot(int flewHours) {
