@@ -4,57 +4,126 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Provides methods to perform various operations on different collections.
+ */
 public interface Expander {
 
-    //can accept any collection with any number
-    //return double value if you get an empty collection return double maximum value
+    /**
+     * Returns the minimum value from a collection of numbers, or max value of type double if collection is empty.
+     *
+     * @param collection collection consisting of numbers.
+     * @return the minimum value from the collection as a double. If the collection is empty, returns Double.MAX_VALUE.
+     */
     double getMinValue(Collection<? extends Number> collection);
 
-    //can accept any collection with any number
-    //return double value if you get an empty collection return double minimum value
+    /**
+     * Returns the maximum value from a collection of numbers or min value of type double if collection is empty.
+     *
+     * @param collection collection consisting of numbers.
+     * @return the maximum value from the collection as a double. If the collection is empty, returns Double.MIN_VALUE.
+     */
     double getMaxValue(Collection<? extends Number> collection);
 
-    //can accept any collection with any number
-    //return a double if you get an empty collection return 0.0
+    /**
+     * Returns the sum of all numbers in a collection, or zero, if collection is empty.
+     *
+     * @param collection collection consisting of numbers.
+     * @return the sum of all numbers in the collection as a double. If the collection is empty, returns 0.0.
+     */
     double getSum(Collection<? extends Number> collection);
 
-    //must combine the entire object into one line, each element must be separated by the provided delimiter,
-    // it is better to use StringBuilder, no separator is needed after the last element;
+    /**
+     * Combines the elements of a collection into a single string, separated by the provided delimiter.
+     *
+     * @param collection the collection of elements to be joined.
+     * @param delimiter  the delimiter used for separating the elements.
+     * @return a string that is the result of joining the elements of the collection.
+     */
     String join(Collection<?> collection, char delimiter);
 
-    //Get a list of numbers, reverse the order of elements, return a double list
+    /**
+     * Returns a new list with reversed order of elements from provided list.
+     *
+     * @param collection the list of numbers to be reversed.
+     * @return a new list with the elements of type double in reverse order.
+     */
     List<Double> reversed(List<? extends Number> collection);
 
-    //Get any collection, split it into a collection list, size determined by amount
-    //a fragment must have the same number of elements, the maximum difference in size is 1
+    /**
+     * Splits a collection into a list of smaller lists, where the size of each sublist is determined by the amount parameter.
+     * Each sublist have the same number of elements, with a maximum difference in size of 1.
+     *
+     * @param collection the collection to be split.
+     * @param amount the size of each sublist.
+     * @return a list of lists, where each sublist contains a portion of the original collection.
+     */
     List<List<Object>> chunked(Collection<?> collection, int amount);
 
-    //if criterion is int, only one element by index should be deleted if criterion is an object
-    //should remove all the same elements from the list
-    //can take a list on any object
+    /**
+     * Removes elements from a list based on a given criterion.
+     * If the criterion is an int, only one element at the specified index will be removed.
+     * If the criterion is an object, all occurrences of the object will be removed from the list.
+     *
+     * @param list the list from which elements will be removed.
+     * @param criteria the criterion used to determine which elements to remove.
+     * @return a new list without the removed elements.
+     */
     @SuppressWarnings("java:S1452")
     List<?> dropElements(List<?> list, Object criteria);
 
-    // should get any instance of the class and return a parameterized collection with the type of that instance
-    //and with the passed object inside
+    /**
+     * Returns a parameterized collection with the type of the input instance and with the passed object inside.
+     *
+     * @param t the instance of the class. It can be of any type.
+     * @return a collection with the passed object inside.
+     */
     <T> List<T> getClassList(T t);
 
-    //must remove all duplicates and nulls, order must be preserved
+    /**
+     * Removes all duplicates and null values from the given collection while preserving the order.
+     *
+     * @param collection the collection from which duplicates and null values need to be removed.
+     * @return a new list without duplicates and null values.
+     */
     <T> List<T> removeDuplicatesAndNull(List<T> collection);
 
-    //must group all items separately and return a map where the key itself is the value and the value is the collection
-    //all duplicate keys
+    /**
+     * Groups all items separately and returns a map where the key itself is the value and the value is the collection of all duplicate keys.
+     *
+     * @param collection the collection of items to be grouped.
+     * @return a map where the key is the value itself and the value is the collection of all duplicate keys.
+     */
     <T> Map<T, Collection<T>> grouping(Collection<T> collection);
 
-    //should merge two map into one
+    /**
+     * Merges two maps into one.
+     *
+     * @param map1 The first map to be merged.
+     * @param map2 The second map to be merged.
+     * @return Returns a new map that is a merge of the two input maps.
+     */
     <T, U> Map<T, U> merge(Map<T, U> map1, Map<T, U> map2);
 
-    //should set default value for each entry where value is null
+    /**
+     * Sets default value for each entry where value is null.
+     *
+     * @param map the map with elements.
+     * @param defaultValue the value to replace null with.
+     * @return a new map that has replaced null values.
+     */
     <T, U> Map<T, U> applyForNull(Map<T, U> map, U defaultValue);
 
-    //must return a collection of elements where each element must meet the following requirements
-    // be key in first or second map
-    //if this is the key in the first, then the second map should have this value
-    //if this is the key in second then the first map should have this value
+    /**
+     * Returns a collection of elements where each element is key in first or second map.
+     * <br>
+     * Requirements:
+     * 1. If element is the key in the first, then the second map should have this value.
+     * 2. If element is the key in second then the first map should have this value.
+     *
+     * @param map1 first map with elements.
+     * @param map2 second map with elements.
+     * @return a collection of elements where each element meets specified requirements.
+     */
     <T> Collection<T> collectingList(Map<T, T> map1, Map<T, T> map2);
 }
