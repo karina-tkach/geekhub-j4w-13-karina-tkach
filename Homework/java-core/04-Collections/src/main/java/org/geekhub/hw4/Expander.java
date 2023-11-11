@@ -32,6 +32,7 @@ public interface Expander {
     //if criterion is int, only one element by index should be deleted if criterion is an object
     //should remove all the same elements from the list
     //can take a list on any object
+    @SuppressWarnings("java:S1452")
     List<?> dropElements(List<?> list, Object criteria);
 
     // should get any instance of the class and return a parameterized collection with the type of that instance
