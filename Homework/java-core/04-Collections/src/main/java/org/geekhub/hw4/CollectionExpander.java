@@ -12,6 +12,9 @@ import java.util.HashMap;
 public class CollectionExpander implements Expander {
     @Override
     public double getMinValue(Collection<? extends Number> collection) {
+        if (collection.isEmpty()) {
+            return Double.MAX_VALUE;
+        }
         double minValue = Double.MAX_VALUE;
         for (Number element : collection) {
             double number = element.doubleValue();
@@ -24,6 +27,9 @@ public class CollectionExpander implements Expander {
 
     @Override
     public double getMaxValue(Collection<? extends Number> collection) {
+        if (collection.isEmpty()) {
+            return Double.MIN_VALUE;
+        }
         double maxValue = Double.MIN_VALUE;
         for (Number element : collection) {
             double number = element.doubleValue();
@@ -45,13 +51,13 @@ public class CollectionExpander implements Expander {
 
     @Override
     public String join(Collection<?> collection, char delimiter) {
+        if (collection.isEmpty()) {
+            return "";
+        }
         StringBuilder resultedString = new StringBuilder();
-        boolean isFirst = true;
         for (Object element : collection) {
-            if (!isFirst) {
+            if (!resultedString.isEmpty()) {
                 resultedString.append(delimiter);
-            } else {
-                isFirst = false;
             }
             resultedString.append(element);
         }
@@ -89,15 +95,15 @@ public class CollectionExpander implements Expander {
         List<?> newList = new ArrayList<>(list);
         if (criteria instanceof Integer index) {
             newList.remove(index.intValue());
-        } else {
-            int index = 0;
-            while (index < newList.size()) {
-                Object element = newList.get(index);
-                if (element.equals(criteria)) {
-                    newList.remove(element);
-                } else {
-                    index++;
-                }
+            return newList;
+        }
+        int index = 0;
+        while (index < newList.size()) {
+            Object element = newList.get(index);
+            if (element.equals(criteria)) {
+                newList.remove(element);
+            } else {
+                index++;
             }
         }
         return newList;
