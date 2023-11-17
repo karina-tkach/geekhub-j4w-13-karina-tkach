@@ -19,15 +19,10 @@ public class Tank implements Technique {
         if (equipage.size() == maxEquipageSize) {
             return false;
         }
-        boolean isPresent = false;
-        for (Object presentedOrc : equipage.getElements()) {
-            if (presentedOrc == orc) {
-                isPresent = true;
-                break;
+        for (Object object : equipage.getElements()) {
+            if (object instanceof Orc presentedOrc && presentedOrc == orc) {
+                return false;
             }
-        }
-        if (isPresent) {
-            return false;
         }
         equipage.add(orc);
         return true;

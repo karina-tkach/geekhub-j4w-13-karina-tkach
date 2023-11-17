@@ -20,20 +20,26 @@ public class OrcoStat {
     public void smashTechnique(Technique technique) {
         destroyedTechnique.add(technique);
         Object[] equipage = technique.getEquipage().getElements();
-        for (Object orc : equipage) {
-            negativelyAliveOrcs.add(orc);
+        for (Object object : equipage) {
+            if (object instanceof Orc orc) {
+                negativelyAliveOrcs.add(orc);
+            }
         }
     }
 
     public int getLosesInDollars() {
         int orcsLosesInDollars = 0;
-        for (Object orc : negativelyAliveOrcs.getElements()) {
-            orcsLosesInDollars += ((Orc) orc).getPrice();
+        for (Object object : negativelyAliveOrcs.getElements()) {
+            if (object instanceof Orc orc) {
+                orcsLosesInDollars += orc.getPrice();
+            }
         }
 
         int techniqueLosesInDollars = 0;
-        for (Object technique : destroyedTechnique.getElements()) {
-            techniqueLosesInDollars += ((Technique) technique).getPrice();
+        for (Object object : destroyedTechnique.getElements()) {
+            if (object instanceof Technique technique) {
+                techniqueLosesInDollars += technique.getPrice();
+            }
         }
 
         return orcsLosesInDollars + techniqueLosesInDollars;
