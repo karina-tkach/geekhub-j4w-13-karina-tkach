@@ -1,9 +1,14 @@
 package org.geekhub.hw5;
 
+import org.geekhub.hw5.exception.ContentLengthNotKnownException;
+import org.geekhub.hw5.exception.FileExistException;
+import org.geekhub.hw5.exception.LimitSizeException;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
@@ -13,6 +18,7 @@ import java.util.stream.Collectors;
 import static org.geekhub.hw5.FileUtils.copyToFile;
 import static org.geekhub.hw5.FileUtils.createDirectories;
 import static org.geekhub.hw5.FileUtils.readAllLines;
+import static org.geekhub.hw5.FileUtils.writeToFile;
 
 public class Downloader {
 
@@ -42,8 +48,7 @@ public class Downloader {
 
             if (isValid(url, pathToFile, filename)) {
                 createDirectories(pathToFile);
-
-                //TODO-16 Use method for saving content to file AND REMOVE THIS MESSAGE
+                saveToFile(url, pathToFile, filename);
             }
         });
     }
@@ -55,7 +60,7 @@ public class Downloader {
             copyToFile(inputStream, path);
         } catch (IOException e) {
             String message = String.format("Download error: Unable to download file from link %s%n", url);
-            //TODO-17 Use method for writting message to log file AND REMOVE THIS MESSAGE
+            writeToFile(pathToLogFile, message.getBytes(StandardCharsets.UTF_8));
         }
     }
 
@@ -70,7 +75,7 @@ public class Downloader {
         try {
             return new URL(url);
         } catch (MalformedURLException e) {
-            //TODO-18 write code here AND REMOVE THIS MESSAGE
+            throw new IllegalArgumentException("Provided URL is wrong");
         }
     }
 
@@ -79,11 +84,11 @@ public class Downloader {
             return contentValidator.isValid(url, pathToFile.toString(), filename);
         } catch (IOException | LimitSizeException | ContentLengthNotKnownException e) {
             String message = e.getMessage();
-            //TODO-19 Use method for writting message to log file AND REMOVE THIS MESSAGE
+            writeToFile(pathToLogFile, message.getBytes(StandardCharsets.UTF_8));
             return false;
         } catch (FileExistException e) {
             String message = e.getMessage();
-            //TODO-20 Use method for writting message to log file AND REMOVE THIS MESSAGE
+            writeToFile(pathToLogFile, message.getBytes(StandardCharsets.UTF_8));
             return true;
         }
     }
