@@ -46,8 +46,9 @@ public class ContentValidator {
 
     private void isExistFile(String pathToFile, String filename, URL url) throws FileExistException {
         Path path = Path.of(pathToFile, filename);
+        String fullPath = path.toString();
         if (Files.exists(path)) {
-            throw new FileExistException(String.format("File %s is updated by url %s%n", path, url));
+            throw new FileExistException(String.format("File %s is updated by url: %s%n", fullPath.substring(fullPath.indexOf('/') + 1), url));
         }
     }
 }
