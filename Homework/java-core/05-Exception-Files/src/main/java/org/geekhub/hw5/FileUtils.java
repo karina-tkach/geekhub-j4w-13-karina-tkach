@@ -5,13 +5,12 @@ import org.geekhub.hw5.exception.FileException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
-import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class FileUtils {
 
@@ -23,7 +22,7 @@ public class FileUtils {
         try {
             return Files.readAllLines(Path.of(file), StandardCharsets.UTF_8);
         } catch (IOException e) {
-            throw new FileException(e.getMessage());
+            throw new FileException("Error happened while reading lines from file");
         }
     }
 
@@ -32,7 +31,7 @@ public class FileUtils {
             Files.createDirectories(path);
 
         } catch (IOException e) {
-            throw new FileException(e.getMessage());
+            throw new FileException("Error happened while creating directories");
         }
     }
 
@@ -41,7 +40,7 @@ public class FileUtils {
             Files.write(path, content);
         }
         catch(IOException e){
-            throw new FileException(e.getMessage());
+            throw new FileException("Error happened while writing to file");
         }
     }
 
@@ -50,7 +49,7 @@ public class FileUtils {
             Files.copy(inputStream, path, StandardCopyOption.REPLACE_EXISTING);
         }
         catch(IOException e){
-            throw new FileException(e.getMessage());
+            throw new FileException("Error happened while copying file");
         }
     }
 
@@ -61,33 +60,17 @@ public class FileUtils {
             }
         }
         catch(IOException e){
-            throw new FileException(e.getMessage());
+            throw new FileException("Error happened while creating file");
         }
     }
 
     public static void deleteDirectories(String directory) {
-        try {
-            Path pathToBeDeleted = Path.of(directory);
-            Files.walkFileTree(pathToBeDeleted,
-                new SimpleFileVisitor<>() {
-                    @Override
-                    public FileVisitResult postVisitDirectory(
-                        Path dir, IOException exc) throws IOException {
-                        Files.delete(dir);
-                        return FileVisitResult.CONTINUE;
-                    }
-
-                    @Override
-                    public FileVisitResult visitFile(
-                        Path file, BasicFileAttributes attrs)
-                        throws IOException {
-                        Files.delete(file);
-                        return FileVisitResult.CONTINUE;
-                    }
-                });
-        }
-        catch(IOException e){
-            throw new FileException(e.getMessage());
+        try (Stream<Path> pathStream = Files.walk(Path.of(directory))) {
+            pathStream
+                .sorted(Comparator.reverseOrder())
+                .forEach(FileUtils::deleteIfExists);
+        } catch (IOException e) {
+            throw new FileException("Error happened while deleting directories", e);
         }
     }
 
@@ -96,7 +79,7 @@ public class FileUtils {
             Files.deleteIfExists(path);
         }
         catch (IOException e){
-            throw new FileException(e.getMessage());
+            throw new FileException("Error happened while deleting file or directory");
         }
     }
 }

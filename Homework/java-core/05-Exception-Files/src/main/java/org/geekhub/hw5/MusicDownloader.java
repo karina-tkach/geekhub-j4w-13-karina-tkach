@@ -5,7 +5,7 @@ import static org.geekhub.hw5.FileUtils.deleteDirectories;
 public class MusicDownloader {
 
     public static void main(String[] args) {
-        String pathToPlaylist = "Homework/java-core/05-Exception-Files/src/main/resources/playlist.txt";
+        String pathToPlaylist = ClassLoader.getSystemResource("playlist.txt").getPath().substring(1);
         String pathToLogFile = "log.txt";
         String mainDirectory = "library";
         int maxFileSize = 10485760;
