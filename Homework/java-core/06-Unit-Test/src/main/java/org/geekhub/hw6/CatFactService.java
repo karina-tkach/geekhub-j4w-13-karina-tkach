@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.geekhub.hw6.exception.CatFactException;
 
 public class CatFactService {
     private static final String CAT_FACT_URL = "https://catfact.ninja/fact";
