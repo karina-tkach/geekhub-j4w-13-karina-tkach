@@ -39,7 +39,7 @@ class MainTest {
 
     @Test
     void main_invalidSecondArgument() {
-        String[] arguments = new String[]{"1", "C:\\temp\\./>user\\fir/>st.csv"};
+        String[] arguments = new String[]{"100", "temp\\>user\\fir/>st.csv"};
         assertThatCode(() -> Main.main(arguments)).isInstanceOf(ArgumentsException.class)
                 .hasMessage("Second argument cannot be converted to a Path");
     }
