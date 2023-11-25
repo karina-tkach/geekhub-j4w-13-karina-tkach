@@ -40,8 +40,7 @@ class MainTest {
     @Test
     void main_invalidSecondArgument() {
         String[] arguments = new String[]{"100", "Homework:\\123\\345\\123.txt"};
-        assertThatCode(() -> Main.main(arguments))
-                .isInstanceOf(ArgumentsException.class)
+        assertThatCode(() -> Main.main(arguments)).isInstanceOf(ArgumentsException.class)
                 .hasMessage("Second argument cannot be converted to a Path");
     }
 
