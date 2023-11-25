@@ -16,8 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(MockitoExtension.class)
 class MainTest {
 
-    private static final Path PATH_OF_FILE = Path.of(ClassLoader.getSystemResource("catFactTest.txt")
-            .getPath());
+    private static final Path PATH_OF_FILE = Path.of("test.txt");
 
     @AfterAll
     public static void deleteFile() throws IOException {
@@ -40,7 +39,7 @@ class MainTest {
 
     @Test
     void main_invalidSecondArgument() {
-        String[] arguments = new String[]{"100", "Homework:/123/345/123.txt"};
+        String[] arguments = new String[]{"100", "|src|test1|resources|catFactTest.txt"};
         assertThatCode(() -> Main.main(arguments)).isInstanceOf(ArgumentsException.class)
                 .hasMessage("Second argument cannot be converted to a Path");
     }

@@ -25,8 +25,7 @@ class CatFactWriterTest {
     private CatFactService catFactService;
 
     private final int TIME_INTERVAL = 1000;
-    private static final Path PATH_TO_FILE = Path.of(ClassLoader.getSystemResource("catFactTest.txt")
-            .getPath()); //Path.of("/Homework/src/test/resources/catFactTest.txt");
+    private static final Path PATH_TO_FILE = Path.of("test.txt");
     private CatFactWriter catFactWriter;
     private static final Path INVALID_PATH = Path.of("/src/test1/resources/catFactTest.txt");
 
