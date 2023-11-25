@@ -16,11 +16,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(MockitoExtension.class)
 class MainTest {
 
-    private static final Path filePath = Path.of("test.txt");
+    private static final Path PATH_OF_FILE = Path.of("./src/test/resources/catFactTest.txt");
 
     @AfterAll
     public static void deleteFile() throws IOException {
-        Files.deleteIfExists(filePath);
+        Files.deleteIfExists(PATH_OF_FILE);
     }
 
     @Test
@@ -39,15 +39,15 @@ class MainTest {
 
     @Test
     void main_invalidSecondArgument() {
-        String[] arguments = new String[]{"100", "Homework:\\123\\345\\123.txt"};
+        String[] arguments = new String[]{"100", "Homework:/123/345/123.txt"};
         assertThatCode(() -> Main.main(arguments)).isInstanceOf(ArgumentsException.class)
                 .hasMessage("Second argument cannot be converted to a Path");
     }
 
     @Test
     void main_successfulExecution() {
-        String[] arguments = new String[]{"100", filePath.toString()};
+        String[] arguments = new String[]{"100", PATH_OF_FILE.toString()};
         assertThatCode(() -> Main.main(arguments)).doesNotThrowAnyException();
-        assertTrue(Files.exists(filePath), "The file was not created.");
+        assertTrue(Files.exists(PATH_OF_FILE), "The file was not created.");
     }
 }
