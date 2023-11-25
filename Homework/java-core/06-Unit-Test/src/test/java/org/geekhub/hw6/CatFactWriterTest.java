@@ -64,7 +64,7 @@ class CatFactWriterTest {
     @Test
     void writeFactsToFile_whenUnableToCreate() {
         catFactWriter = new CatFactWriter(catFactService, timeInterval, Path.of("Homework\\java-core\\07-Unit-Test\\src\\main\\resources\\catFacts.txt"));
-        assertThatCode(catFactWriter::writeFactsToFile)
+        assertThatCode(() -> catFactWriter.writeFactsToFile())
             .isInstanceOf(FileException.class)
             .hasMessage("Fail to create file with provided path: Homework\\java-core\\07-Unit-Test\\src\\main\\resources\\catFacts.txt");
     }
