@@ -34,14 +34,14 @@ class MainTest {
     void main_invalidFirstArgument() {
         String[] arguments = new String[]{"a", "test.txt"};
         assertThatCode(() -> Main.main(arguments)).isInstanceOf(ArgumentsException.class)
-                .hasMessage("First argument must be numeric value");
+                .hasMessage("Exception in converting arguments");
     }
 
     @Test
     void main_invalidSecondArgument() {
-        String[] arguments = new String[]{"100", "|src|test1|resources|catFactTest.txt"};
+        String[] arguments = new String[]{"100", null};
         assertThatCode(() -> Main.main(arguments)).isInstanceOf(ArgumentsException.class)
-                .hasMessage("Second argument cannot be converted to a Path");
+                .hasMessage("Exception in converting arguments");
     }
 
     @Test
