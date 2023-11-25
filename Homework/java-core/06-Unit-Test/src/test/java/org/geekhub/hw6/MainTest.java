@@ -16,7 +16,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(MockitoExtension.class)
 class MainTest {
 
-    private static final Path PATH_OF_FILE = Path.of("./src/test/resources/catFactTest.txt");
+    private static final Path PATH_OF_FILE = Path.of(ClassLoader.getSystemResource("catFactTest.txt")
+            .getPath().substring(1));
 
     @AfterAll
     public static void deleteFile() throws IOException {
