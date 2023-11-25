@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class MainTest {
 
     private static final Path PATH_OF_FILE = Path.of(ClassLoader.getSystemResource("catFactTest.txt")
-            .getPath().substring(1));
+            .getPath());
 
     @AfterAll
     public static void deleteFile() throws IOException {
