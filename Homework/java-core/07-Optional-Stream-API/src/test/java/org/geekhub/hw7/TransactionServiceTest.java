@@ -13,6 +13,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@SuppressWarnings("all")
 class TransactionServiceTest {
     private static List<Transaction> getTransactions() {
         List<Transaction> transactions = new ArrayList<>();
@@ -178,8 +179,8 @@ class TransactionServiceTest {
         TransactionService service = new TransactionService(transactions);
 
         Optional<LocalDate> dateWithMostExpenses = service.getDateWithMostExpenses();
-        assertTrue(dateWithMostExpenses.isPresent(), "Expected a date to be present.");
-        assertEquals(LocalDate.of(2023, 1, 2), dateWithMostExpenses.get(), "The date with the most expenses was incorrect.");
+        assertThat(dateWithMostExpenses).isPresent();
+        assertThat(dateWithMostExpenses.get()).isEqualTo(LocalDate.of(2023, 1, 2));
     }
 
     @Test
@@ -189,7 +190,7 @@ class TransactionServiceTest {
         TransactionService service = new TransactionService(transactions);
 
         Optional<LocalDate> emptyDateWithMostExpenses = service.getDateWithMostExpenses();
-        assertTrue(emptyDateWithMostExpenses.isEmpty(), "Expected no date to be present for an empty list of transactions.");
+        assertThat(emptyDateWithMostExpenses).isEmpty();
     }
 
     @Test
@@ -200,10 +201,9 @@ class TransactionServiceTest {
 
         Map<String, Double> averageSpendingPerCategory = service.getAverageSpendingPerCategory();
 
-        assertEquals(2, averageSpendingPerCategory.size(), "The size of the average spending per category map was incorrect.");
-
-        assertEquals(12.5, averageSpendingPerCategory.get("Food"), "The average spending for the 'Food' category was incorrect.");
-        assertEquals(22.5, averageSpendingPerCategory.get("Shopping"), "The average spending for the 'Shopping' category was incorrect.");
+        assertThat(averageSpendingPerCategory).hasSize(2)
+            .containsEntry("Food",12.5)
+            .containsEntry("Shopping",22.5);
     }
 
     @Test
@@ -213,8 +213,7 @@ class TransactionServiceTest {
         TransactionService service = new TransactionService(transactions);
 
         Map<String, Double> averageSpendingPerCategory = service.getAverageSpendingPerCategory();
-
-        assertTrue(averageSpendingPerCategory.isEmpty(), "Expected no data to be present for an empty list of transactions.");
+        assertThat(averageSpendingPerCategory).isEmpty();
     }
 
     @Test
@@ -223,8 +222,8 @@ class TransactionServiceTest {
         TransactionService service = new TransactionService(transactions);
 
         Optional<String> mostPopularCategory = service.getMostPopularCategory();
-        assertTrue(mostPopularCategory.isPresent(), "Expected a category to be present.");
-        assertEquals("Shopping", mostPopularCategory.get(), "The most popular category was incorrect.");
+        assertThat(mostPopularCategory).isPresent();
+        assertThat(mostPopularCategory.get()).isEqualTo("Shopping");
     }
 
     @Test
@@ -233,7 +232,7 @@ class TransactionServiceTest {
         TransactionService service = new TransactionService(transactions);
 
         Optional<String> emptyMostPopularCategory = service.getMostPopularCategory();
-        assertTrue(emptyMostPopularCategory.isEmpty(), "Expected no category to be present for an empty list of transactions.");
+        assertThat(emptyMostPopularCategory).isEmpty();
     }
 
     @Test
@@ -244,10 +243,9 @@ class TransactionServiceTest {
 
         Map<String, Double> categoryWiseDistribution = service.getCategoryWiseDistribution();
 
-        assertEquals(2, categoryWiseDistribution.size(), "The size of the category-wise distribution map was incorrect.");
-
-        assertEquals(36, Math.round(categoryWiseDistribution.get("Food")), "The category-wise distribution for the 'Food' category was incorrect.");
-        assertEquals(64, Math.round(categoryWiseDistribution.get("Shopping")), "The category-wise distribution for the 'Shopping' category was incorrect.");
+        assertThat(categoryWiseDistribution).hasSize(2);
+        assertThat(Math.round(categoryWiseDistribution.get("Food"))).isEqualTo(36);
+        assertThat(Math.round(categoryWiseDistribution.get("Shopping"))).isEqualTo(64);
     }
 
     @Test
@@ -258,6 +256,6 @@ class TransactionServiceTest {
 
         Map<String, Double> categoryWiseDistribution = service.getCategoryWiseDistribution();
 
-        assertTrue(categoryWiseDistribution.isEmpty(), "Expected no data to be present for an empty list of transactions.");
+        assertThat(categoryWiseDistribution).isEmpty();
     }
 }
