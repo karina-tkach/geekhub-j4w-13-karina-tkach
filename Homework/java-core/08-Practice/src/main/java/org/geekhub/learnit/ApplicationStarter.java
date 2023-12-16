@@ -61,13 +61,13 @@ public class ApplicationStarter {
                     }
 
                     Student studentnew = new Student(name, new HashMap<>(scores));
-                    student = studentnew;
+                    student = studentnew;w
                     students.add(studentnew);
                     exception = null;
                     break;
                 case "get-last-created-student-scores":
                     if (student != null) {
-                        StringBuilder string = new StringBuilder().append("Student: ").append(student.name()).append(" scores: ");
+                        StringBuilder string = ne StringBuilder().append("Student: ").append(student.name()).append(" scores: ");
                         for (Map.Entry scores2 : scores.entrySet()) {
                             string.append("%nSubject :").append(scores2.getKey()).append(" scores: ").append(scores2.getValue());
                         }

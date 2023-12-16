@@ -40,6 +40,7 @@ class CatFactWriterTest {
         Files.deleteIfExists(PATH_TO_FILE);
     }
 
+
     @Test
     void writeFactsToFile_successfulWrite() throws InterruptedException, IOException, CatFactException {
         when(catFactService.getRandomCatFact()).thenReturn("This is a cat fact");
@@ -48,6 +49,7 @@ class CatFactWriterTest {
         assertTrue(Files.exists(PATH_TO_FILE), "The file was not created.");
 
         List<String> lines = Files.readAllLines(PATH_TO_FILE);
+
         assertEquals(2, lines.size(), "The file was expected to have 2 lines only.");
         assertEquals("This is a cat fact", lines.get(0), "The cat fact was not written to the file.");
     }
@@ -61,6 +63,7 @@ class CatFactWriterTest {
         assertTrue(Files.exists(PATH_TO_FILE), "The file was not created.");
 
         List<String> lines = Files.readAllLines(PATH_TO_FILE);
+
         assertEquals(1, lines.size(), "The file was expected to have 1 line only.");
         assertEquals("I don't know", lines.get(0), "The cat fact was written to the file.");
     }
