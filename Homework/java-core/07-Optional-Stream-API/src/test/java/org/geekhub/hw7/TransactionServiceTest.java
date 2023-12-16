@@ -10,10 +10,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@SuppressWarnings("all")
 class TransactionServiceTest {
     private static List<Transaction> getTransactions() {
         List<Transaction> transactions = new ArrayList<>();
@@ -95,6 +92,7 @@ class TransactionServiceTest {
         assertThat(foodTransactionsOnDate.get(0).amount()).isEqualTo(10.0);
     }
 
+    @SuppressWarnings("java:S5976")
     @Test
     void getTransactionsByCategoryAndDate_absentCategory() {
         List<Transaction> transactions = getTransactions();
@@ -179,8 +177,8 @@ class TransactionServiceTest {
         TransactionService service = new TransactionService(transactions);
 
         Optional<LocalDate> dateWithMostExpenses = service.getDateWithMostExpenses();
-        assertThat(dateWithMostExpenses).isPresent();
-        assertThat(dateWithMostExpenses.get()).isEqualTo(LocalDate.of(2023, 1, 2));
+        assertThat(dateWithMostExpenses).isPresent()
+        .contains(LocalDate.of(2023, 1, 2));
     }
 
     @Test
@@ -222,8 +220,8 @@ class TransactionServiceTest {
         TransactionService service = new TransactionService(transactions);
 
         Optional<String> mostPopularCategory = service.getMostPopularCategory();
-        assertThat(mostPopularCategory).isPresent();
-        assertThat(mostPopularCategory.get()).isEqualTo("Shopping");
+        assertThat(mostPopularCategory).isPresent()
+        .contains("Shopping");
     }
 
     @Test
