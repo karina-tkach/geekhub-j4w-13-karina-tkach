@@ -62,8 +62,9 @@ public class TransactionService implements TransactionAnalyzer {
                 Collectors.summingDouble(Transaction::amount)))
             .entrySet()
             .stream()
-            .max(Map.Entry.comparingByValue())
-            .map(Map.Entry::getKey);
+            .sorted(Map.Entry.<LocalDate, Double>comparingByValue().reversed())
+            .map(Map.Entry::getKey)
+            .findFirst();
     }
 
     @Override

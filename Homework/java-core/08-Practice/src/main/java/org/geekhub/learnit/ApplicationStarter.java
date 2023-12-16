@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-
+@SuppressWarnings("all")
 public class ApplicationStarter {
 
     public static List<Student> students = new ArrayList<>();
@@ -61,13 +61,13 @@ public class ApplicationStarter {
                     }
 
                     Student studentnew = new Student(name, new HashMap<>(scores));
-                    student = studentnew;w
+                    student = studentnew;
                     students.add(studentnew);
                     exception = null;
                     break;
                 case "get-last-created-student-scores":
                     if (student != null) {
-                        StringBuilder string = ne StringBuilder().append("Student: ").append(student.name()).append(" scores: ");
+                        StringBuilder string = new StringBuilder().append("Student: ").append(student.name()).append(" scores: ");
                         for (Map.Entry scores2 : scores.entrySet()) {
                             string.append("%nSubject :").append(scores2.getKey()).append(" scores: ").append(scores2.getValue());
                         }

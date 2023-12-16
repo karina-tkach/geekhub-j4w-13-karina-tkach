@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -29,8 +30,8 @@ class TransactionServiceTest {
         TransactionService service = new TransactionService(transactions);
 
         Optional<Transaction> biggestFoodTransaction = service.getBiggestTransactionInCategory("Food");
-        assertTrue(biggestFoodTransaction.isPresent(), "Expected a transaction to be present.");
-        assertEquals(15.0, biggestFoodTransaction.get().amount(), "The biggest transaction in the 'Food' category was incorrect.");
+        assertThat(biggestFoodTransaction).isPresent();
+        assertThat(biggestFoodTransaction.get().amount()).isEqualTo(15.0);
     }
 
     @Test
@@ -40,7 +41,7 @@ class TransactionServiceTest {
         TransactionService service = new TransactionService(transactions);
 
         Optional<Transaction> biggestNonPresentTransaction = service.getBiggestTransactionInCategory("Car");
-        assertTrue(biggestNonPresentTransaction.isEmpty(), "Expected no transaction to be present for a non-present category.");
+        assertThat(biggestNonPresentTransaction).isEmpty();
     }
 
     @Test
@@ -49,7 +50,7 @@ class TransactionServiceTest {
         TransactionService service = new TransactionService(transactions);
 
         Optional<Transaction> biggestTransaction = service.getBiggestTransactionInCategory("Car");
-        assertTrue(biggestTransaction.isEmpty(), "Expected no transaction to be present for an empty list");
+        assertThat(biggestTransaction).isEmpty();
     }
 
     @Test
@@ -59,7 +60,7 @@ class TransactionServiceTest {
         TransactionService service = new TransactionService(transactions);
 
         double totalSpentOnDate = service.getTotalSpentForDate(LocalDate.of(2023, 1, 1));
-        assertEquals(30.0, totalSpentOnDate, "The total spending for the date 2023-01-01 was incorrect.");
+        assertThat(totalSpentOnDate).isEqualTo(30.0);
     }
 
     @Test
@@ -69,7 +70,7 @@ class TransactionServiceTest {
         TransactionService service = new TransactionService(transactions);
 
         double totalSpentOnAbsentDate = service.getTotalSpentForDate(LocalDate.of(2023, 1, 3));
-        assertEquals(0.0, totalSpentOnAbsentDate, "The total spending for a non-present date was incorrect.");
+        assertThat(totalSpentOnAbsentDate).isEqualTo(0.0);
     }
 
     @Test
@@ -79,7 +80,7 @@ class TransactionServiceTest {
         TransactionService service = new TransactionService(transactions);
 
         double totalSpentOnEmptyList = service.getTotalSpentForDate(LocalDate.of(2023, 1, 3));
-        assertEquals(0.0, totalSpentOnEmptyList, "The total spending for an empty list was incorrect.");
+        assertThat(totalSpentOnEmptyList).isEqualTo(0.0);
     }
 
     @Test
@@ -89,8 +90,8 @@ class TransactionServiceTest {
         TransactionService service = new TransactionService(transactions);
 
         List<Transaction> foodTransactionsOnDate = service.getTransactionsByCategoryAndDate("Food", LocalDate.of(2023, 1, 1));
-        assertEquals(1, foodTransactionsOnDate.size(), "The number of transactions for the 'Food' category and the date 2023-01-01 was incorrect.");
-        assertEquals(10.0, foodTransactionsOnDate.get(0).amount(), "The transaction amount for the 'Food' category and the date 2023-01-01 was incorrect.");
+        assertThat(foodTransactionsOnDate).hasSize(1);
+        assertThat(foodTransactionsOnDate.get(0).amount()).isEqualTo(10.0);
     }
 
     @Test
@@ -100,7 +101,7 @@ class TransactionServiceTest {
         TransactionService service = new TransactionService(transactions);
 
         List<Transaction> absentTransactions = service.getTransactionsByCategoryAndDate("Car", LocalDate.of(2022, 1, 1));
-        assertTrue(absentTransactions.isEmpty(), "Expected no transactions to be present for an absent category.");
+        assertThat(absentTransactions).isEmpty();
     }
 
     @Test
@@ -110,7 +111,7 @@ class TransactionServiceTest {
         TransactionService service = new TransactionService(transactions);
 
         List<Transaction> absentTransactions = service.getTransactionsByCategoryAndDate("Food", LocalDate.of(2024, 1, 3));
-        assertTrue(absentTransactions.isEmpty(), "Expected no transactions to be present for an absent date.");
+        assertThat(absentTransactions).isEmpty();
     }
 
     @Test
@@ -120,7 +121,7 @@ class TransactionServiceTest {
         TransactionService service = new TransactionService(transactions);
 
         List<Transaction> absentTransactions = service.getTransactionsByCategoryAndDate("Car", LocalDate.of(2022, 1, 3));
-        assertTrue(absentTransactions.isEmpty(), "Expected no transactions to be present for an absent category and date.");
+        assertThat(absentTransactions).isEmpty();
     }
 
     @Test
@@ -130,7 +131,7 @@ class TransactionServiceTest {
         TransactionService service = new TransactionService(transactions);
 
         List<Transaction> absentTransactions = service.getTransactionsByCategoryAndDate("Food", LocalDate.of(2023, 1, 1));
-        assertTrue(absentTransactions.isEmpty(), "Expected no transactions to be present for an empty list.");
+        assertThat(absentTransactions).isEmpty();
     }
 
     @Test
@@ -141,10 +142,9 @@ class TransactionServiceTest {
 
         Map<String, Double> spentAmountByCategory = service.getSpentAmountByCategory();
 
-        assertEquals(2, spentAmountByCategory.size(), "The size of the spent amount by category map was incorrect.");
-
-        assertEquals(25.0, spentAmountByCategory.get("Food"), "The spent amount for the 'Food' category was incorrect.");
-        assertEquals(45.0, spentAmountByCategory.get("Shopping"), "The spent amount for the 'Shopping' category was incorrect.");
+        assertThat(spentAmountByCategory).hasSize(2)
+            .containsEntry("Food",25.0)
+            .containsEntry("Shopping",45.0);
     }
 
     @Test
@@ -154,8 +154,7 @@ class TransactionServiceTest {
         TransactionService service = new TransactionService(transactions);
 
         Map<String, Double> spentAmountByCategory = service.getSpentAmountByCategory();
-
-        assertTrue(spentAmountByCategory.isEmpty(), "The spent amount by category map for an empty list was incorrect.");
+        assertThat(spentAmountByCategory).isEmpty();
     }
 
     @Test
@@ -169,7 +168,7 @@ class TransactionServiceTest {
         expectedMap.put("Shopping", 45.0);
         expectedMap.put("Food", 25.0);
 
-        assertEquals(expectedMap, spentAmountByCategory, "The spent amount by category map was in wrong order.");
+        assertThat(spentAmountByCategory).isEqualTo(expectedMap);
     }
 
     @Test
