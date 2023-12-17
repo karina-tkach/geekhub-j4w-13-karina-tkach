@@ -19,18 +19,13 @@ public class StockManager {
 
         scheduleRestocking();
     }
-
     private void scheduleRestocking() {
-        scheduler.scheduleWithFixedDelay(this::restockInventory, 0L, restockInterval, TimeUnit.SECONDS);
-    }
-
-    private void restockInventory() {
-        synchronized (onlineStore) {
+        scheduler.scheduleAtFixedRate(() -> {
             Map<String, Integer> inventory = onlineStore.getInventory();
             for (Map.Entry<String, Integer> entry : inventory.entrySet()) {
                 onlineStore.addProduct(entry.getKey(), entry.getValue() + quantityToAdd);
             }
-        }
+        }, restockInterval, restockInterval, TimeUnit.SECONDS);
     }
 
     @SuppressWarnings({"ResultOfMethodCallIgnored"})
