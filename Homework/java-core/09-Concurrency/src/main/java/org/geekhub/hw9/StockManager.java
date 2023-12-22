@@ -23,7 +23,7 @@ public class StockManager {
         scheduler.scheduleAtFixedRate(() -> {
             Map<String, Integer> inventory = onlineStore.getInventory();
             for (Map.Entry<String, Integer> entry : inventory.entrySet()) {
-                onlineStore.addProduct(entry.getKey(), entry.getValue() + quantityToAdd);
+                onlineStore.addProduct(entry.getKey(), quantityToAdd);
             }
         }, restockInterval, restockInterval, TimeUnit.SECONDS);
     }
