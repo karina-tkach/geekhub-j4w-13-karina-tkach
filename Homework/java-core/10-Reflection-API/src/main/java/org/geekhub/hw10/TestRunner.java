@@ -6,24 +6,29 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 public class TestRunner {
     private static final String DELIMITER = "========================================";
-    private TestRunner(){
+
+    private TestRunner() {
     }
-    public static void runTests(Class<?>... classes) {
+
+    public static void runTests(String packageName) {
         int totalTests = 0;
         int passedTests = 0;
         int failedTests = 0;
 
+        Set<Class<?>> classes = new ClassLoaderFromPackage().findAllClassesUsingClassLoader(packageName);
         printStart();
 
         for (Class<?> clazz : classes) {
-            System.out.println("\nRunning tests in " + clazz.getSimpleName() + " class");
-
             Method[] methods = clazz.getDeclaredMethods();
             List<Method> testMethods = getTestMethods(methods);
             totalTests += testMethods.size();
+            if (!testMethods.isEmpty()) {
+                System.out.println("\nRunning tests in " + clazz.getSimpleName() + " class");
+            }
             for (Method testMethod : testMethods) {
                 try {
                     Object instance = clazz.getDeclaredConstructor().newInstance();
@@ -54,10 +59,10 @@ public class TestRunner {
             }
         }
 
-        printEnd(passedTests,failedTests,totalTests);
+        printEnd(passedTests, failedTests, totalTests);
     }
 
-    private static List<Method> getTestMethods(Method[] methods){
+    private static List<Method> getTestMethods(Method[] methods) {
         List<Method> testMethods = new ArrayList<>();
 
         Arrays.stream(methods).forEach(method -> {
@@ -69,12 +74,14 @@ public class TestRunner {
         });
         return testMethods;
     }
-    private static void printStart(){
+
+    private static void printStart() {
         System.out.println(DELIMITER);
         System.out.println("Testing framework");
         System.out.println(DELIMITER);
     }
-    private static void printEnd(int passedTests, int failedTests,int totalTests){
+
+    private static void printEnd(int passedTests, int failedTests, int totalTests) {
         System.out.println("\n" + DELIMITER);
         System.out.println("Summary");
         System.out.println(DELIMITER);
@@ -82,6 +89,7 @@ public class TestRunner {
         System.out.println("Passed tests: " + passedTests);
         System.out.println("Failed tests: " + failedTests);
     }
+
     private static void executeSetupMethods(Class<?> clazz, Object instance) throws InvocationTargetException, IllegalAccessException {
         Method[] methods = clazz.getDeclaredMethods();
         for (Method method : methods) {
