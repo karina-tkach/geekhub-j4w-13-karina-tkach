@@ -27,21 +27,21 @@ class MainTest {
     void main_notEnoughArgumentsProvided() {
         String[] arguments = new String[]{"1"};
         assertThatCode(() -> Main.main(arguments)).isInstanceOf(ArgumentsException.class)
-                .hasMessage("Both time interval and path should be provided via command-line arguments");
+            .hasMessage("Both time interval and path should be provided via command-line arguments");
     }
 
     @Test
     void main_invalidFirstArgument() {
         String[] arguments = new String[]{"a", "test.txt"};
         assertThatCode(() -> Main.main(arguments)).isInstanceOf(ArgumentsException.class)
-                .hasMessage("First argument must be numeric value");
+            .hasMessage("First argument must be numeric value");
     }
 
     @Test
     void main_invalidSecondArgument() {
         String[] arguments = new String[]{"100", "\u0000"};
         assertThatCode(() -> Main.main(arguments)).isInstanceOf(ArgumentsException.class)
-                .hasMessage("Second argument cannot be converted to a Path");
+            .hasMessage("Second argument cannot be converted to a Path");
     }
 
     @Test

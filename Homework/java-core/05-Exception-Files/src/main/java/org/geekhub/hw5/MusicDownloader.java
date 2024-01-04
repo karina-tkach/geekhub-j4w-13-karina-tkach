@@ -5,8 +5,7 @@ import static org.geekhub.hw5.FileUtils.deleteDirectories;
 public class MusicDownloader {
 
     public static void main(String[] args) {
-        //TODO-1 Replace path-to-playlist.txt with the correct path to playlist.txt
-        String pathToPlaylist = "path-to-playlist.txt";
+        String pathToPlaylist = ClassLoader.getSystemResource("playlist.txt").getPath().substring(1);
         String pathToLogFile = "log.txt";
         String mainDirectory = "library";
         int maxFileSize = 10485760;

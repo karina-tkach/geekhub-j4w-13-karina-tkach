@@ -38,7 +38,7 @@ class ContentValidatorTest {
         ContentLengthNotKnownException exception = assertThrows(ContentLengthNotKnownException.class, () ->
             validator.isValid(url, null, FILE_NAME));
 
-        String expectedMessage = "Cannot download file from url: http://test\n";
+        String expectedMessage = String.format("Cannot download file from url: http://test%n");
         String actualMessage = exception.getMessage();
 
         assertEquals(expectedMessage, actualMessage);
@@ -52,7 +52,7 @@ class ContentValidatorTest {
         LimitSizeException exception = assertThrows(LimitSizeException.class, () ->
             validator.isValid(url, null, FILE_NAME));
 
-        String expectedMessage = "Failed to download from url: file:./src/test/resources/Браття українці.mp3 over 10\n";
+        String expectedMessage = String.format("Failed to download from url: file:./src/test/resources/Браття українці.mp3 over 10%n");
         String actualMessage = exception.getMessage();
 
         assertEquals(expectedMessage, actualMessage);

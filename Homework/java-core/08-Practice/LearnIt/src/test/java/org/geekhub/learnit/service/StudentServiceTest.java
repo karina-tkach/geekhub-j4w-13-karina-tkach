@@ -17,9 +17,9 @@ import java.util.List;
 
 import static java.util.Collections.emptyMap;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@SuppressWarnings("all")
 @ExtendWith(MockitoExtension.class)
 class StudentServiceTest {
 
@@ -66,8 +66,6 @@ class StudentServiceTest {
 
         assertThrows(IllegalStateException.class, executable);
     }
-
-
     @Test
     void getStudent() {}
 

@@ -57,7 +57,7 @@ class CatFactWriterTest {
     @Test
     void writeFactsToFile_whenUnsuccessfulResponse() throws InterruptedException, CatFactException, IOException {
         when(catFactService.getRandomCatFact())
-                .thenThrow(new CatFactException("Failed to get cat fact", new IOException()));
+            .thenThrow(new CatFactException("Failed to get cat fact", new IOException()));
         catFactWriter.writeFactsToFile();
 
         assertTrue(Files.exists(PATH_TO_FILE), "The file was not created.");
@@ -72,7 +72,7 @@ class CatFactWriterTest {
     void writeFactsToFile_whenUnableToCreate() {
         catFactWriter = new CatFactWriter(catFactService, TIME_INTERVAL, INVALID_PATH);
         assertThatCode(() -> catFactWriter.writeFactsToFile())
-                .isInstanceOf(FileException.class)
-                .hasMessage(String.format("Fail to create file with provided path: %s", INVALID_PATH));
+            .isInstanceOf(FileException.class)
+            .hasMessage(String.format("Fail to create file with provided path: %s", INVALID_PATH));
     }
 }

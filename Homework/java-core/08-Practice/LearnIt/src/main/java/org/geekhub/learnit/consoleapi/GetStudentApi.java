@@ -10,6 +10,7 @@ public class GetStudentApi {
 
     private final Scanner scanner;
     private final StudentService studentService;
+    private static final String ERROR_MESSAGE = "No student found!";
 
     public GetStudentApi(Scanner scanner,
                          StudentService studentService) {
@@ -20,7 +21,7 @@ public class GetStudentApi {
     public void printLastCreatedStudent() {
         Student student = studentService.getLastCreatedStudent();
         if (student == null) {
-            System.out.println("No student found!");
+            System.out.println(ERROR_MESSAGE);
             return;
         }
 
@@ -39,7 +40,7 @@ public class GetStudentApi {
 
         Student student = studentService.getStudent(index);
         if (student == null) {
-            System.out.println("No student found!");
+            System.out.println(ERROR_MESSAGE);
             return;
         }
 
@@ -49,7 +50,7 @@ public class GetStudentApi {
     public void printAverageScores() {
         List<Student> students = studentService.getStudents();
         if (students.isEmpty()) {
-            System.out.println("No student found!");
+            System.out.println(ERROR_MESSAGE);
             return;
         }
 

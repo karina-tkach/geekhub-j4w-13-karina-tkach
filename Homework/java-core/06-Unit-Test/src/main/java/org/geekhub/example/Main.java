@@ -3,6 +3,7 @@ package org.geekhub.example;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.geekhub.example.entity.FileInfo;
 
+@SuppressWarnings("java:S106")
 public class Main {
     public static void main(String[] args) {
         var httpClient = HttpClientBuilder.create().build();

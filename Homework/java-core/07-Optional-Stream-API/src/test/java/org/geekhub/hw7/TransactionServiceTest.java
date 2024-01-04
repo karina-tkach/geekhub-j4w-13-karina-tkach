@@ -178,7 +178,7 @@ class TransactionServiceTest {
 
         Optional<LocalDate> dateWithMostExpenses = service.getDateWithMostExpenses();
         assertThat(dateWithMostExpenses).isPresent()
-        .contains(LocalDate.of(2023, 1, 2));
+            .contains(LocalDate.of(2023, 1, 2));
     }
 
     @Test
@@ -221,7 +221,7 @@ class TransactionServiceTest {
 
         Optional<String> mostPopularCategory = service.getMostPopularCategory();
         assertThat(mostPopularCategory).isPresent()
-        .contains("Shopping");
+            .contains("Shopping");
     }
 
     @Test
