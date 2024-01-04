@@ -1,9 +1,5 @@
 package org.geekhub.hw5;
 
-import org.geekhub.hw5.exception.ContentLengthNotKnownException;
-import org.geekhub.hw5.exception.FileExistException;
-import org.geekhub.hw5.exception.LimitSizeException;
-
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -32,23 +28,24 @@ public class ContentValidator {
         return true;
     }
 
-    private void hasContent(int contentLength, URL url) throws ContentLengthNotKnownException {
+    //TODO-10 ADD correct throws AND REMOVE THIS MESSAGE
+    private void hasContent(int contentLength, URL url) {
         if (contentLength == CONTENT_LENGTH_IS_NOT_KNOWN) {
-            throw new ContentLengthNotKnownException(String.format("Cannot download file from url: %s%n", url));
+            //TODO-11 ADD correct throw and message AND REMOVE THIS MESSAGE
         }
     }
 
-    private void validateContentLength(int contentLength, URL url) throws LimitSizeException {
+    //TODO-12 ADD correct throws AND REMOVE THIS MESSAGE
+    private void validateContentLength(int contentLength, URL url) {
         if (contentLength > maxFileSize) {
-            throw new LimitSizeException(String.format("Failed to download from url: %s over 10%n", url));
+            //TODO-13 ADD correct throw and message AND REMOVE THIS MESSAGE
         }
     }
 
-    private void isExistFile(String pathToFile, String filename, URL url) throws FileExistException {
-        Path path = Path.of(pathToFile, filename);
-        String fullPath = path.toString();
-        if (Files.exists(path)) {
-            throw new FileExistException(String.format("File %s is updated by url: %s%n", fullPath.substring(fullPath.indexOf('/') + 1), url));
+    //TODO-14 ADD correct throws AND REMOVE THIS MESSAGE
+    private void isExistFile(String pathToFile, String filename, URL url) {
+        if (Files.exists(Path.of(pathToFile, filename))) {
+            //TODO-15 ADD correct throw and message AND REMOVE THIS MESSAGE
         }
     }
 }

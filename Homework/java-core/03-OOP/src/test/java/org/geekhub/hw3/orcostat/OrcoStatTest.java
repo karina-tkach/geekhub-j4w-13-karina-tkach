@@ -1,7 +1,6 @@
 package org.geekhub.hw3.orcostat;
 
 import org.geekhub.hw3.orcostat.model.Orc;
-import org.geekhub.hw3.orcostat.model.OrcoStat;
 import org.geekhub.hw3.orcostat.model.air.Aircraft;
 import org.geekhub.hw3.orcostat.model.air.Pilot;
 import org.geekhub.hw3.orcostat.model.ground.Driver;
