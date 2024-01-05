@@ -1,4 +1,4 @@
-package org.geekhub.hw10;
+package org.geekhub.hw10.framework;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -14,12 +14,14 @@ public class CustomAssertions {
         }
     }
 
-    @SuppressWarnings("java:S108")
-    public static void assertThrows(Runnable runnable) {
+    public static void assertThrows(Runnable runnable, Class<? extends Exception> type) {
         try {
             runnable.run();
-            throw new AssertionError("Expected an exception but none was thrown");
-        } catch (Exception ignored) {
+            throw new AssertionError("Expected exception of type " + type.getName() + " was not thrown.");
+        } catch (Exception exception) {
+            if (!type.isInstance(exception)) {
+                throw new AssertionError("Expected exception of type " + type.getName() + ", but got " + exception.getClass().getName());
+            }
         }
     }
 

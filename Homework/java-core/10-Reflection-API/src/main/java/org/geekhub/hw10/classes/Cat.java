@@ -1,5 +1,6 @@
-package org.geekhub.hw10;
+package org.geekhub.hw10.classes;
 
+@SuppressWarnings("all")
 public class Cat {
     private final int paws;
     private final int ears;

@@ -1,5 +1,11 @@
-package org.geekhub.hw10;
+package org.geekhub.hw10.tests;
 
+import org.geekhub.hw10.framework.BeforeMethod;
+import org.geekhub.hw10.classes.Cat;
+import org.geekhub.hw10.framework.CustomAssertions;
+import org.geekhub.hw10.framework.Test;
+
+@SuppressWarnings("all")
 public class CatTest {
     private Cat firstCat;
     private Cat secondCat;
@@ -11,13 +17,13 @@ public class CatTest {
     }
 
     @Test
-    public void testEqualityOfPaws() {
+    public void getPawsNumber_whenSameToSecond_shouldBeEqual() {
         boolean result = firstCat.getPawsNumber() == secondCat.getPawsNumber();
         CustomAssertions.assertEquals(true, result);
     }
 
     @Test
-    public void testEqualityOfEnergy() {
+    public void getEnergy_whenDiffer_shouldThrowAssertionError() {
         int firstEnergy = firstCat.getEnergy();
         secondCat.sleep();
         int secondEnergy = secondCat.getEnergy();
@@ -25,16 +31,17 @@ public class CatTest {
     }
 
     @Test
-    public void testException() {
-        CustomAssertions.assertThrows(() -> new Cat(4, -1, "W"));
+    public void constructor_whenInvalidArguments_shouldThrowException() {
+        CustomAssertions.assertThrows(() -> new Cat(4, -1, "W"), IllegalArgumentException.class);
     }
 
     @Test
-    public void testEqualityOfObjects() throws IllegalAccessException {
+    public void equal_whenIdenticalObjects_shouldBeEqual() throws IllegalAccessException {
         CustomAssertions.assertReflectionEquals(firstCat, new Cat(firstCat));
     }
+
     @Test
-    public void testEqualityOfDifferentObjects() throws IllegalAccessException {
+    public void equal_whenDifferentObjects_shouldThrowAssertionError() throws IllegalAccessException {
         CustomAssertions.assertReflectionEquals(firstCat, secondCat);
     }
 }

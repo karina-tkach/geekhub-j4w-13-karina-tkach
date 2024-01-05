@@ -1,4 +1,4 @@
-package org.geekhub.hw10;
+package org.geekhub.hw10.framework;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+@SuppressWarnings("all")
 public class TestRunner {
     private static final String DELIMITER = "========================================";
 
@@ -40,8 +41,10 @@ public class TestRunner {
                     } else {
                         String parameterSource = testMethod.getAnnotation(Test.class).parameterSource();
                         Method parameterMethod = clazz.getDeclaredMethod(parameterSource);
+                        parameterMethod.setAccessible(true);
                         Object[] parameters = (Object[]) parameterMethod.invoke(instance);
-                        testMethod.invoke(instance, parameters);
+                        Object[] param = {parameters};
+                        testMethod.invoke(instance, param);
                     }
                     System.out.println("  + Test: " + testMethod.getName() + " - Passed");
                     passedTests++;
