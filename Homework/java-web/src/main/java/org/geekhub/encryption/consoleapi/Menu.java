@@ -1,5 +1,7 @@
 package org.geekhub.encryption.consoleapi;
 
+import org.geekhub.encryption.injector.Injectable;
+
 import java.util.Scanner;
 
 public class Menu {
