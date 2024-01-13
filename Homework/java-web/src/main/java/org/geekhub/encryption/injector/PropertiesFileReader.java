@@ -32,11 +32,11 @@ public class PropertiesFileReader {
                     String propertyName = lineData[0].trim();
                     String propertyValue = lineData[1].trim();
                     if (propertyName.isEmpty() || propertyValue.isEmpty()) {
-                        throw new PropertyFormatException("Property name or value can`t be empty or contain just whitespaces.");
+                        throw new PropertyFormatException("Property name or value can`t contain just whitespaces.");
                     }
                     properties.put(propertyName, propertyValue);
                 } else {
-                    throw new PropertyFormatException("Line containing property name and value can't be empty and must contain exactly one '=' symbol");
+                    throw new PropertyFormatException("Line must contain property name & value, and exactly one '=' symbol");
                 }
             }
         } catch (IOException ex) {
