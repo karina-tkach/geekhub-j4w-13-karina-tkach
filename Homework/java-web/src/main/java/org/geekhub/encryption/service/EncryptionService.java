@@ -97,6 +97,7 @@ public class EncryptionService {
         return sb.toString();
     }
 
+    @SuppressWarnings("java:S127")
     private String encryptViaTheVigenereCipher(String message, String key) {
         String keyLower = key.toLowerCase();
         String keyUpper = key.toUpperCase();
