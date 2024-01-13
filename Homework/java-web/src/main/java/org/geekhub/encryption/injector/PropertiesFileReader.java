@@ -1,5 +1,6 @@
 package org.geekhub.encryption.injector;
 
+import org.geekhub.encryption.exception.FileException;
 import org.geekhub.encryption.exception.PropertyFormatException;
 
 import java.io.FileNotFoundException;
@@ -17,13 +18,12 @@ public class PropertiesFileReader {
 
     }
 
-    @SuppressWarnings("CallToPrintStackTrace")
     public static Map<String, String> readFile(String pathToFile) {
         Path propertiesFilePath = Path.of(pathToFile);
         Map<String, String> properties = new HashMap<>();
         try {
             if (!Files.exists(propertiesFilePath)) {
-                throw new FileNotFoundException("Property file was not found");
+                throw new FileNotFoundException("Property file was not found.");
             }
             List<String> linesFromFile = readAllLines(propertiesFilePath);
             for (String line : linesFromFile) {
@@ -32,7 +32,7 @@ public class PropertiesFileReader {
                     String propertyName = lineData[0].trim();
                     String propertyValue = lineData[1].trim();
                     if (propertyName.isEmpty() || propertyValue.isEmpty()) {
-                        throw new PropertyFormatException("Property name or value can`t be empty or contain just whitespaces");
+                        throw new PropertyFormatException("Property name or value can`t be empty or contain just whitespaces.");
                     }
                     properties.put(propertyName, propertyValue);
                 } else {
@@ -40,10 +40,10 @@ public class PropertiesFileReader {
                 }
             }
         } catch (IOException ex) {
-            ex.printStackTrace();
-
+            throw new FileException("Error occurred while properties file", ex);
         }
         return properties;
+
     }
 
     private static boolean isLineValid(String line) {

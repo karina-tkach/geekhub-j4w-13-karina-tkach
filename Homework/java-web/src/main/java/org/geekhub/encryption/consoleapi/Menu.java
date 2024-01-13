@@ -1,7 +1,5 @@
 package org.geekhub.encryption.consoleapi;
 
-import org.geekhub.encryption.injector.Injectable;
-
 import java.util.Scanner;
 
 public class Menu {
@@ -29,18 +27,20 @@ public class Menu {
 
         while (running) {
             System.out.println(MENU_OPTIONS);
+            try {
+                int choice = Integer.parseInt(scanner.nextLine());
 
-            int choice = scanner.nextInt();
-            scanner.nextLine();
-
-            switch (choice) {
-                case 1 -> createEncryption.encryptMessage();
-                case 2 -> getEncryption.displayHistory();
-                case 3 -> getEncryption.displayHistoryByDate();
-                case 4 -> getEncryption.displayAlgorithmUsageCount();
-                case 5 -> getEncryption.displayUniqueEncryptions();
-                case 0 -> running = false;
-                default -> System.out.println("Invalid choice. Please try again.");
+                switch (choice) {
+                    case 1 -> createEncryption.encryptMessage();
+                    case 2 -> getEncryption.displayHistory();
+                    case 3 -> getEncryption.displayHistoryByDate();
+                    case 4 -> getEncryption.displayAlgorithmUsageCount();
+                    case 5 -> getEncryption.displayUniqueEncryptions();
+                    case 0 -> running = false;
+                    default -> System.out.println("Invalid choice. Please try again.");
+                }
+            } catch (NumberFormatException ex) {
+                System.out.println("Invalid input. Please try again.");
             }
         }
     }

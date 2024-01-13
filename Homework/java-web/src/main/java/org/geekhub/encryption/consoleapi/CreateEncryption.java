@@ -1,6 +1,5 @@
 package org.geekhub.encryption.consoleapi;
 
-import org.geekhub.encryption.injector.Injectable;
 import org.geekhub.encryption.service.EncryptionService;
 
 import java.util.Scanner;
@@ -15,6 +14,7 @@ public class CreateEncryption {
         5. Encrypt a message using Vigenere cipher""";
     private final Scanner scanner;
     private final EncryptionService encryptionService;
+
     public CreateEncryption(Scanner scanner, EncryptionService encryptionService) {
         this.scanner = scanner;
         this.encryptionService = encryptionService;
@@ -23,39 +23,55 @@ public class CreateEncryption {
     public void encryptMessage() {
         String cipherName = getInputCipherName();
         String message = getInputMessage();
-        String encryptedMessage = encryptionService.encryptMessage(cipherName,message);
-        System.out.println("Encrypted message: " + encryptedMessage);
+        String key = "";
+        if (cipherName.equals("Vigenere")) {
+            key = getKeyForVigenereCipher();
+        }
+        try {
+            String encryptedMessage = encryptionService.encryptMessage(cipherName, message, key);
+            System.out.println("Encrypted message: " + encryptedMessage);
+        } catch (IllegalArgumentException ex) {
+            System.out.println("Incorrect input message or key.");
+        }
     }
 
     private String getInputCipherName() {
         do {
             System.out.println(SUBMENU_OPTIONS);
+            try {
+                int choice = Integer.parseInt(scanner.nextLine());
 
-            int choice = scanner.nextInt();
-            scanner.nextLine();
-
-            switch (choice) {
-                case 1 -> {
-                    return "Caesar";
+                switch (choice) {
+                    case 1 -> {
+                        return "Caesar";
+                    }
+                    case 2 -> {
+                        return "Atbash";
+                    }
+                    case 3 -> {
+                        return "A1Z26";
+                    }
+                    case 4 -> {
+                        return "ROT13";
+                    }
+                    case 5 -> {
+                        return "Vigenere";
+                    }
+                    default -> System.out.println("Invalid choice. Please try again.");
                 }
-                case 2 -> {
-                    return "Atbash";
-                }
-                case 3 -> {
-                    return "A1Z26";
-                }
-                case 4 -> {
-                    return "ROT13";
-                }
-                case 5 -> {
-                    return "Vigenere";
-                }
-                default -> System.out.println("Invalid choice. Please try again.");
+            } catch (NumberFormatException ex) {
+                System.out.println("Invalid input. Please try again.");
             }
         } while (true);
     }
-    private String getInputMessage(){
+
+    private String getInputMessage() {
         System.out.println("Enter the message to encrypt:");
+        return scanner.nextLine();
+    }
+
+    private String getKeyForVigenereCipher() {
+        System.out.println("Enter the key to encrypt a message with Vigenere cipher:");
         return scanner.nextLine();
     }
 }
