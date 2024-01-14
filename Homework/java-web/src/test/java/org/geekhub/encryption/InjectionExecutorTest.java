@@ -3,8 +3,8 @@ package org.geekhub.encryption;
 import org.geekhub.encryption.exception.NoPropertyIsFoundException;
 import org.geekhub.encryption.exception.UnapplyableFieldTypeException;
 import org.geekhub.encryption.injector.InjectionExecutor;
-import org.geekhub.encryption.testutil.Company;
-import org.geekhub.encryption.testutil.Person;
+import org.geekhub.encryption.model.Company;
+import org.geekhub.encryption.model.Person;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -39,7 +39,7 @@ class InjectionExecutorTest {
         Files.write(PATH_TO_FILE, "name=SPD\nworker=Vlad".getBytes());
         assertThatCode(() -> new InjectionExecutor(STRING_PATH).execute(company))
             .isInstanceOf(UnapplyableFieldTypeException.class)
-            .hasMessage("Cannot apply @Injectable to the field with type org.geekhub.encryption.testutil.Person");
+            .hasMessage("Cannot apply @Injectable to the field with type org.geekhub.encryption.model.Person");
     }
 
     @Test

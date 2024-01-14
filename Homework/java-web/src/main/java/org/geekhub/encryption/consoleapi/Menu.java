@@ -15,7 +15,6 @@ public class Menu {
     private final CreateEncryption createEncryption;
     private final GetEncryption getEncryption;
 
-
     public Menu(Scanner scanner, CreateEncryption createEncryption, GetEncryption getEncryption) {
         this.scanner = scanner;
         this.createEncryption = createEncryption;

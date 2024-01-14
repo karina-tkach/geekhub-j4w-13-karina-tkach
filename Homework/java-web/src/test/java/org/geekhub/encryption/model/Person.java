@@ -1,4 +1,4 @@
-package org.geekhub.encryption.testutil;
+package org.geekhub.encryption.model;
 
 import org.geekhub.encryption.injector.Injectable;
 
