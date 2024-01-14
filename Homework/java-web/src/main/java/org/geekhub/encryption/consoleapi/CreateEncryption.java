@@ -35,34 +35,26 @@ public class CreateEncryption {
         }
     }
 
+    @SuppressWarnings("EnhancedSwitchMigration")
     private String getInputCipherName() {
-        do {
+        while (true) {
             System.out.println(SUBMENU_OPTIONS);
             try {
                 int choice = Integer.parseInt(scanner.nextLine());
 
                 switch (choice) {
-                    case 1 -> {
-                        return "Caesar";
-                    }
-                    case 2 -> {
-                        return "Atbash";
-                    }
-                    case 3 -> {
-                        return "A1Z26";
-                    }
-                    case 4 -> {
-                        return "ROT13";
-                    }
-                    case 5 -> {
-                        return "Vigenere";
-                    }
-                    default -> System.out.println("Invalid choice. Please try again.");
+                    case 1: return "Caesar";
+                    case 2: return "Atbash";
+                    case 3: return "A1Z26";
+                    case 4: return "ROT13";
+                    case 5: return "Vigenere";
+                    default:
+                        System.out.println("Invalid choice. Please try again.");
                 }
             } catch (NumberFormatException ex) {
                 System.out.println("Invalid input. Please try again.");
             }
-        } while (true);
+        }
     }
 
     private String getInputMessage() {

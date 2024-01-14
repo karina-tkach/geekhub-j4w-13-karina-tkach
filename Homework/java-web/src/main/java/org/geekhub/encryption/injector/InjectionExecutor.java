@@ -18,16 +18,18 @@ public class InjectionExecutor {
         Class<?> clazz = object.getClass();
         for (Field field : clazz.getDeclaredFields()) {
             if (field.isAnnotationPresent(Injectable.class)) {
-                String propertyName = field.getAnnotation(Injectable.class).propertyName();
-                if (propertiesFromFile.containsKey(propertyName)) {
-                    setFieldValue(object, field, propertiesFromFile.get(propertyName));
-                } else {
-                    throw new NoPropertyIsFoundException("No property data for field " + field.getName() + " was found");
-                }
+                processAnnotatedField(field,object);
             }
         }
     }
-
+    private void processAnnotatedField(Field field, Object object){
+        String propertyName = field.getAnnotation(Injectable.class).propertyName();
+        if (propertiesFromFile.containsKey(propertyName)) {
+            setFieldValue(object, field, propertiesFromFile.get(propertyName));
+        } else {
+            throw new NoPropertyIsFoundException("No property data for field " + field.getName() + " was found");
+        }
+    }
     @SuppressWarnings("java:S3011")
     private void setFieldValue(Object instance, Field field, String value) {
         field.setAccessible(true);

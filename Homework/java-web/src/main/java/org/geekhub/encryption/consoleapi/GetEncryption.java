@@ -26,14 +26,7 @@ public class GetEncryption {
 
     public void displayHistory() {
         List<String> log = logService.getFullHistory();
-
-        if (log.isEmpty()) {
-            System.out.println(ERROR_MESSAGE);
-        } else {
-            for (String encryptionData : log) {
-                System.out.println(encryptionData);
-            }
-        }
+        printInfo(log);
     }
 
     public void displayHistoryByDate() {
@@ -42,17 +35,21 @@ public class GetEncryption {
 
         try {
             new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
-            List<String> log = logService.getHistoryByDate(dateString);
 
-            if (!log.isEmpty()) {
-                for (String encryptionData : log) {
-                    System.out.println(encryptionData);
-                }
-            } else {
-                System.out.println("There's no log for such date.");
-            }
+            List<String> log = logService.getHistoryByDate(dateString);
+            printInfo(log);
         } catch (ParseException ex) {
             System.out.println("Invalid date format.");
+        }
+    }
+
+    private void printInfo(List<String> log) {
+        if (!log.isEmpty()) {
+            for (String encryptionData : log) {
+                System.out.println(encryptionData);
+            }
+        } else {
+            System.out.println(ERROR_MESSAGE);
         }
     }
 
@@ -82,33 +79,25 @@ public class GetEncryption {
         }
     }
 
+    @SuppressWarnings("EnhancedSwitchMigration")
     private String getCipherName() {
-        do {
+        while (true) {
             System.out.println(OPTIONS);
             try {
                 int choice = Integer.parseInt(scanner.nextLine());
 
                 switch (choice) {
-                    case 1 -> {
-                        return "Caesar";
-                    }
-                    case 2 -> {
-                        return "Atbash";
-                    }
-                    case 3 -> {
-                        return "A1Z26";
-                    }
-                    case 4 -> {
-                        return "ROT13";
-                    }
-                    case 5 -> {
-                        return "Vigenere";
-                    }
-                    default -> System.out.println("Invalid choice. Please try again.");
+                    case 1: return "Caesar";
+                    case 2: return "Atbash";
+                    case 3: return "A1Z26";
+                    case 4: return "ROT13";
+                    case 5: return "Vigenere";
+                    default:
+                        System.out.println("Invalid choice. Please try again.");
                 }
             } catch (NumberFormatException ex) {
                 System.out.println("Invalid input. Please try again.");
             }
-        } while (true);
+        }
     }
 }

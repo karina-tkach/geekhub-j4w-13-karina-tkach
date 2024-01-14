@@ -5,6 +5,8 @@ import org.geekhub.encryption.injector.PropertiesFileReader;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -29,36 +31,13 @@ class PropertiesFileReaderTest {
         Files.delete(PATH_TO_FILE);
     }
 
-    @Test
-    void shouldThrowException_whenFileContainsEmptyLine() throws IOException {
-        Files.write(PATH_TO_FILE, "\n".getBytes());
+    @ParameterizedTest
+    @ValueSource(strings = {"\n", "age=18\n =Anna", "age=18\nname= ", "name:Anna"})
+    void shouldThrowException_whenFileContainsInvalidData(String line) throws IOException {
+        Files.write(PATH_TO_FILE, line.getBytes());
         assertThatCode(() -> PropertiesFileReader.readFile(STRING_PATH))
             .isInstanceOf(PropertyFormatException.class)
-            .hasMessage("Line must contain property name & value, and exactly one '=' symbol");
-    }
-
-    @Test
-    void shouldThrowException_whenNameIsBlank() throws IOException {
-        Files.write(PATH_TO_FILE, "age=18\n =Anna".getBytes());
-        assertThatCode(() -> PropertiesFileReader.readFile(STRING_PATH))
-            .isInstanceOf(PropertyFormatException.class)
-            .hasMessage("Property name or value can`t contain just whitespaces.");
-    }
-
-    @Test
-    void shouldThrowException_whenValueIsBlank() throws IOException {
-        Files.write(PATH_TO_FILE, "age=18\nname= ".getBytes());
-        assertThatCode(() -> PropertiesFileReader.readFile(STRING_PATH))
-            .isInstanceOf(PropertyFormatException.class)
-            .hasMessage("Property name or value can`t contain just whitespaces.");
-    }
-
-    @Test
-    void shouldThrowException_whenFileContainsInvalidSeparator() throws IOException {
-        Files.write(PATH_TO_FILE, "name:Anna".getBytes());
-        assertThatCode(() -> PropertiesFileReader.readFile(STRING_PATH))
-            .isInstanceOf(PropertyFormatException.class)
-            .hasMessage("Line must contain property name & value, and exactly one '=' symbol");
+            .hasMessage("Line must contain property name & value, exactly one '=' symbol, and not to be blank");
     }
 
     @Test

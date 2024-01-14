@@ -59,15 +59,16 @@ public class LogService {
 
     public int getUniqueEncryptions(String originalMessage, String cipherName) {
         List<String> log = encryptionRepository.getHistoryLog();
-        int count = 0;
-        for (String encryption : log) {
-            String[] encryptionData = encryption.split("\\|#");
-            String message = encryptionData[1];
-            String algorithm = encryptionData[2];
-            if (message.equals(originalMessage) && algorithm.equals(cipherName)) {
-                count++;
-            }
-        }
-        return count;
+
+        return (int) log.stream()
+            .map(encryption -> encryption.split("\\|#"))
+            .filter(encryptionData -> isEquals(encryptionData, originalMessage, cipherName))
+            .count();
+    }
+
+    private boolean isEquals(String[] encryptionData, String originalMessage, String cipherName) {
+        String message = encryptionData[1];
+        String algorithm = encryptionData[2];
+        return message.equals(originalMessage) && algorithm.equals(cipherName);
     }
 }

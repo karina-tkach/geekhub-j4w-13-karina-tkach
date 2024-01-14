@@ -3,15 +3,12 @@ package org.geekhub.encryption.injector;
 import org.geekhub.encryption.exception.FileException;
 import org.geekhub.encryption.exception.PropertyFormatException;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 import java.nio.file.Files;
-
-import static java.nio.file.Files.readAllLines;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class PropertiesFileReader {
     private PropertiesFileReader() {
@@ -20,34 +17,30 @@ public class PropertiesFileReader {
 
     public static Map<String, String> readFile(String pathToFile) {
         Path propertiesFilePath = Path.of(pathToFile);
-        Map<String, String> properties = new HashMap<>();
-        try {
-            if (!Files.exists(propertiesFilePath)) {
-                throw new FileNotFoundException("Property file was not found.");
-            }
-            List<String> linesFromFile = readAllLines(propertiesFilePath);
-            for (String line : linesFromFile) {
-                if (isLineValid(line)) {
-                    String[] lineData = line.split("=");
-                    String propertyName = lineData[0].trim();
-                    String propertyValue = lineData[1].trim();
-                    if (propertyName.isEmpty() || propertyValue.isEmpty()) {
-                        throw new PropertyFormatException("Property name or value can`t contain just whitespaces.");
-                    }
-                    properties.put(propertyName, propertyValue);
-                } else {
-                    throw new PropertyFormatException("Line must contain property name & value, and exactly one '=' symbol");
-                }
-            }
+        Map<String, String> properties;
+        try (Stream<String> input = Files.lines(propertiesFilePath)) {
+
+            properties = input.filter(PropertiesFileReader::isLineValid)
+                .collect(Collectors.toMap(
+                    lineData -> lineData.split("=")[0].trim(),
+                    lineData -> lineData.split("=")[1].trim()
+                ));
+
         } catch (IOException ex) {
-            throw new FileException("Error occurred while properties file", ex);
+            throw new FileException("Error occurred while processing properties file", ex);
         }
+
         return properties;
 
     }
 
     private static boolean isLineValid(String line) {
-        return !line.isBlank() && line.split("=").length == 2;
+        String[] data = line.split("=");
+        if (line.isBlank() || data.length != 2 || data[0].trim().isEmpty() || data[1].trim().isEmpty()) {
+            throw new PropertyFormatException("Line must contain property name & value, exactly one '=' symbol, and not to be blank");
+        } else {
+            return true;
+        }
     }
 }
 

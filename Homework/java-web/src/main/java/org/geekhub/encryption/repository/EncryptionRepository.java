@@ -29,9 +29,8 @@ public class EncryptionRepository {
     public void addToHistoryLog(String originalMessage, String algorithm, String encryptedMessage, OffsetDateTime dateTime) {
         try {
             String delimiter = "|#";
-            String res = dateTime.toString() + delimiter +
-                         originalMessage + delimiter + algorithm +
-                         delimiter + encryptedMessage;
+            String res = String.format("%1$s%2$s%3$s%2$s%4$s%2$s%5$s", dateTime.toString(), delimiter,
+                originalMessage, algorithm, encryptedMessage);
             log.add(res);
             res += "\n";
             Files.write(PATH_TO_LOG_FILE, res.getBytes(), StandardOpenOption.APPEND);
