@@ -97,11 +97,11 @@ class LogServiceTest {
 
         when(encryptionRepository.getHistoryLog()).thenReturn(log);
 
-        int uniqueEncryptions1 = logService.getUniqueEncryptions("message1", "algorithm1");
-        int uniqueEncryptions2 = logService.getUniqueEncryptions("message2", "algorithm2");
-        int uniqueEncryptions3 = logService.getUniqueEncryptions("message2", "algorithm3");
-        int uniqueEncryptions4 = logService.getUniqueEncryptions("message3", "algorithm1");
-        int uniqueEncryptions5 = logService.getUniqueEncryptions("message4", "algorithm3");
+        long uniqueEncryptions1 = logService.getUniqueEncryptions("message1", "algorithm1");
+        long uniqueEncryptions2 = logService.getUniqueEncryptions("message2", "algorithm2");
+        long uniqueEncryptions3 = logService.getUniqueEncryptions("message2", "algorithm3");
+        long uniqueEncryptions4 = logService.getUniqueEncryptions("message3", "algorithm1");
+        long uniqueEncryptions5 = logService.getUniqueEncryptions("message4", "algorithm3");
 
         assertEquals(1, uniqueEncryptions1, "The count of unique encryptions for message1 and algorithm1 is incorrect.");
         assertEquals(2, uniqueEncryptions2, "The count of unique encryptions for message2 and algorithm2 is incorrect.");

@@ -44,12 +44,13 @@ public class GetEncryption {
     }
 
     private void printInfo(List<String> log) {
-        if (!log.isEmpty()) {
-            for (String encryptionData : log) {
-                System.out.println(encryptionData);
-            }
-        } else {
+        if (log.isEmpty()) {
             System.out.println(ERROR_MESSAGE);
+            return;
+        }
+
+        for (String encryptionData : log) {
+            System.out.println(encryptionData);
         }
     }
 
@@ -58,10 +59,11 @@ public class GetEncryption {
 
         if (algorithmUsageCount.isEmpty()) {
             System.out.println(ERROR_MESSAGE);
-        } else {
-            for (Map.Entry<String, Integer> entry : algorithmUsageCount.entrySet()) {
-                System.out.println(entry.getKey() + " was used " + entry.getValue() + " times");
-            }
+            return;
+        }
+
+        for (Map.Entry<String, Integer> entry : algorithmUsageCount.entrySet()) {
+            System.out.println(entry.getKey() + " was used " + entry.getValue() + " times");
         }
     }
 
@@ -71,7 +73,7 @@ public class GetEncryption {
         System.out.println("Choose algorithm name:");
         String cipherName = getCipherName();
 
-        int encryptionCount = logService.getUniqueEncryptions(originalMessage, cipherName);
+        long encryptionCount = logService.getUniqueEncryptions(originalMessage, cipherName);
         if (encryptionCount == 0) {
             System.out.println(ERROR_MESSAGE);
         } else {

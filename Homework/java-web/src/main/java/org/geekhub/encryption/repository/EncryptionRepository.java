@@ -32,7 +32,7 @@ public class EncryptionRepository {
             String res = String.format("%1$s%2$s%3$s%2$s%4$s%2$s%5$s", dateTime.toString(), delimiter,
                 originalMessage, algorithm, encryptedMessage);
             log.add(res);
-            res += "\n";
+            res = String.format("%s%n", res);
             Files.write(PATH_TO_LOG_FILE, res.getBytes(), StandardOpenOption.APPEND);
         } catch (Exception ex) {
             throw new FileException("Error occurred while processing log file", ex);

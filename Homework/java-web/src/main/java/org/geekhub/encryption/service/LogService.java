@@ -2,10 +2,9 @@ package org.geekhub.encryption.service;
 
 import org.geekhub.encryption.repository.EncryptionRepository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class LogService {
     private final EncryptionRepository encryptionRepository;
@@ -15,52 +14,44 @@ public class LogService {
     }
 
     public List<String> getFullHistory() {
-        List<String> fullHistory = new ArrayList<>();
         List<String> log = encryptionRepository.getHistoryLog();
 
-        for (String encryption : log) {
-            String[] encryptionData = encryption.split("\\|#");
-            String res = String.format("%s - Message '%s' was encrypted via %s into '%s'",
-                encryptionData[0], encryptionData[1], encryptionData[2], encryptionData[3]);
-            fullHistory.add(res);
-        }
-        return fullHistory;
+        return log.stream()
+            .map(this::getFormatedString)
+            .toList();
     }
 
     public List<String> getHistoryByDate(String dateString) {
-        List<String> historyByDate = new ArrayList<>();
         List<String> log = encryptionRepository.getHistoryLog();
 
-        for (String encryption : log) {
-            String[] encryptionData = encryption.split("\\|#");
-            String date = encryptionData[0].substring(0, 10);
+        return log.stream()
+            .filter(encryption -> encryption.startsWith(dateString))
+            .map(this::getFormatedString)
+            .toList();
+    }
 
-            if (date.equals(dateString)) {
-                String res = String.format("%s - Message '%s' was encrypted via %s into '%s'",
-                    encryptionData[0], encryptionData[1], encryptionData[2], encryptionData[3]);
-                historyByDate.add(res);
-            }
-        }
-        return historyByDate;
+    private String getFormatedString(String encryption) {
+        String[] encryptionData = encryption.split("\\|#");
+        return String.format("%s - Message '%s' was encrypted via %s into '%s'",
+            encryptionData[0], encryptionData[1], encryptionData[2], encryptionData[3]);
     }
 
     public Map<String, Integer> getAlgorithmUsageCount() {
         List<String> log = encryptionRepository.getHistoryLog();
-        Map<String, Integer> algorithmUsageCount = new HashMap<>();
 
-        for (String encryption : log) {
-            String[] encryptionData = encryption.split("\\|#");
-            String algorithm = encryptionData[2];
-            algorithmUsageCount.put(algorithm, algorithmUsageCount.getOrDefault(algorithm, 0) + 1);
-        }
-
-        return algorithmUsageCount;
+        return log.stream()
+            .map(encryption -> encryption.split("\\|#")[2])
+            .collect(Collectors.toMap(
+                algorithm -> algorithm,
+                algorithm -> 1,
+                Integer::sum
+            ));
     }
 
-    public int getUniqueEncryptions(String originalMessage, String cipherName) {
+    public long getUniqueEncryptions(String originalMessage, String cipherName) {
         List<String> log = encryptionRepository.getHistoryLog();
 
-        return (int) log.stream()
+        return log.stream()
             .map(encryption -> encryption.split("\\|#"))
             .filter(encryptionData -> isEquals(encryptionData, originalMessage, cipherName))
             .count();

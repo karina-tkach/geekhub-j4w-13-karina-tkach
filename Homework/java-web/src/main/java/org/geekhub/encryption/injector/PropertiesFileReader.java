@@ -17,10 +17,10 @@ public class PropertiesFileReader {
 
     public static Map<String, String> readFile(String pathToFile) {
         Path propertiesFilePath = Path.of(pathToFile);
-        Map<String, String> properties;
         try (Stream<String> input = Files.lines(propertiesFilePath)) {
 
-            properties = input.filter(PropertiesFileReader::isLineValid)
+            return input
+                .filter(PropertiesFileReader::isLineValid)
                 .collect(Collectors.toMap(
                     lineData -> lineData.split("=")[0].trim(),
                     lineData -> lineData.split("=")[1].trim()
@@ -29,18 +29,16 @@ public class PropertiesFileReader {
         } catch (IOException ex) {
             throw new FileException("Error occurred while processing properties file", ex);
         }
-
-        return properties;
-
     }
 
     private static boolean isLineValid(String line) {
         String[] data = line.split("=");
+
         if (line.isBlank() || data.length != 2 || data[0].trim().isEmpty() || data[1].trim().isEmpty()) {
             throw new PropertyFormatException("Line must contain property name & value, exactly one '=' symbol, and not to be blank");
-        } else {
-            return true;
         }
+
+        return true;
     }
 }
 
