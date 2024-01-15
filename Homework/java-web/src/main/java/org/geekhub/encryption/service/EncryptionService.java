@@ -50,11 +50,11 @@ public class EncryptionService {
     }
 
     private char getCharForShiftEncryption(int letter, int shift) {
-        if (letter >= 'a' && letter <= 'z') {
+        if (isInLettersInterval('a', letter)) {
             return (char) ((letter - 'a' + shift) % NUMBER_OF_LETTERS_IN_ALPHABET + 'a');
         }
 
-        if (letter >= 'A' && letter <= 'Z') {
+        if (isInLettersInterval('A', letter)) {
             return (char) ((letter - 'A' + shift) % NUMBER_OF_LETTERS_IN_ALPHABET + 'A');
         }
 
@@ -68,15 +68,23 @@ public class EncryptionService {
     }
 
     private char getCharForAtbashEncryption(int letter) {
-        if (letter >= 'a' && letter <= 'z') {
+        if (isInLettersInterval('a', letter)) {
             return (char) ('a' + ('z' - letter));
         }
 
-        if (letter >= 'A' && letter <= 'Z') {
+        if (isInLettersInterval('A', letter)) {
             return (char) ('A' + ('Z' - letter));
         }
 
         return (char) letter;
+    }
+
+    private boolean isInLettersInterval(char beginLetter, int letter) {
+        if (beginLetter == 'a' && letter >= 'a' && letter <= 'z') {
+            return true;
+        }
+
+        return beginLetter == 'A' && letter >= 'A' && letter <= 'Z';
     }
 
     private String encryptViaTheA1Z26Cipher(String message) {
