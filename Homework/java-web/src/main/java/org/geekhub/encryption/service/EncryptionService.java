@@ -4,6 +4,7 @@ import org.geekhub.encryption.injector.Injectable;
 import org.geekhub.encryption.repository.EncryptionRepository;
 
 import java.time.OffsetDateTime;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -14,9 +15,13 @@ public class EncryptionService {
     @Injectable(propertyName = "rot13Key")
     private int rot13key;
     private final EncryptionRepository encryptionRepository;
+    private final AtomicBoolean lastCharIsLetter;
+    private final AtomicInteger keyIndex;
 
     public EncryptionService(EncryptionRepository encryptionRepository) {
         this.encryptionRepository = encryptionRepository;
+        this.lastCharIsLetter = new AtomicBoolean();
+        this.keyIndex = new AtomicInteger();
     }
 
     public String encryptMessage(String cipherName, String message, String key) {
@@ -50,15 +55,12 @@ public class EncryptionService {
     }
 
     private char getCharForShiftEncryption(int letter, int shift) {
-        if (isInLettersInterval('a', letter)) {
-            return (char) ((letter - 'a' + shift) % NUMBER_OF_LETTERS_IN_ALPHABET + 'a');
+        int keyLetter = getKeyLetter(letter);
+        if (keyLetter == 0) {
+            return (char) letter;
         }
 
-        if (isInLettersInterval('A', letter)) {
-            return (char) ((letter - 'A' + shift) % NUMBER_OF_LETTERS_IN_ALPHABET + 'A');
-        }
-
-        return (char) letter;
+        return (char) ((letter - keyLetter + shift) % NUMBER_OF_LETTERS_IN_ALPHABET + keyLetter);
     }
 
     private String encryptViaTheAtbashCipher(String message) {
@@ -68,66 +70,66 @@ public class EncryptionService {
     }
 
     private char getCharForAtbashEncryption(int letter) {
-        if (isInLettersInterval('a', letter)) {
-            return (char) ('a' + ('z' - letter));
+        int keyLetter = getKeyLetter(letter);
+        if (keyLetter == 0) {
+            return (char) letter;
         }
 
-        if (isInLettersInterval('A', letter)) {
-            return (char) ('A' + ('Z' - letter));
-        }
-
-        return (char) letter;
+        return (char) (keyLetter + (keyLetter + NUMBER_OF_LETTERS_IN_ALPHABET - 1 - letter));
     }
 
-    private boolean isInLettersInterval(char beginLetter, int letter) {
-        if (beginLetter == 'a' && letter >= 'a' && letter <= 'z') {
-            return true;
+    private int getKeyLetter(int letter) {
+        if (letter >= 'a' && letter <= 'z') {
+            return 'a';
         }
 
-        return beginLetter == 'A' && letter >= 'A' && letter <= 'Z';
+        if (letter >= 'A' && letter <= 'Z') {
+            return 'A';
+        }
+
+        return 0;
     }
 
     private String encryptViaTheA1Z26Cipher(String message) {
-        StringBuilder sb = new StringBuilder(message.length());
+        return message.chars()
+            .mapToObj(this::getStringForA1Z26Encryption)
+            .collect(Collectors.joining());
+    }
 
-        message.chars()
-            .forEach(letter -> {
-                if (letter >= 'a' && letter <= 'z') {
-                    sb.append(letter - 'a' + 1).append("-");
-                } else if (letter >= 'A' && letter <= 'Z') {
-                    sb.append(letter - 'A' + 1).append("-");
-                } else {
-                    sb.deleteCharAt(sb.length() - 1);
-                    sb.append((char) letter);
-                }
-            });
-
-        if (!sb.isEmpty() && sb.charAt(sb.length() - 1) == '-') {
-            sb.deleteCharAt(sb.length() - 1);
+    private String getStringForA1Z26Encryption(int letter) {
+        int keyLetter = getKeyLetter(letter);
+        if (keyLetter == 0) {
+            lastCharIsLetter.set(false);
+            return String.valueOf((char)letter);
         }
 
-        return sb.toString();
+        String result = String.valueOf(letter - keyLetter + 1);
+        if (lastCharIsLetter.get()) {
+            result = "-" + result;
+        }
+        lastCharIsLetter.set(true);
+        return result;
     }
 
     private String encryptViaTheVigenereCipher(String message, String key) {
         String keyLower = key.toLowerCase();
         String keyUpper = key.toUpperCase();
-        StringBuilder sb = new StringBuilder(message.length());
-        AtomicInteger keyIndex = new AtomicInteger();
 
-        message.chars()
-            .forEach(letter -> {
-                if (letter >= 'a' && letter <= 'z') {
-                    sb.append((char) (((letter - 'a') + (keyLower.charAt(keyIndex.get()) - 'a')) % NUMBER_OF_LETTERS_IN_ALPHABET + 'a'));
-                    keyIndex.set(keyIndex.incrementAndGet() % key.length());
-                } else if (letter >= 'A' && letter <= 'Z') {
-                    sb.append((char) (((letter - 'A') + (keyUpper.charAt(keyIndex.get()) - 'A')) % NUMBER_OF_LETTERS_IN_ALPHABET + 'A'));
-                    keyIndex.set(keyIndex.incrementAndGet() % key.length());
-                } else {
-                    sb.append((char) letter);
-                }
-            });
+        return message.chars()
+            .mapToObj(letter -> String.valueOf(getCharForVigenereEncryption(letter, keyLower, keyUpper)))
+            .collect(Collectors.joining());
+    }
 
-        return sb.toString();
+    private char getCharForVigenereEncryption(int letter, String keyLower, String keyUpper) {
+        int keyLetter = getKeyLetter(letter);
+        if (keyLetter == 0) {
+            return (char) letter;
+        }
+
+        String key = (keyLetter == 'a' ? keyLower : keyUpper);
+
+        char res = (char) (((letter - keyLetter) + (key.charAt(keyIndex.get()) - keyLetter)) % NUMBER_OF_LETTERS_IN_ALPHABET + keyLetter);
+        keyIndex.set(keyIndex.incrementAndGet() % key.length());
+        return res;
     }
 }
