@@ -126,10 +126,14 @@ public class EncryptionService {
             return (char) letter;
         }
 
-        String key = (keyLetter == 'a' ? keyLower : keyUpper);
+        String key = getKeyInValidCase(keyLetter, keyLower, keyUpper);
 
         char res = (char) (((letter - keyLetter) + (key.charAt(keyIndex.get()) - keyLetter)) % NUMBER_OF_LETTERS_IN_ALPHABET + keyLetter);
         keyIndex.set(keyIndex.incrementAndGet() % key.length());
         return res;
+    }
+
+    private String getKeyInValidCase(int keyLetter, String keyLower, String keyUpper){
+        return keyLetter == 'a' ? keyLower : keyUpper;
     }
 }
