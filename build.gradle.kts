@@ -38,8 +38,8 @@ allprojects {
         dependsOn("checkstyleMain", "sonarlintMain")
     }
 
-    configure<IdeaModel>{
-        module{
+    configure<IdeaModel> {
+        module {
             sourceDirs.plusAssign(file("src/main/java"))
         }
     }
@@ -56,7 +56,7 @@ allprojects {
         }
     }
 
-    configure<SonarLintExtension>{
+    configure<SonarLintExtension> {
         languages {
             include("java")
         }
@@ -77,4 +77,9 @@ allprojects {
     tasks.named<Test>("test") {
         useJUnitPlatform()
     }
+}
+
+tasks.wrapper {
+    gradleVersion = "latest"
+    distributionType = Wrapper.DistributionType.ALL
 }
