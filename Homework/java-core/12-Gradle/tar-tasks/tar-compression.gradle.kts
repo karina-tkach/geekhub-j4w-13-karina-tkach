@@ -47,6 +47,4 @@ tasks.register<Delete>("cleanup") {
     file(secondDir).list()?.forEach { f ->
         delete("${secondDir}${f}")
     }
-
-    //delete("build/archive/, "src/test/resources/")
 }
