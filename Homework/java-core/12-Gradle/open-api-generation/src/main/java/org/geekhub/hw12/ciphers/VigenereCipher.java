@@ -51,6 +51,7 @@ public class VigenereCipher implements Cipher<VigenereCipherDto> {
 
     @Override
     public String decode(VigenereCipherDto decodeData) {
+        keyIndex.set(0);
         String keyLower = decodeData.getKeyword().toLowerCase();
         String keyUpper = decodeData.getKeyword().toUpperCase();
 
