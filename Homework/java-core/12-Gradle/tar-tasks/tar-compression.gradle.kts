@@ -38,13 +38,6 @@ tasks.register<Delete>("cleanup") {
     description = "Deletes all files from the `build/archive` and `src/test/resources` dirs"
     group = "custom-archive"
 
-    val firstDir = "src/test/resources/"
-    file(firstDir).list()?.forEach { f ->
-        delete("${firstDir}${f}")
-    }
-
-    val secondDir = "build/archive/"
-    file(secondDir).list()?.forEach { f ->
-        delete("${secondDir}${f}")
-    }
+    delete("src/test/resources/")
+    delete("build/archive/")
 }

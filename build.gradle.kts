@@ -19,11 +19,8 @@ allprojects {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    tasks.named<JavaCompile>("compileJava") {
+    tasks.withType<JavaCompile> {
         options.encoding = "UTF-8"
-    }
-    tasks.withType<Test> {
-        systemProperty("file.encoding", "UTF-8")
     }
 
     repositories {
@@ -74,12 +71,12 @@ allprojects {
         }
     }
 
-    tasks.named<Test>("test") {
+    tasks.withType<Test> {
         useJUnitPlatform()
     }
 }
 
 tasks.wrapper {
-    gradleVersion = "latest"
+    gradleVersion = "8.5"
     distributionType = Wrapper.DistributionType.ALL
 }

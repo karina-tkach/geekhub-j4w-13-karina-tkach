@@ -12,6 +12,7 @@ public class VigenereCipher implements Cipher<VigenereCipherDto> {
     }
     @Override
     public String encode(VigenereCipherDto encodeData) {
+        keyIndex.set(0);
         String keyLower = encodeData.getKeyword().toLowerCase();
         String keyUpper = encodeData.getKeyword().toUpperCase();
 
