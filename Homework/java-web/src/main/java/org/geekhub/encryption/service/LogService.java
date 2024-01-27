@@ -1,11 +1,13 @@
 package org.geekhub.encryption.service;
 
 import org.geekhub.encryption.repository.EncryptionRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Service
 public class LogService {
     private final EncryptionRepository encryptionRepository;
 
@@ -36,28 +38,34 @@ public class LogService {
             encryptionData[0], encryptionData[1], encryptionData[2], encryptionData[3]);
     }
 
-    public Map<String, Integer> getAlgorithmUsageCount() {
+    public List<String> getAlgorithmUsageCount() {
         List<String> log = encryptionRepository.getHistoryLog();
 
-        return log.stream()
+        Map<String, Integer> algorithmUsageCount = log.stream()
             .map(encryption -> encryption.split("\\|#")[2])
             .collect(Collectors.toMap(
                 algorithm -> algorithm,
                 algorithm -> 1,
                 Integer::sum
             ));
+
+        return algorithmUsageCount.entrySet().stream()
+            .map(entry -> entry.getKey() + " was used " + entry.getValue() + " times")
+            .toList();
     }
 
-    public long getUniqueEncryptions(String originalMessage, String cipherName) {
+    public String getUniqueEncryptions(String originalMessage, String cipherName) {
         List<String> log = encryptionRepository.getHistoryLog();
 
-        return log.stream()
+        long encryptionCount = log.stream()
             .map(encryption -> encryption.split("\\|#"))
-            .filter(encryptionData -> isEquals(encryptionData, originalMessage, cipherName))
+            .filter(encryptionData -> isEqual(encryptionData, originalMessage, cipherName))
             .count();
+
+        return String.format("Message '%s' was encrypted via %s %d times", originalMessage, cipherName, encryptionCount);
     }
 
-    private boolean isEquals(String[] encryptionData, String originalMessage, String cipherName) {
+    private boolean isEqual(String[] encryptionData, String originalMessage, String cipherName) {
         String message = encryptionData[1];
         String algorithm = encryptionData[2];
         return message.equals(originalMessage) && algorithm.equals(cipherName);

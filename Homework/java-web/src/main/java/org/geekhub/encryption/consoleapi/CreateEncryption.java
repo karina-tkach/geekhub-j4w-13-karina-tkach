@@ -1,5 +1,10 @@
 package org.geekhub.encryption.consoleapi;
 
+import org.geekhub.encryption.ciphers.A1Z26Cipher;
+import org.geekhub.encryption.ciphers.AtbashCipher;
+import org.geekhub.encryption.ciphers.CaesarCipher;
+import org.geekhub.encryption.ciphers.Cipher;
+import org.geekhub.encryption.ciphers.VigenereCipher;
 import org.geekhub.encryption.service.EncryptionService;
 
 import java.util.Scanner;
@@ -10,8 +15,7 @@ public class CreateEncryption {
         1. Encrypt a message using Caesar cipher
         2. Encrypt a message using Atbash cipher
         3. Encrypt a message using A1Z26 cipher
-        4. Encrypt a message using ROT13 cipher
-        5. Encrypt a message using Vigenere cipher""";
+        4. Encrypt a message using Vigenere cipher""";
     private final Scanner scanner;
     private final EncryptionService encryptionService;
 
@@ -21,33 +25,30 @@ public class CreateEncryption {
     }
 
     public void encryptMessage() {
-        String cipherName = getInputCipherName();
+        Cipher cipher = getInputCipher();
         String message = getInputMessage();
-        String key = "";
-        if (cipherName.equals("Vigenere")) {
-            key = getKeyForVigenereCipher();
-        }
+        encryptionService.setCipher(cipher);
+
         try {
-            String encryptedMessage = encryptionService.encryptMessage(cipherName, message, key);
+            String encryptedMessage = encryptionService.encryptMessage(message);
             System.out.println("Encrypted message: " + encryptedMessage);
         } catch (IllegalArgumentException ex) {
-            System.out.println("Incorrect input message or key.");
+            System.out.println("Incorrect input message.");
         }
     }
 
     @SuppressWarnings("EnhancedSwitchMigration")
-    private String getInputCipherName() {
+    private Cipher getInputCipher() {
         while (true) {
             System.out.println(SUBMENU_OPTIONS);
             try {
                 int choice = Integer.parseInt(scanner.nextLine());
 
                 switch (choice) {
-                    case 1: return "Caesar";
-                    case 2: return "Atbash";
-                    case 3: return "A1Z26";
-                    case 4: return "ROT13";
-                    case 5: return "Vigenere";
+                    case 1: return new CaesarCipher();
+                    case 2: return new AtbashCipher();
+                    case 3: return new A1Z26Cipher();
+                    case 4: return new VigenereCipher();
                     default:
                         System.out.println("Invalid choice. Please try again.");
                 }
@@ -59,11 +60,6 @@ public class CreateEncryption {
 
     private String getInputMessage() {
         System.out.println("Enter the message to encrypt:");
-        return scanner.nextLine();
-    }
-
-    private String getKeyForVigenereCipher() {
-        System.out.println("Enter the key to encrypt a message with Vigenere cipher:");
         return scanner.nextLine();
     }
 }

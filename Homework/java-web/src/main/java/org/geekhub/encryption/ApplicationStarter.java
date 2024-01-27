@@ -1,30 +1,44 @@
 package org.geekhub.encryption;
 
-import org.geekhub.encryption.consoleapi.CreateEncryption;
-import org.geekhub.encryption.consoleapi.GetEncryption;
-import org.geekhub.encryption.consoleapi.Menu;
-import org.geekhub.encryption.injector.InjectionExecutor;
-import org.geekhub.encryption.repository.EncryptionRepository;
 import org.geekhub.encryption.service.EncryptionService;
 import org.geekhub.encryption.service.LogService;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import java.util.Scanner;
+import java.util.List;
+
 
 public class ApplicationStarter {
     public static void main(String[] args) {
-        String pathToPropertiesFile = ClassLoader.getSystemResource("application.properties").getPath().substring(1);
-        InjectionExecutor injectionExecutor = new InjectionExecutor(pathToPropertiesFile);
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfiguration.class);
+        context.registerShutdownHook();
 
-        Scanner scanner = new Scanner(System.in);
+        EncryptionService encryptionService = context.getBean(EncryptionService.class);
+        String originalMessage = "Hello";
+        String encryptedMessage = encryptionService.encryptMessage(originalMessage);
+        System.out.printf("%s%n%n", encryptedMessage);
 
-        EncryptionRepository repository = new EncryptionRepository();
-        EncryptionService encryptionService = new EncryptionService(repository);
-        injectionExecutor.execute(encryptionService);
-        LogService logService = new LogService(repository);
-        CreateEncryption createEncryption = new CreateEncryption(scanner, encryptionService);
-        GetEncryption getEncryption = new GetEncryption(scanner, logService);
+        LogService logService = context.getBean(LogService.class);
+        List<String> fullHistory = logService.getFullHistory();
+        printInfo("Full history:", fullHistory);
 
-        Menu menu = new Menu(scanner, createEncryption, getEncryption);
-        menu.printMenu();
+        String date = "2024-01-27";
+        List<String> historyByDate = logService.getHistoryByDate(date);
+        printInfo("History by date "+ date,historyByDate);
+
+        List<String> algorithmUsageCount = logService.getAlgorithmUsageCount();
+        printInfo("Algorithm usage count:",algorithmUsageCount);
+
+        String cipherName = "Caesar";
+        String uniqueEncryption = logService.getUniqueEncryptions(originalMessage,cipherName);
+        System.out.printf("Number of encryptions of message '%s' by %s cipher%n",originalMessage,cipherName);
+        System.out.println(uniqueEncryption);
+    }
+
+    private static void printInfo(String infoMessage, List<String> entries){
+        System.out.println(infoMessage);
+        for (String entry : entries){
+            System.out.println(entry);
+        }
+        System.out.println("\n\n");
     }
 }

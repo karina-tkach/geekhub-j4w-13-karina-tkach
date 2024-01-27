@@ -1,6 +1,7 @@
 package org.geekhub.encryption.repository;
 
 import org.geekhub.encryption.exception.FileException;
+import org.springframework.stereotype.Repository;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -9,6 +10,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class EncryptionRepository {
     private static final Path PATH_TO_LOG_FILE = Path.of("historyLog.txt");
     private final List<String> log;

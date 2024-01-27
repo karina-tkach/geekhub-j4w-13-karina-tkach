@@ -10,8 +10,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -78,13 +78,12 @@ class LogServiceTest {
 
         when(encryptionRepository.getHistoryLog()).thenReturn(log);
 
-        Map<String, Integer> algorithmUsageCount = logService.getAlgorithmUsageCount();
+        List<String> algorithmUsageCount = logService.getAlgorithmUsageCount();
+        List<String> expected = List.of("algorithm1 was used 3 times",
+            "algorithm2 was used 1 times", "algorithm3 was used 2 times");
 
         assertEquals(3, algorithmUsageCount.size(), "The size of the algorithm usage count is incorrect.");
-
-        assertEquals(3, algorithmUsageCount.get("algorithm1"), "The count for algorithm1 is incorrect.");
-        assertEquals(1, algorithmUsageCount.get("algorithm2"), "The count for algorithm2 is incorrect.");
-        assertEquals(2, algorithmUsageCount.get("algorithm3"), "The count for algorithm3 is incorrect.");
+        assertThat(algorithmUsageCount).containsExactlyInAnyOrderElementsOf(expected);
     }
 
     @Test
@@ -97,16 +96,16 @@ class LogServiceTest {
 
         when(encryptionRepository.getHistoryLog()).thenReturn(log);
 
-        long uniqueEncryptions1 = logService.getUniqueEncryptions("message1", "algorithm1");
-        long uniqueEncryptions2 = logService.getUniqueEncryptions("message2", "algorithm2");
-        long uniqueEncryptions3 = logService.getUniqueEncryptions("message2", "algorithm3");
-        long uniqueEncryptions4 = logService.getUniqueEncryptions("message3", "algorithm1");
-        long uniqueEncryptions5 = logService.getUniqueEncryptions("message4", "algorithm3");
+        String uniqueEncryption1 = logService.getUniqueEncryptions("message1", "algorithm1");
+        String uniqueEncryption2 = logService.getUniqueEncryptions("message2", "algorithm2");
+        String uniqueEncryption3 = logService.getUniqueEncryptions("message2", "algorithm3");
+        String uniqueEncryption4 = logService.getUniqueEncryptions("message3", "algorithm1");
+        String uniqueEncryption5 = logService.getUniqueEncryptions("message4", "algorithm3");
 
-        assertEquals(1, uniqueEncryptions1, "The count of unique encryptions for message1 and algorithm1 is incorrect.");
-        assertEquals(2, uniqueEncryptions2, "The count of unique encryptions for message2 and algorithm2 is incorrect.");
-        assertEquals(0, uniqueEncryptions3, "The count of unique encryptions for message2 and algorithm1 is incorrect.");
-        assertEquals(1, uniqueEncryptions4, "The count of unique encryptions for message3 and algorithm1 is incorrect.");
-        assertEquals(0, uniqueEncryptions5, "The count of unique encryptions for message4 and algorithm3 is incorrect.");
+        assertEquals("Message 'message1' was encrypted via algorithm1 1 times", uniqueEncryption1, "The count of unique encryptions for message1 and algorithm1 is incorrect.");
+        assertEquals("Message 'message2' was encrypted via algorithm2 2 times", uniqueEncryption2, "The count of unique encryptions for message2 and algorithm2 is incorrect.");
+        assertEquals("Message 'message2' was encrypted via algorithm3 0 times", uniqueEncryption3, "The count of unique encryptions for message2 and algorithm1 is incorrect.");
+        assertEquals("Message 'message3' was encrypted via algorithm1 1 times", uniqueEncryption4, "The count of unique encryptions for message3 and algorithm1 is incorrect.");
+        assertEquals("Message 'message4' was encrypted via algorithm3 0 times", uniqueEncryption5, "The count of unique encryptions for message4 and algorithm3 is incorrect.");
     }
 }

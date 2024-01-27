@@ -5,7 +5,6 @@ import org.geekhub.encryption.service.LogService;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 public class GetEncryption {
@@ -14,8 +13,7 @@ public class GetEncryption {
         1. Caesar cipher
         2. Atbash cipher
         3. A1Z26 cipher
-        4. ROT13 cipher
-        5. Vigenere cipher""";
+        4. Vigenere cipher""";
     private final Scanner scanner;
     private final LogService logService;
 
@@ -55,16 +53,9 @@ public class GetEncryption {
     }
 
     public void displayAlgorithmUsageCount() {
-        Map<String, Integer> algorithmUsageCount = logService.getAlgorithmUsageCount();
+        List<String> algorithmUsageCount = logService.getAlgorithmUsageCount();
 
-        if (algorithmUsageCount.isEmpty()) {
-            System.out.println(ERROR_MESSAGE);
-            return;
-        }
-
-        for (Map.Entry<String, Integer> entry : algorithmUsageCount.entrySet()) {
-            System.out.println(entry.getKey() + " was used " + entry.getValue() + " times");
-        }
+        printInfo(algorithmUsageCount);
     }
 
     public void displayUniqueEncryptions() {
@@ -73,12 +64,8 @@ public class GetEncryption {
         System.out.println("Choose algorithm name:");
         String cipherName = getCipherName();
 
-        long encryptionCount = logService.getUniqueEncryptions(originalMessage, cipherName);
-        if (encryptionCount == 0) {
-            System.out.println(ERROR_MESSAGE);
-        } else {
-            System.out.printf("Message '%s' was encrypted via %s %d times%n", originalMessage, cipherName, encryptionCount);
-        }
+        String uniqueEncryption = logService.getUniqueEncryptions(originalMessage, cipherName);
+        System.out.println(uniqueEncryption);
     }
 
     @SuppressWarnings("EnhancedSwitchMigration")
@@ -92,8 +79,7 @@ public class GetEncryption {
                     case 1: return "Caesar";
                     case 2: return "Atbash";
                     case 3: return "A1Z26";
-                    case 4: return "ROT13";
-                    case 5: return "Vigenere";
+                    case 4: return "Vigenere";
                     default:
                         System.out.println("Invalid choice. Please try again.");
                 }
