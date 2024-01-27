@@ -30,7 +30,7 @@ public class ApplicationStarter {
 
         String cipherName = "Caesar";
         String uniqueEncryption = logService.getUniqueEncryptions(originalMessage,cipherName);
-        System.out.printf("Number of encryptions of message '%s' by %s cipher%n",originalMessage,cipherName);
+        System.out.printf("Number of encryptions of message '%s' by %s cipher:%n",originalMessage,cipherName);
         System.out.println(uniqueEncryption);
     }
 
