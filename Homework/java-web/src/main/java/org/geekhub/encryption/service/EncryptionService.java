@@ -1,35 +1,45 @@
 package org.geekhub.encryption.service;
 
 import org.geekhub.encryption.ciphers.Cipher;
-import org.geekhub.encryption.repository.EncryptionRepository;
+import org.geekhub.encryption.models.HistoryEntry;
+import org.geekhub.encryption.repository.EncryptionRepositoryInMemory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
 
 @Service
+@SuppressWarnings("java:S6857")
 public class EncryptionService {
-    private final EncryptionRepository encryptionRepository;
-    private Cipher cipher;
+    private final EncryptionRepositoryInMemory encryptionRepository;
+    private final Cipher cipher;
+    @Value("${operation.type:}")
+    private String operationType;
 
-    public EncryptionService(EncryptionRepository encryptionRepository, Cipher cipher) {
+    public EncryptionService(EncryptionRepositoryInMemory encryptionRepository, Cipher cipher) {
         this.encryptionRepository = encryptionRepository;
         this.cipher = cipher;
     }
 
-    public String encryptMessage(String message) {
+    public String performOperation(String message) {
         if (message.isBlank()) {
             throw new IllegalArgumentException("Incorrect data for encryption.");
         }
 
-        String encryptedMessage = cipher.encrypt(message);
+        String processedMessage;
+        operationType = operationType.toUpperCase();
+        if (operationType.equals("ENCRYPTION")) {
+            processedMessage = cipher.encrypt(message);
+        } else if (operationType.equals("DECRYPTION")) {
+            processedMessage = cipher.decrypt(message);
+        } else {
+            throw new IllegalArgumentException("Illegal operation type.");
+        }
 
         OffsetDateTime dateTime = OffsetDateTime.now();
-        encryptionRepository.addToHistoryLog(message, cipher.getCipherName(), encryptedMessage, dateTime);
+        HistoryEntry entry = new HistoryEntry(message, processedMessage, cipher.getCipherName(), dateTime, operationType);
+        encryptionRepository.saveEncoding(entry);
 
-        return encryptedMessage;
-    }
-
-    public void setCipher(Cipher cipher){
-        this.cipher = cipher;
+        return processedMessage;
     }
 }

@@ -12,9 +12,12 @@ public class AtbashCipher implements Cipher {
 
     @Override
     public String encrypt(String message) {
-        return message.chars()
-            .mapToObj(letter -> String.valueOf(getCharForAtbashEncryption(letter)))
-            .collect(Collectors.joining());
+        return performOperation(message);
+    }
+
+    @Override
+    public String decrypt(String message) {
+        return performOperation(message);
     }
 
     @Override
@@ -22,7 +25,13 @@ public class AtbashCipher implements Cipher {
         return "Atbash";
     }
 
-    private char getCharForAtbashEncryption(int letter) {
+    private String performOperation(String message) {
+        return message.chars()
+            .mapToObj(letter -> String.valueOf(getCharForAtbashOperation(letter)))
+            .collect(Collectors.joining());
+    }
+
+    private char getCharForAtbashOperation(int letter) {
         int keyLetter = getKeyLetter(letter);
         if (keyLetter == 0) {
             return (char) letter;

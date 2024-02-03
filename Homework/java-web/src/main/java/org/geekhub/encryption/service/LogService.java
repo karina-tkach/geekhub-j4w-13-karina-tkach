@@ -1,6 +1,6 @@
 package org.geekhub.encryption.service;
 
-import org.geekhub.encryption.repository.EncryptionRepository;
+import org.geekhub.encryption.repository.EncryptionRepositoryInMemory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,13 +9,13 @@ import java.util.stream.Collectors;
 
 @Service
 public class LogService {
-    private final EncryptionRepository encryptionRepository;
+    private final EncryptionRepositoryInMemory encryptionRepository;
 
-    public LogService(EncryptionRepository encryptionRepository) {
+    public LogService(EncryptionRepositoryInMemory encryptionRepository) {
         this.encryptionRepository = encryptionRepository;
     }
 
-    public List<String> getFullHistory() {
+    /*public List<String> getFullHistory() {
         List<String> log = encryptionRepository.getHistoryLog();
 
         return log.stream()
@@ -69,5 +69,5 @@ public class LogService {
         String message = encryptionData[1];
         String algorithm = encryptionData[2];
         return message.equals(originalMessage) && algorithm.equals(cipherName);
-    }
+    }*/
 }

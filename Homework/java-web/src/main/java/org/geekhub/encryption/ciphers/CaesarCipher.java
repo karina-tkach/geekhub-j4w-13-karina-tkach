@@ -15,12 +15,14 @@ public class CaesarCipher implements Cipher {
 
     @Override
     public String encrypt(String message) {
-        int finalShift = ((caesarKey % NUMBER_OF_LETTERS_IN_ALPHABET)
-            + NUMBER_OF_LETTERS_IN_ALPHABET) % NUMBER_OF_LETTERS_IN_ALPHABET;
+        int finalShift = getFinalShift();
+        return performOperation(message, finalShift);
+    }
 
-        return message.chars()
-            .mapToObj(letter -> String.valueOf(getCharForCaesarEncryption(letter, finalShift)))
-            .collect(Collectors.joining());
+    @Override
+    public String decrypt(String message) {
+        int finalShift = -getFinalShift();
+        return performOperation(message, finalShift);
     }
 
     @Override
@@ -28,7 +30,18 @@ public class CaesarCipher implements Cipher {
         return "Caesar";
     }
 
-    private char getCharForCaesarEncryption(int letter, int shift) {
+    private int getFinalShift() {
+        return ((caesarKey % NUMBER_OF_LETTERS_IN_ALPHABET)
+            + NUMBER_OF_LETTERS_IN_ALPHABET) % NUMBER_OF_LETTERS_IN_ALPHABET;
+    }
+
+    private String performOperation(String message, int shift) {
+        return message.chars()
+            .mapToObj(letter -> String.valueOf(getCharForCaesarOperation(letter, shift)))
+            .collect(Collectors.joining());
+    }
+
+    private char getCharForCaesarOperation(int letter, int shift) {
         int keyLetter = getKeyLetter(letter);
         if (keyLetter == 0) {
             return (char) letter;
