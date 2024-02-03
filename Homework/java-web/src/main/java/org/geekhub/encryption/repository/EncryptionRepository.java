@@ -10,6 +10,6 @@ public interface EncryptionRepository {
     List<HistoryEntry> getHistoryByAlgorithm(String algorithm);
     List<HistoryEntry> getHistoryInDateRange(OffsetDateTime from, OffsetDateTime to);
     List<HistoryEntry> getHistoryByAlgorithmAndOperationType(String algorithm, String operationType);
-    List<HistoryEntry> getFullHistoryWithPagination(int pageNumber, int pageSize);
-    List<HistoryEntry> getFullHistoryWithPaginationAndUserId(int userId, int pageNumber, int pageSize);
+    List<HistoryEntry> getFullHistoryWithPagination(int pageNumber, int limit);
+    List<HistoryEntry> getFullHistoryWithPaginationAndUserId(int userId, int pageNumber, int limit);
 }

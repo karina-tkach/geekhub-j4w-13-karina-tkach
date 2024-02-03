@@ -10,8 +10,6 @@ public class HistoryEntry {
     private final String algorithmName;
     private final OffsetDateTime date;
     private final String operationType;
-    @Value("${active.user.id}")
-    private int activeUserId;
 
     public HistoryEntry(String originalMessage, String processedMessage, String algorithmName, OffsetDateTime date, String operationType) {
 
@@ -42,13 +40,9 @@ public class HistoryEntry {
         return operationType;
     }
 
-    public int getActiveUserId() {
-        return activeUserId;
-    }
-
     @Override
     public String toString() {
-        return String.format("Message '%s' was processed by user %d via the '%s' operation" +
-            " and %s cipher into '%s' at %tH:%<tM:%<tS %<tY-%<tm-%<td", originalMessage, activeUserId, operationType, algorithmName, processedMessage, date);
+        return String.format("Message '%s' was processed via the '%s' operation" +
+            " and %s cipher into '%s' at %tH:%<tM:%<tS %<tY-%<tm-%<td", originalMessage, operationType, algorithmName, processedMessage, date);
     }
 }
