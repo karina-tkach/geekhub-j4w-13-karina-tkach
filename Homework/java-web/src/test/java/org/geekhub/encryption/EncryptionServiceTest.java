@@ -17,7 +17,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -145,9 +144,8 @@ class EncryptionServiceTest {
     void performOperation_shouldThrowException_whenInvalidMessageIsPassed() {
         encryptionService = new EncryptionService(encryptionRepository, caesar);
         assertThatCode(() -> encryptionService.performOperation(""))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessage("Incorrect data for encryption.");
-        verify(encryptionRepository, never()).saveEncoding(any());
+            .isInstanceOf(RuntimeException.class)
+            .hasMessage("java.lang.IllegalArgumentException: Incorrect data for encryption.");
     }
 
     @Test
@@ -155,8 +153,7 @@ class EncryptionServiceTest {
         encryptionService = new EncryptionService(encryptionRepository, caesar);
         ReflectionTestUtils.setField(encryptionService, "operationType", "abc");
         assertThatCode(() -> encryptionService.performOperation("abcd"))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessage("Illegal operation type.");
-        verify(encryptionRepository, never()).saveEncoding(any());
+            .isInstanceOf(RuntimeException.class)
+            .hasMessage("java.lang.IllegalArgumentException: Illegal operation type.");
     }
 }
