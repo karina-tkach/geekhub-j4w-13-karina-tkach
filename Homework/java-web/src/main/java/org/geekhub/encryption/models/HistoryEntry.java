@@ -1,7 +1,5 @@
 package org.geekhub.encryption.models;
 
-import org.springframework.beans.factory.annotation.Value;
-
 import java.time.OffsetDateTime;
 
 public class HistoryEntry {
@@ -10,14 +8,16 @@ public class HistoryEntry {
     private final String algorithmName;
     private final OffsetDateTime date;
     private final String operationType;
+    private final String status;
 
-    public HistoryEntry(String originalMessage, String processedMessage, String algorithmName, OffsetDateTime date, String operationType) {
+    public HistoryEntry(String originalMessage, String processedMessage, String algorithmName, OffsetDateTime date, String operationType, String status) {
 
         this.originalMessage = originalMessage;
         this.processedMessage = processedMessage;
         this.algorithmName = algorithmName;
         this.date = date;
         this.operationType = operationType;
+        this.status = status;
     }
 
     public String getOriginalMessage() {
@@ -38,6 +38,10 @@ public class HistoryEntry {
 
     public String getOperationType() {
         return operationType;
+    }
+
+    public String getStatus() {
+        return status;
     }
 
     @Override

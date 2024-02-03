@@ -11,6 +11,7 @@ class HistoryEntryMapper {
     private HistoryEntryMapper() {
 
     }
+
     @SuppressWarnings("java:S1172")
     static HistoryEntry mapRow(ResultSet rs, int ignoredRowNum) throws SQLException {
         String originalMessage = rs.getString("original_message");
@@ -18,7 +19,8 @@ class HistoryEntryMapper {
         String algorithmName = rs.getString("algorithm");
         OffsetDateTime date = rs.getTimestamp("date").toLocalDateTime().atOffset(ZoneOffset.ofHours(2));
         String operationType = rs.getString("operation_type");
+        String status = rs.getString("status");
 
-        return new HistoryEntry(originalMessage, processedMessage, algorithmName, date, operationType);
+        return new HistoryEntry(originalMessage, processedMessage, algorithmName, date, operationType, status);
     }
 }

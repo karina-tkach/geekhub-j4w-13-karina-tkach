@@ -8,7 +8,6 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
-import java.time.OffsetDateTime;
 import java.util.List;
 
 @Repository
@@ -25,8 +24,8 @@ public class EncryptionRepositoryInMemory implements EncryptionRepository {
     @Override
     public void saveEncoding(HistoryEntry entry) {
         String query = """
-            INSERT INTO history (original_message, processed_message, algorithm, date, operation_type, user_id)
-            VALUES (:original_message, :processed_message, :algorithm, :date, :operation_type, :user_id)
+            INSERT INTO history (original_message, processed_message, algorithm, date, operation_type, status, user_id)
+            VALUES (:original_message, :processed_message, :algorithm, :date, :operation_type, :status, :user_id)
             """;
 
         SqlParameterSource parameters = new MapSqlParameterSource()
@@ -35,6 +34,7 @@ public class EncryptionRepositoryInMemory implements EncryptionRepository {
             .addValue("algorithm", entry.getAlgorithmName())
             .addValue("date", Timestamp.from(entry.getDate().toInstant()))
             .addValue("operation_type", entry.getOperationType())
+            .addValue("status", entry.getStatus())
             .addValue("user_id", activeUserId);
 
         namedParameterJdbcTemplate.update(query, parameters);
@@ -54,17 +54,15 @@ public class EncryptionRepositoryInMemory implements EncryptionRepository {
     }
 
     @Override
-    public List<HistoryEntry> getHistoryInDateRange(OffsetDateTime from, OffsetDateTime to) {
+    public List<HistoryEntry> getHistoryInDateRange(Timestamp from, Timestamp to) {
         String query = """
             SELECT * FROM history
             WHERE (date BETWEEN COALESCE(:from,date) AND COALESCE(:to,date))
             """;
 
-        Timestamp fromTime = from == null ? null : Timestamp.from(from.toInstant());
-        Timestamp toTime = to == null ? null : Timestamp.from(to.toInstant());
         SqlParameterSource parameters = new MapSqlParameterSource()
-            .addValue("from", fromTime)
-            .addValue("to", toTime);
+            .addValue("from", from)
+            .addValue("to", to);
 
         return namedParameterJdbcTemplate.query(query, parameters, HistoryEntryMapper::mapRow);
     }

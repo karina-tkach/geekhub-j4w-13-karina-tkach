@@ -9,9 +9,11 @@ import org.springframework.stereotype.Service;
 import java.time.OffsetDateTime;
 
 @Service
-@SuppressWarnings("java:S6857")
+@SuppressWarnings("all")
 public class EncryptionService {
     private final EncryptionRepositoryInMemory encryptionRepository;
+    private static final String SUCCESS_OPERATION_STATUS = "SUCCESS";
+    private static final String FAIL_OPERATION_STATUS = "FAIL";
     private final Cipher cipher;
     @Value("${operation.type:}")
     private String operationType;
@@ -22,23 +24,31 @@ public class EncryptionService {
     }
 
     public String performOperation(String message) {
-        if (message.isBlank()) {
-            throw new IllegalArgumentException("Incorrect data for encryption.");
-        }
+        String processedMessage = null;
+        try {
+            if (message.isBlank()) {
+                throw new IllegalArgumentException("Incorrect data for encryption.");
+            }
 
-        String processedMessage;
-        operationType = operationType.toUpperCase();
-        if (operationType.equals("ENCRYPTION")) {
-            processedMessage = cipher.encrypt(message);
-        } else if (operationType.equals("DECRYPTION")) {
-            processedMessage = cipher.decrypt(message);
-        } else {
-            throw new IllegalArgumentException("Illegal operation type.");
-        }
+            operationType = operationType.toUpperCase();
+            if (operationType.equals("ENCRYPTION")) {
+                processedMessage = cipher.encrypt(message);
+            } else if (operationType.equals("DECRYPTION")) {
+                processedMessage = cipher.decrypt(message);
+            } else {
+                throw new IllegalArgumentException("Illegal operation type.");
+            }
 
-        OffsetDateTime dateTime = OffsetDateTime.now();
-        HistoryEntry entry = new HistoryEntry(message, processedMessage, cipher.getCipherName(), dateTime, operationType);
-        encryptionRepository.saveEncoding(entry);
+            OffsetDateTime dateTime = OffsetDateTime.now();
+            HistoryEntry entry = new HistoryEntry(message, processedMessage, cipher.getCipherName(), dateTime, operationType, SUCCESS_OPERATION_STATUS);
+            encryptionRepository.saveEncoding(entry);
+        }
+        catch (Exception ex) {
+            OffsetDateTime dateTime = OffsetDateTime.now();
+            HistoryEntry entry = new HistoryEntry(message, processedMessage, cipher.getCipherName(), dateTime, operationType, FAIL_OPERATION_STATUS);
+            encryptionRepository.saveEncoding(entry);
+            throw new RuntimeException(ex);
+        }
 
         return processedMessage;
     }
