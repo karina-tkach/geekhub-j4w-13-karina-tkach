@@ -10,8 +10,11 @@ import java.util.stream.Collectors;
 @Profile("Caesar-cipher")
 public class CaesarCipher implements Cipher {
     public static final int NUMBER_OF_LETTERS_IN_ALPHABET = 26;
-    @Value("${caesar.key}")
-    private int caesarKey;
+    private final int caesarKey;
+
+    public CaesarCipher(@Value("${caesar.key}") int caesarKey) {
+        this.caesarKey = caesarKey;
+    }
 
     @Override
     public String encrypt(String message) {

@@ -44,7 +44,7 @@ public class ApplicationStarter {
 
     private static void printHistory(List<HistoryEntry> historyEntryList) {
         for (HistoryEntry entry : historyEntryList) {
-            System.out.println(entry);
+            System.out.println(entry.stringRepresentation());
         }
     }
 

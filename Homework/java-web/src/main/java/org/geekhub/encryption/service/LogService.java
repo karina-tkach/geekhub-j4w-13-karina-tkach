@@ -5,7 +5,6 @@ import org.geekhub.encryption.repository.EncryptionRepositoryInMemory;
 import org.geekhub.encryption.validators.LogValidator;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -28,11 +27,7 @@ public class LogService {
     }
 
     public List<HistoryEntry> getHistoryInDateRange(OffsetDateTime from, OffsetDateTime to) {
-        Timestamp fromTime = (from == null) ? null : Timestamp.from(from.toInstant());
-        Timestamp toTime = (to == null) ? null : Timestamp.from(to.toInstant());
-
-        return encryptionRepository.getHistoryInDateRange(fromTime, toTime);
-
+        return encryptionRepository.getHistoryInDateRange(from, to);
     }
 
     public List<HistoryEntry> getHistoryByAlgorithmAndOperationType(String algorithm, String operationType) {

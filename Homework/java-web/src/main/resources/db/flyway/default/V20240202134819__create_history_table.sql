@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS public."history"
+CREATE TABLE history
 (
     id SERIAL PRIMARY KEY,
     original_message TEXT,

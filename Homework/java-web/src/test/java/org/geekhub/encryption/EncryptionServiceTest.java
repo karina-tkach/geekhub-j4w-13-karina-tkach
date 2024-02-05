@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -30,16 +29,13 @@ class EncryptionServiceTest {
 
     @BeforeAll
     public static void setUp() {
-        caesar = new CaesarCipher();
-        vigenere = new VigenereCipher();
-        ReflectionTestUtils.setField(caesar, "caesarKey", 3);
-        ReflectionTestUtils.setField(vigenere, "key", "key");
+        caesar = new CaesarCipher(3);
+        vigenere = new VigenereCipher("key");
     }
 
     @Test
     void performOperation_shouldProperlyEncrypt_whenCaesarCipherIsChosen() {
-        encryptionService = new EncryptionService(encryptionRepository, caesar);
-        ReflectionTestUtils.setField(encryptionService, "operationType", "ENCRYPTION");
+        encryptionService = new EncryptionService(encryptionRepository, caesar, "ENCRYPTION");
         String message = "Hello";
         String expectedMessage = "Khoor";
 
@@ -51,8 +47,7 @@ class EncryptionServiceTest {
 
     @Test
     void performOperation_shouldProperlyDecrypt_whenCaesarCipherIsChosen() {
-        encryptionService = new EncryptionService(encryptionRepository, caesar);
-        ReflectionTestUtils.setField(encryptionService, "operationType", "DECRYPTION");
+        encryptionService = new EncryptionService(encryptionRepository, caesar, "DECRYPTION");
         String message = "Khoor";
         String expectedMessage = "Hello";
 
@@ -64,8 +59,7 @@ class EncryptionServiceTest {
 
     @Test
     void performOperation_shouldProperlyEncrypt_whenAtbashCipherIsChosen() {
-        encryptionService = new EncryptionService(encryptionRepository, new AtbashCipher());
-        ReflectionTestUtils.setField(encryptionService, "operationType", "ENCRYPTION");
+        encryptionService = new EncryptionService(encryptionRepository, new AtbashCipher(), "ENCRYPTION");
         String message = "Hello";
         String expectedMessage = "Svool";
 
@@ -77,8 +71,7 @@ class EncryptionServiceTest {
 
     @Test
     void performOperation_shouldProperlyDecrypt_whenAtbashCipherIsChosen() {
-        encryptionService = new EncryptionService(encryptionRepository, new AtbashCipher());
-        ReflectionTestUtils.setField(encryptionService, "operationType", "DECRYPTION");
+        encryptionService = new EncryptionService(encryptionRepository, new AtbashCipher(), "DECRYPTION");
         String message = "Svool";
         String expectedMessage = "Hello";
 
@@ -90,8 +83,7 @@ class EncryptionServiceTest {
 
     @Test
     void performOperation_shouldProperlyEncrypt_whenA1Z26CipherIsChosen() {
-        encryptionService = new EncryptionService(encryptionRepository, new A1Z26Cipher());
-        ReflectionTestUtils.setField(encryptionService, "operationType", "ENCRYPTION");
+        encryptionService = new EncryptionService(encryptionRepository, new A1Z26Cipher(), "ENCRYPTION");
         String message = "Hello!";
         String expectedMessage = "8-5-12-12-15!";
 
@@ -103,8 +95,7 @@ class EncryptionServiceTest {
 
     @Test
     void performOperation_shouldProperlyDecrypt_whenA1Z26CipherIsChosen() {
-        encryptionService = new EncryptionService(encryptionRepository, new A1Z26Cipher());
-        ReflectionTestUtils.setField(encryptionService, "operationType", "DECRYPTION");
+        encryptionService = new EncryptionService(encryptionRepository, new A1Z26Cipher(), "DECRYPTION");
         String message = "8-5-12-12-15";
         String expectedMessage = "HELLO";
 
@@ -116,8 +107,7 @@ class EncryptionServiceTest {
 
     @Test
     void performOperation_shouldProperlyEncrypt_whenVigenereCipherIsChosen() {
-        encryptionService = new EncryptionService(encryptionRepository, vigenere);
-        ReflectionTestUtils.setField(encryptionService, "operationType", "ENCRYPTION");
+        encryptionService = new EncryptionService(encryptionRepository, vigenere, "ENCRYPTION");
         String message = "Hello";
         String expectedMessage = "Rijvs";
 
@@ -129,8 +119,7 @@ class EncryptionServiceTest {
 
     @Test
     void performOperation_shouldProperlyDecrypt_whenVigenereCipherIsChosen() {
-        encryptionService = new EncryptionService(encryptionRepository, vigenere);
-        ReflectionTestUtils.setField(encryptionService, "operationType", "DECRYPTION");
+        encryptionService = new EncryptionService(encryptionRepository, vigenere, "DECRYPTION");
         String message = "Rijvs";
         String expectedMessage = "Hello";
 
@@ -142,7 +131,7 @@ class EncryptionServiceTest {
 
     @Test
     void performOperation_shouldThrowException_whenInvalidMessageIsPassed() {
-        encryptionService = new EncryptionService(encryptionRepository, caesar);
+        encryptionService = new EncryptionService(encryptionRepository, caesar, "ENCRYPTION");
         assertThatCode(() -> encryptionService.performOperation(""))
             .isInstanceOf(RuntimeException.class)
             .hasMessage("java.lang.IllegalArgumentException: Incorrect data for encryption.");
@@ -150,8 +139,7 @@ class EncryptionServiceTest {
 
     @Test
     void performOperation_shouldThrowException_whenNoOperationTypeIsProvided() {
-        encryptionService = new EncryptionService(encryptionRepository, caesar);
-        ReflectionTestUtils.setField(encryptionService, "operationType", "abc");
+        encryptionService = new EncryptionService(encryptionRepository, caesar, "abc");
         assertThatCode(() -> encryptionService.performOperation("abcd"))
             .isInstanceOf(RuntimeException.class)
             .hasMessage("java.lang.IllegalArgumentException: Illegal operation type.");

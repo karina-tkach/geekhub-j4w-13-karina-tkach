@@ -15,7 +15,6 @@ dependencies {
     implementation("org.flywaydb:flyway-core:$flywayVersion")
     runtimeOnly("org.flywaydb:flyway-database-postgresql:$flywayVersion")
 
-    testImplementation("org.springframework:spring-test:$springVersion")
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation(platform("org.mockito:mockito-bom:5.7.0"))
 

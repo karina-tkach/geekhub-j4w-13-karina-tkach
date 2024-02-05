@@ -8,17 +8,19 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Repository
-@SuppressWarnings("all")
+@SuppressWarnings("java:S1192")
 public class EncryptionRepositoryInMemory implements EncryptionRepository {
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-    @Value("${active.user.id}")
-    private int activeUserId;
+    private final int activeUserId;
 
-    public EncryptionRepositoryInMemory(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+    public EncryptionRepositoryInMemory(NamedParameterJdbcTemplate namedParameterJdbcTemplate,
+                                        @Value("${active.user.id}") int activeUserId) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+        this.activeUserId = activeUserId;
     }
 
     @Override
@@ -29,12 +31,12 @@ public class EncryptionRepositoryInMemory implements EncryptionRepository {
             """;
 
         SqlParameterSource parameters = new MapSqlParameterSource()
-            .addValue("original_message", entry.getOriginalMessage())
-            .addValue("processed_message", entry.getProcessedMessage())
-            .addValue("algorithm", entry.getAlgorithmName())
-            .addValue("date", Timestamp.from(entry.getDate().toInstant()))
-            .addValue("operation_type", entry.getOperationType())
-            .addValue("status", entry.getStatus())
+            .addValue("original_message", entry.originalMessage())
+            .addValue("processed_message", entry.processedMessage())
+            .addValue("algorithm", entry.algorithmName())
+            .addValue("date", Timestamp.from(entry.date().toInstant()))
+            .addValue("operation_type", entry.operationType())
+            .addValue("status", entry.status())
             .addValue("user_id", activeUserId);
 
         namedParameterJdbcTemplate.update(query, parameters);
@@ -54,15 +56,18 @@ public class EncryptionRepositoryInMemory implements EncryptionRepository {
     }
 
     @Override
-    public List<HistoryEntry> getHistoryInDateRange(Timestamp from, Timestamp to) {
+    public List<HistoryEntry> getHistoryInDateRange(OffsetDateTime from, OffsetDateTime to) {
+        Timestamp fromTime = (from == null) ? null : Timestamp.from(from.toInstant());
+        Timestamp toTime = (to == null) ? null : Timestamp.from(to.toInstant());
+
         String query = """
             SELECT * FROM history
             WHERE (date BETWEEN COALESCE(:from,date) AND COALESCE(:to,date))
             """;
 
         SqlParameterSource parameters = new MapSqlParameterSource()
-            .addValue("from", from)
-            .addValue("to", to);
+            .addValue("from", fromTime)
+            .addValue("to", toTime);
 
         return namedParameterJdbcTemplate.query(query, parameters, HistoryEntryMapper::mapRow);
     }

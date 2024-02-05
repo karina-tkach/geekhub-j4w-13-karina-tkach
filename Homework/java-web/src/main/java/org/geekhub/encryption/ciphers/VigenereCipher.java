@@ -11,12 +11,11 @@ import java.util.stream.Collectors;
 @Profile("Vigenere-cipher")
 public class VigenereCipher implements Cipher {
     public static final int NUMBER_OF_LETTERS_IN_ALPHABET = 26;
-
-    @Value("${vigenere.key}")
-    private String key;
+    private final String key;
     private final AtomicInteger keyIndex;
 
-    public VigenereCipher() {
+    public VigenereCipher(@Value("${vigenere.key}") String key) {
+        this.key = key;
         this.keyIndex = new AtomicInteger();
     }
 

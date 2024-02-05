@@ -41,10 +41,11 @@ public class DatabaseConfiguration {
 
     @Bean(initMethod = "migrate")
     public Flyway flyway(DataSource dataSource,
+                         @Value("${spring.flyway.baselineOnMigrate}") boolean baselineOnMigrate,
                          @Value("${spring.flyway.locations}") String[] locations) {
         return Flyway.configure()
             .dataSource(dataSource)
-            .baselineOnMigrate(true)
+            .baselineOnMigrate(baselineOnMigrate)
             .locations(locations)
             .load();
     }

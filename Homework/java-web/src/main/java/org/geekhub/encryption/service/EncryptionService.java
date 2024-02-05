@@ -1,6 +1,7 @@
 package org.geekhub.encryption.service;
 
 import org.geekhub.encryption.ciphers.Cipher;
+import org.geekhub.encryption.exception.OperationFailedException;
 import org.geekhub.encryption.models.HistoryEntry;
 import org.geekhub.encryption.repository.EncryptionRepositoryInMemory;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,18 +10,18 @@ import org.springframework.stereotype.Service;
 import java.time.OffsetDateTime;
 
 @Service
-@SuppressWarnings("all")
 public class EncryptionService {
     private final EncryptionRepositoryInMemory encryptionRepository;
     private static final String SUCCESS_OPERATION_STATUS = "SUCCESS";
     private static final String FAIL_OPERATION_STATUS = "FAIL";
     private final Cipher cipher;
-    @Value("${operation.type:}")
     private String operationType;
 
-    public EncryptionService(EncryptionRepositoryInMemory encryptionRepository, Cipher cipher) {
+    public EncryptionService(EncryptionRepositoryInMemory encryptionRepository, Cipher cipher,
+                             @Value("${operation.type:}") String operationType) {
         this.encryptionRepository = encryptionRepository;
         this.cipher = cipher;
+        this.operationType = operationType;
     }
 
     public String performOperation(String message) {
@@ -42,12 +43,11 @@ public class EncryptionService {
             OffsetDateTime dateTime = OffsetDateTime.now();
             HistoryEntry entry = new HistoryEntry(message, processedMessage, cipher.getCipherName(), dateTime, operationType, SUCCESS_OPERATION_STATUS);
             encryptionRepository.saveEncoding(entry);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             OffsetDateTime dateTime = OffsetDateTime.now();
             HistoryEntry entry = new HistoryEntry(message, processedMessage, cipher.getCipherName(), dateTime, operationType, FAIL_OPERATION_STATUS);
             encryptionRepository.saveEncoding(entry);
-            throw new RuntimeException(ex);
+            throw new OperationFailedException(ex);
         }
 
         return processedMessage;
