@@ -8,8 +8,12 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
 public class BookMapper {
+    private BookMapper() {
 
-    public static Book mapToBook(ResultSet resultSet, int i) throws SQLException {
+    }
+
+    @SuppressWarnings("java:S1172")
+    public static Book mapToBook(ResultSet resultSet, int ignoredI) throws SQLException {
         int id = resultSet.getInt("id");
         String name = resultSet.getString("name");
         String description = resultSet.getString("description");

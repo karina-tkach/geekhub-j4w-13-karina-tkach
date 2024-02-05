@@ -12,8 +12,10 @@ import org.springframework.stereotype.Repository;
 import java.sql.Timestamp;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Repository
+@SuppressWarnings("java:S1192")
 public class NamedJdbcTemplateBookRepository implements BookRepository {
 
     private final NamedParameterJdbcTemplate namedJdbcTemplate;
@@ -23,7 +25,7 @@ public class NamedJdbcTemplateBookRepository implements BookRepository {
     }
 
     @Override
-    public Book createBook(Book book) {
+    public Book createBook(@NonNull Book book) {
         String query = """
             INSERT INTO books (name, description, author, publishDate) VALUES (:name, :description, :author, :publishDate)
             """;
@@ -37,7 +39,7 @@ public class NamedJdbcTemplateBookRepository implements BookRepository {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         namedJdbcTemplate.update(query, parameters, keyHolder, new String[]{"id"});
 
-        return new Book(keyHolder.getKey().intValue(), book.name(), book.description(), book.author(), book.publishDate());
+        return new Book(Objects.requireNonNull(keyHolder.getKey()).intValue(), book.name(), book.description(), book.author(), book.publishDate());
     }
 
     @Override
@@ -83,7 +85,7 @@ public class NamedJdbcTemplateBookRepository implements BookRepository {
     }
 
     @Override
-    public List<Book> findBooksByName(String name) {
+    public List<Book> findBooksByName(@NonNull String name) {
         String query = "SELECT * FROM books WHERE name = :name";
 
         SqlParameterSource parameters = new MapSqlParameterSource()
@@ -101,7 +103,7 @@ public class NamedJdbcTemplateBookRepository implements BookRepository {
     }
 
     @Override
-    public List<Book> findBooksPublishedInDateRange(OffsetDateTime from, OffsetDateTime to) {
+    public List<Book> findBooksPublishedInDateRange(@NonNull OffsetDateTime from, @NonNull OffsetDateTime to) {
         String query = "SELECT * FROM books WHERE publishDate BETWEEN :from AND :to";
 
         SqlParameterSource parameters = new MapSqlParameterSource()

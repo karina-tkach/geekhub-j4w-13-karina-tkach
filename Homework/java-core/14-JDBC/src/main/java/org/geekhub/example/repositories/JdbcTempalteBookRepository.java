@@ -11,8 +11,10 @@ import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Repository
+@SuppressWarnings("all")
 public class JdbcTempalteBookRepository implements BookRepository {
 
     private final JdbcTemplate jdbcTemplate;
@@ -52,7 +54,7 @@ public class JdbcTempalteBookRepository implements BookRepository {
         }, keyHolder);
 
         return new Book(
-            keyHolder.getKey().intValue(),
+            Objects.requireNonNull(keyHolder.getKey()).intValue(),
             book.name(),
             book.description(),
             book.author(),

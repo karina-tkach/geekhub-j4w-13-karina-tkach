@@ -8,6 +8,7 @@ import org.springframework.core.env.AbstractEnvironment;
 import java.time.OffsetDateTime;
 import java.util.List;
 
+@SuppressWarnings("all")
 public class ApplicationStarter {
 
     private static final String DEV_PROFILE = "dev";
