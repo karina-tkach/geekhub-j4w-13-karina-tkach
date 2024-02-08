@@ -1,13 +1,11 @@
 package org.geekhub.encryption.ciphers;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
 @Component
-@Profile("Caesar-cipher")
 public class CaesarCipher implements Cipher {
     public static final int NUMBER_OF_LETTERS_IN_ALPHABET = 26;
     private final int caesarKey;

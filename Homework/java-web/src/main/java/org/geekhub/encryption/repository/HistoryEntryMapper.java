@@ -4,7 +4,6 @@ import org.geekhub.encryption.models.HistoryEntry;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
 class HistoryEntryMapper {
@@ -13,14 +12,14 @@ class HistoryEntryMapper {
     }
 
     @SuppressWarnings("java:S1172")
-    static HistoryEntry mapRow(ResultSet rs, int ignoredRowNum) throws SQLException {
-        String originalMessage = rs.getString("original_message");
-        String processedMessage = rs.getString("processed_message");
-        String algorithmName = rs.getString("algorithm");
-        OffsetDateTime date = rs.getTimestamp("date").toLocalDateTime().atOffset(ZoneOffset.ofHours(2));
-        String operationType = rs.getString("operation_type");
-        String status = rs.getString("status");
-
-        return new HistoryEntry(originalMessage, processedMessage, algorithmName, date, operationType, status);
+    static HistoryEntry mapToPojo(ResultSet rs, int ignoredRowNum) throws SQLException {
+        return new HistoryEntry(rs.getInt("id"),
+        rs.getInt("user_id"),
+        rs.getString("original_message"),
+        rs.getString("processed_message"),
+        rs.getString("algorithm"),
+        rs.getTimestamp("date").toLocalDateTime().atOffset(ZoneOffset.ofHours(2)),
+        rs.getString("operation_type"),
+        rs.getString("status"));
     }
 }

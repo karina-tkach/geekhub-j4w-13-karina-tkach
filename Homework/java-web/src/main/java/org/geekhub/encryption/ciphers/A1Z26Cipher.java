@@ -1,6 +1,5 @@
 package org.geekhub.encryption.ciphers;
 
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -9,7 +8,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Component
-@Profile("A1Z26-cipher")
 public class A1Z26Cipher implements Cipher {
     private final AtomicBoolean lastCharIsLetter;
     private static final int ASCII_NUMBER_OF_FIRST_LETTER = 65;

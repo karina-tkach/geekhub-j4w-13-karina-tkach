@@ -1,12 +1,10 @@
 package org.geekhub.encryption.ciphers;
 
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
 @Component
-@Profile("Atbash-cipher")
 public class AtbashCipher implements Cipher {
     public static final int NUMBER_OF_LETTERS_IN_ALPHABET = 26;
 

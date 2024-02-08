@@ -1,14 +1,12 @@
 package org.geekhub.encryption.ciphers;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Component
-@Profile("Vigenere-cipher")
 public class VigenereCipher implements Cipher {
     public static final int NUMBER_OF_LETTERS_IN_ALPHABET = 26;
     private final String key;

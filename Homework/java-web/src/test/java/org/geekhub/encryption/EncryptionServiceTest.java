@@ -3,9 +3,10 @@ package org.geekhub.encryption;
 import org.geekhub.encryption.ciphers.A1Z26Cipher;
 import org.geekhub.encryption.ciphers.AtbashCipher;
 import org.geekhub.encryption.ciphers.CaesarCipher;
-import org.geekhub.encryption.ciphers.Cipher;
+import org.geekhub.encryption.ciphers.CipherFactory;
 import org.geekhub.encryption.ciphers.VigenereCipher;
-import org.geekhub.encryption.repository.EncryptionRepositoryInMemory;
+import org.geekhub.encryption.exception.OperationFailedException;
+import org.geekhub.encryption.repository.EncryptionRepositoryImpl;
 import org.geekhub.encryption.service.EncryptionService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -22,20 +23,19 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class EncryptionServiceTest {
     @Mock
-    private EncryptionRepositoryInMemory encryptionRepository;
+    private EncryptionRepositoryImpl encryptionRepository;
     private EncryptionService encryptionService;
-    private static Cipher caesar;
-    private static Cipher vigenere;
+    private static CipherFactory cipherFactory;
 
     @BeforeAll
     public static void setUp() {
-        caesar = new CaesarCipher(3);
-        vigenere = new VigenereCipher("key");
+        cipherFactory = new CipherFactory(new CaesarCipher(3), new A1Z26Cipher(),
+            new AtbashCipher(), new VigenereCipher("key"));
     }
 
     @Test
     void performOperation_shouldProperlyEncrypt_whenCaesarCipherIsChosen() {
-        encryptionService = new EncryptionService(encryptionRepository, caesar, "ENCRYPTION");
+        encryptionService = new EncryptionService(encryptionRepository, cipherFactory, "CAESAR", "ENCRYPTION", 1);
         String message = "Hello";
         String expectedMessage = "Khoor";
 
@@ -47,7 +47,7 @@ class EncryptionServiceTest {
 
     @Test
     void performOperation_shouldProperlyDecrypt_whenCaesarCipherIsChosen() {
-        encryptionService = new EncryptionService(encryptionRepository, caesar, "DECRYPTION");
+        encryptionService = new EncryptionService(encryptionRepository, cipherFactory, "CAESAR", "DECRYPTION", 1);
         String message = "Khoor";
         String expectedMessage = "Hello";
 
@@ -59,7 +59,7 @@ class EncryptionServiceTest {
 
     @Test
     void performOperation_shouldProperlyEncrypt_whenAtbashCipherIsChosen() {
-        encryptionService = new EncryptionService(encryptionRepository, new AtbashCipher(), "ENCRYPTION");
+        encryptionService = new EncryptionService(encryptionRepository, cipherFactory, "ATBASH", "ENCRYPTION", 1);
         String message = "Hello";
         String expectedMessage = "Svool";
 
@@ -71,7 +71,7 @@ class EncryptionServiceTest {
 
     @Test
     void performOperation_shouldProperlyDecrypt_whenAtbashCipherIsChosen() {
-        encryptionService = new EncryptionService(encryptionRepository, new AtbashCipher(), "DECRYPTION");
+        encryptionService = new EncryptionService(encryptionRepository, cipherFactory, "ATBASH", "DECRYPTION", 1);
         String message = "Svool";
         String expectedMessage = "Hello";
 
@@ -83,7 +83,7 @@ class EncryptionServiceTest {
 
     @Test
     void performOperation_shouldProperlyEncrypt_whenA1Z26CipherIsChosen() {
-        encryptionService = new EncryptionService(encryptionRepository, new A1Z26Cipher(), "ENCRYPTION");
+        encryptionService = new EncryptionService(encryptionRepository, cipherFactory, "A1Z26", "ENCRYPTION", 1);
         String message = "Hello!";
         String expectedMessage = "8-5-12-12-15!";
 
@@ -95,7 +95,7 @@ class EncryptionServiceTest {
 
     @Test
     void performOperation_shouldProperlyDecrypt_whenA1Z26CipherIsChosen() {
-        encryptionService = new EncryptionService(encryptionRepository, new A1Z26Cipher(), "DECRYPTION");
+        encryptionService = new EncryptionService(encryptionRepository, cipherFactory, "A1Z26", "DECRYPTION", 1);
         String message = "8-5-12-12-15";
         String expectedMessage = "HELLO";
 
@@ -107,7 +107,7 @@ class EncryptionServiceTest {
 
     @Test
     void performOperation_shouldProperlyEncrypt_whenVigenereCipherIsChosen() {
-        encryptionService = new EncryptionService(encryptionRepository, vigenere, "ENCRYPTION");
+        encryptionService = new EncryptionService(encryptionRepository, cipherFactory, "VIGENERE", "ENCRYPTION", 1);
         String message = "Hello";
         String expectedMessage = "Rijvs";
 
@@ -119,7 +119,7 @@ class EncryptionServiceTest {
 
     @Test
     void performOperation_shouldProperlyDecrypt_whenVigenereCipherIsChosen() {
-        encryptionService = new EncryptionService(encryptionRepository, vigenere, "DECRYPTION");
+        encryptionService = new EncryptionService(encryptionRepository, cipherFactory, "VIGENERE", "DECRYPTION", 1);
         String message = "Rijvs";
         String expectedMessage = "Hello";
 
@@ -131,17 +131,15 @@ class EncryptionServiceTest {
 
     @Test
     void performOperation_shouldThrowException_whenInvalidMessageIsPassed() {
-        encryptionService = new EncryptionService(encryptionRepository, caesar, "ENCRYPTION");
+        encryptionService = new EncryptionService(encryptionRepository, cipherFactory, "CAESAR", "ENCRYPTION", 1);
         assertThatCode(() -> encryptionService.performOperation(""))
-            .isInstanceOf(RuntimeException.class)
+            .isInstanceOf(OperationFailedException.class)
             .hasMessage("java.lang.IllegalArgumentException: Incorrect data for encryption.");
     }
 
     @Test
     void performOperation_shouldThrowException_whenNoOperationTypeIsProvided() {
-        encryptionService = new EncryptionService(encryptionRepository, caesar, "abc");
-        assertThatCode(() -> encryptionService.performOperation("abcd"))
-            .isInstanceOf(RuntimeException.class)
-            .hasMessage("java.lang.IllegalArgumentException: Illegal operation type.");
+        assertThatCode(() -> new EncryptionService(encryptionRepository, cipherFactory, "CAESAR", "", 1))
+            .isInstanceOf(IllegalArgumentException.class);
     }
 }

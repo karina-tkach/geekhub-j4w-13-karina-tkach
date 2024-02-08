@@ -2,7 +2,7 @@ package org.geekhub.encryption;
 
 import org.geekhub.encryption.models.HistoryEntry;
 import org.geekhub.encryption.service.EncryptionService;
-import org.geekhub.encryption.service.LogService;
+import org.geekhub.encryption.service.HistoryService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.time.OffsetDateTime;
@@ -19,26 +19,26 @@ public class ApplicationStarter {
         String encryptedMessage = encryptionService.performOperation(originalMessage);
         System.out.printf("%s%n", encryptedMessage);
 
-        LogService logService = context.getBean(LogService.class);
+        HistoryService historyService = context.getBean(HistoryService.class);
 
         printFetchName("History by algorithm:");
-        printHistory(logService.getHistoryByAlgorithm("Caesar"));
+        printHistory(historyService.getHistoryByAlgorithm("Caesar"));
         printDelimiters();
 
         printFetchName("History in date range:");
-        printHistory(logService.getHistoryInDateRange(null, OffsetDateTime.now()));
+        printHistory(historyService.getHistoryInDateRange(null, OffsetDateTime.now()));
         printDelimiters();
 
         printFetchName("History bt algorithm and operation type:");
-        printHistory(logService.getHistoryByAlgorithmAndOperationType("Vigenere", "ENCRYPTION"));
+        printHistory(historyService.getHistoryByAlgorithmAndOperationType("Vigenere", "ENCRYPTION"));
         printDelimiters();
 
         printFetchName("History with pagination:");
-        printHistory(logService.getFullHistoryWithPagination(1, 2));
+        printHistory(historyService.getFullHistoryWithPagination(1, 2));
         printDelimiters();
 
         printFetchName("History with pagination and user id:");
-        printHistory(logService.getFullHistoryWithPaginationAndUserId(1, 1, 2));
+        printHistory(historyService.getFullHistoryWithPaginationAndUserId(1, 1, 2));
         printDelimiters();
     }
 
