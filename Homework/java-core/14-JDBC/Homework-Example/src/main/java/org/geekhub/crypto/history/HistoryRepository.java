@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface HistoryRepository {
 
-    void saveRecord(HistoryRecord record);
+    void saveRecord(HistoryRecord historyRecord);
 
     void deleteRecord(int id);
 

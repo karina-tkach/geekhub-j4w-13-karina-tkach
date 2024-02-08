@@ -13,6 +13,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 @Component
+@SuppressWarnings("all")
 public class UserInteractionService {
 
     private final EncodingAlgorithm encodingAlgorithm;

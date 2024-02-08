@@ -8,7 +8,8 @@ class UserMapper {
     private UserMapper() {
     }
 
-    static User mapToPojo(ResultSet rs, int rowNum) throws SQLException {
+    @SuppressWarnings("java:S1172")
+    static User mapToPojo(ResultSet rs, int ignoredRowNum) throws SQLException {
         return new User(
             rs.getInt("user_id"),
             rs.getString("username")

@@ -13,6 +13,7 @@ class HistoryMapper {
     private HistoryMapper() {
     }
 
+    @SuppressWarnings("java:S1172")
     static HistoryRecord mapToPojo(ResultSet rs, int rowNum) throws SQLException {
         return new HistoryRecord(
             rs.getInt("record_id"),
