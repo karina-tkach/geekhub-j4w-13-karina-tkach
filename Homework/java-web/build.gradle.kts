@@ -4,6 +4,21 @@ val postgresqlVersion = "42.7.1"
 val hikariVersion = "5.1.0"
 val jdbcVersion = "6.1.3"
 val flywayVersion = "10.6.0"
+val ciphersVersion = "1.0.0"
+
+repositories {
+    mavenCentral()
+    maven {
+        url = uri("https://repsy.io/mvn/vrudas/ktkach-j4w-s13-repo")
+        credentials {
+            username = System.getenv("REPSY_USER")
+            password = System.getenv("REPSY_PASSWORD")
+        }
+        authentication {
+            create<BasicAuthentication>("basic")
+        }
+    }
+}
 
 dependencies {
     implementation("org.springframework:spring-context:$springVersion")
@@ -11,6 +26,7 @@ dependencies {
     implementation("org.springframework:spring-jdbc:$jdbcVersion")
     implementation("org.postgresql:postgresql:$postgresqlVersion")
     implementation("com.zaxxer:HikariCP:$hikariVersion")
+    implementation("org.geekhub:ciphers:$ciphersVersion")
 
     implementation("org.flywaydb:flyway-core:$flywayVersion")
     runtimeOnly("org.flywaydb:flyway-database-postgresql:$flywayVersion")

@@ -1,6 +1,6 @@
 package org.geekhub.encryption.service;
 
-import org.geekhub.encryption.ciphers.Cipher;
+import org.geekhub.ciphers.Cipher;
 import org.geekhub.encryption.models.CipherAlgorithm;
 import org.geekhub.encryption.ciphers.CipherFactory;
 import org.geekhub.encryption.exception.OperationFailedException;

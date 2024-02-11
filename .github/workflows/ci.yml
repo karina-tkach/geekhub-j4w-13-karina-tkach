@@ -11,6 +11,9 @@ jobs:
   build:
     name: Build application
     uses: ./.github/workflows/run_build_job.yml
+    secrets:
+      REPSY_USER: ${{ secrets.REPSY_USER }}
+      REPSY_PASSWORD: ${{ secrets.REPSY_PASSWORD }}
 
   test:
     needs: build

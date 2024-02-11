@@ -1,10 +1,10 @@
 package org.geekhub.encryption;
 
-import org.geekhub.encryption.ciphers.A1Z26Cipher;
-import org.geekhub.encryption.ciphers.AtbashCipher;
-import org.geekhub.encryption.ciphers.CaesarCipher;
+import org.geekhub.ciphers.A1Z26Cipher;
+import org.geekhub.ciphers.AtbashCipher;
+import org.geekhub.ciphers.CaesarCipher;
+import org.geekhub.ciphers.VigenereCipher;
 import org.geekhub.encryption.ciphers.CipherFactory;
-import org.geekhub.encryption.ciphers.VigenereCipher;
 import org.geekhub.encryption.exception.OperationFailedException;
 import org.geekhub.encryption.repository.EncryptionRepositoryImpl;
 import org.geekhub.encryption.service.EncryptionService;
