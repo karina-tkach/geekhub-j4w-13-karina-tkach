@@ -5,7 +5,6 @@ import org.geekhub.crypto.encoding.EncodingOperation;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
 class HistoryMapper {
