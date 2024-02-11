@@ -19,6 +19,6 @@ jobs:
 
       - name: Publish to Maven Repository
         env:
-          REPSY_USERNAME: ${{ secrets.REPSY_USERNAME }}
+          REPSY_USERNAME: ${{ secrets.REPSY_USER }}
           REPSY_PASSWORD: ${{ secrets.REPSY_PASSWORD }}
         run: ./gradlew publish
