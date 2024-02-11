@@ -6,6 +6,9 @@ on:
 jobs:
   sonarlint:
     runs-on: ubuntu-latest
+    env:
+      REPSY_USER: ${{ secrets.REPSY_USER }}
+      REPSY_PASSWORD: ${{ secrets.REPSY_PASSWORD }}
 
     steps:
       - name: Check out repository code

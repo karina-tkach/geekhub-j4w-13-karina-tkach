@@ -21,15 +21,15 @@ jobs:
   sonarlint:
     name: Check application style via sonarlint
     uses: ./.github/workflows/run_sonarlint_job.yml
+    secrets: inherit
 
   checkstype:
     name: Check application style via checkstyle
     uses: ./.github/workflows/run_checkstyle_job.yml
+    secrets: inherit
 
   publish:
     needs: build
     name: Publish ciphers library into Maven repo
     uses: ./.github/workflows/run_lib_publish_job.yml
-    secrets:
-      REPSY_USER: ${{ secrets.REPSY_USER }}
-      REPSY_PASSWORD: ${{ secrets.REPSY_PASSWORD }}
+    secrets: inherit
