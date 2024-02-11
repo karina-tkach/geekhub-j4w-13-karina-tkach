@@ -24,9 +24,9 @@ publishing {
 
     repositories {
         maven {
-            url = uri("https://repsy.io/mvn/vrudas/ktkach-j4w-s13-repo")
+            url = uri("https://repo.repsy.io/mvn/vrudas/ktkach-j4w-s13-repo")
             credentials {
-                username = System.getenv("REPSY_USERNAME")
+                username = System.getenv("REPSY_USER")
                 password = System.getenv("REPSY_PASSWORD")
             }
         }

@@ -18,9 +18,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Publish to Maven Repository
-        uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629
-        with:
-            arguments: publish
         env:
-          REPSY_USERNAME: ${{ secrets.REPSY_USER }}
+          REPSY_USER: ${{ secrets.REPSY_USER }}
           REPSY_PASSWORD: ${{ secrets.REPSY_PASSWORD }}
+        run: ./gradlew publish
