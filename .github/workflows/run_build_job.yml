@@ -6,6 +6,9 @@ on:
 jobs:
   tests:
     runs-on: ubuntu-latest
+    env:
+      REPSY_USER: ${{ secrets.REPSY_USER }}
+      REPSY_PASSWORD: ${{ secrets.REPSY_PASSWORD }}
 
     steps:
       - name: Check out repository code
@@ -21,7 +24,4 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Execute gradle assemble
-        env:
-          REPSY_USER: ${{ secrets.REPSY_USER }}
-          REPSY_PASSWORD: ${{ secrets.REPSY_PASSWORD }}
         run: ./gradlew assemble
