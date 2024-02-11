@@ -2,6 +2,10 @@ name: Publish Ciphers Library
 
 on:
   workflow_call:
+    secrets:
+      REPSY_USER:
+      REPSY_PASSWORD:
+        required: true
 
 jobs:
   publish:

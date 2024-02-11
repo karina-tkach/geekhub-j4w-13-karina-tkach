@@ -29,9 +29,6 @@ publishing {
                 username = System.getenv("REPSY_USER")
                 password = System.getenv("REPSY_PASSWORD")
             }
-            authentication {
-                create<BasicAuthentication>("basic")
-            }
         }
     }
 }

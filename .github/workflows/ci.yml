@@ -29,3 +29,6 @@ jobs:
     needs: build
     name: Publish ciphers library into Maven repo
     uses: ./.github/workflows/run_lib_publish_job.yml
+    secrets:
+      REPSY_USER: ${{ secrets.REPSY_USER }}
+      REPSY_PASSWORD: ${{ secrets.REPSY_PASSWORD }}
