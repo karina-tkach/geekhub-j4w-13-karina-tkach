@@ -21,4 +21,7 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Execute gradle assemble
+        env:
+          REPSY_USER: ${{ secrets.REPSY_USER }}
+          REPSY_PASSWORD: ${{ secrets.REPSY_PASSWORD }}
         run: ./gradlew assemble
