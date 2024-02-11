@@ -38,8 +38,7 @@ public class FileUtils {
     public static void writeToFile(Path path, byte[] content) {
         try {
             Files.write(path, content);
-        }
-        catch(IOException e){
+        } catch (IOException e) {
             throw new FileException("Error happened while writing to file");
         }
     }
@@ -47,8 +46,7 @@ public class FileUtils {
     public static void copyToFile(InputStream inputStream, Path path) {
         try {
             Files.copy(inputStream, path, StandardCopyOption.REPLACE_EXISTING);
-        }
-        catch(IOException e){
+        } catch (IOException e) {
             throw new FileException("Error happened while copying file");
         }
     }
@@ -58,8 +56,7 @@ public class FileUtils {
             if (Files.notExists(path)) {
                 Files.createFile(path);
             }
-        }
-        catch(IOException e){
+        } catch (IOException e) {
             throw new FileException("Error happened while creating file");
         }
     }
@@ -77,8 +74,7 @@ public class FileUtils {
     public static void deleteIfExists(Path path) {
         try {
             Files.deleteIfExists(path);
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             throw new FileException("Error happened while deleting file or directory");
         }
     }

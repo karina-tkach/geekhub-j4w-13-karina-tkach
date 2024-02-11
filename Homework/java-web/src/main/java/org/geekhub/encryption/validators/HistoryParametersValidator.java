@@ -24,7 +24,7 @@ public class HistoryParametersValidator {
         return operationTypes.contains(operationType);
     }
 
-    public boolean validateDate(OffsetDateTime from, OffsetDateTime to){
+    public boolean validateDate(OffsetDateTime from, OffsetDateTime to) {
         return Objects.isNull(from) || Objects.isNull(to) || from.isBefore(to);
     }
 
