@@ -11,6 +11,7 @@ jobs:
   build:
     name: Build application
     uses: ./.github/workflows/run_build_job.yml
+    secrets: inherit
 
   test:
     needs: build
