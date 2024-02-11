@@ -17,6 +17,9 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Setup build
+        uses: gradle/gradle-build-action@v2
+
       - name: Publish to Maven Repository
         env:
           REPSY_USER: ${{ secrets.REPSY_USER }}
