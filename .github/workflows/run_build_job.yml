@@ -2,10 +2,6 @@ name: Build application
 
 on:
   workflow_call:
-    secrets:
-      REPSY_USER:
-      REPSY_PASSWORD:
-        required: true
 
 jobs:
   tests:
@@ -23,12 +19,6 @@ jobs:
 
       - name: Setup build
         uses: gradle/gradle-build-action@v2
-        env:
-          REPSY_USER: ${{ secrets.REPSY_USER }}
-          REPSY_PASSWORD: ${{ secrets.REPSY_PASSWORD }}
 
       - name: Execute gradle assemble
-        env:
-          REPSY_USER: ${{ secrets.REPSY_USER }}
-          REPSY_PASSWORD: ${{ secrets.REPSY_PASSWORD }}
         run: ./gradlew assemble
