@@ -9,10 +9,10 @@ val ciphersVersion = "1.0.0"
 repositories {
     mavenCentral()
     maven {
-        url = uri("https://repsy.io/mvn/vrudas/ktkach-j4w-s13-repo")
+        url = uri("https://repo.repsy.io/mvn/karinatkach/ciphers-library")
         credentials {
-            username = System.getenv("REPSY_USER")
-            password = System.getenv("REPSY_PASSWORD")
+            username = System.getenv("REPSY_USER") ?: providers.gradleProperty("username").get()
+            password = System.getenv("REPSY_PASSWORD") ?: providers.gradleProperty("password").get()
         }
         authentication {
             create<BasicAuthentication>("basic")

@@ -2,10 +2,6 @@ name: Publish Ciphers Library
 
 on:
   workflow_call:
-    secrets:
-      REPSY_USER:
-      REPSY_PASSWORD:
-        required: true
 
 jobs:
   publish:
@@ -21,11 +17,11 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Setup build
+      - name: Prepare to publish
         uses: gradle/gradle-build-action@v2
 
       - name: Publish to Maven Repository
         env:
           REPSY_USER: ${{ secrets.REPSY_USER }}
           REPSY_PASSWORD: ${{ secrets.REPSY_PASSWORD }}
-        run: ./gradlew publish
+        run: ./gradlew Homework:java-web:cipher-library:publish
