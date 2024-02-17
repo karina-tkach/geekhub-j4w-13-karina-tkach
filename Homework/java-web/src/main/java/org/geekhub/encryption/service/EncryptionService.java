@@ -1,9 +1,9 @@
 package org.geekhub.encryption.service;
 
 import org.geekhub.ciphers.Cipher;
-import org.geekhub.encryption.models.CipherAlgorithm;
 import org.geekhub.encryption.ciphers.CipherFactory;
 import org.geekhub.encryption.exception.OperationFailedException;
+import org.geekhub.encryption.models.EncodeDataDTO;
 import org.geekhub.encryption.models.HistoryEntry;
 import org.geekhub.encryption.models.OperationType;
 import org.geekhub.encryption.repository.EncryptionRepository;
@@ -18,44 +18,41 @@ public class EncryptionService {
     private final EncryptionRepository encryptionRepository;
     private static final String SUCCESS_OPERATION_STATUS = "SUCCESS";
     private static final String FAIL_OPERATION_STATUS = "FAIL";
-    private final CipherFactory cipherFactory;
-    private final CipherAlgorithm cipherAlgorithm;
-    private final OperationType operationType;
     private final int activeUserId;
 
-    public EncryptionService(EncryptionRepository encryptionRepository, CipherFactory cipherFactory,
-                             @Value("${active.cipher}") String cipherAlgorithm,
-                             @Value("${operation.type}") String operationType,
+    public EncryptionService(EncryptionRepository encryptionRepository,
                              @Value("${active.user.id}") int activeUserId) {
         this.encryptionRepository = encryptionRepository;
-        this.cipherFactory = cipherFactory;
-        this.cipherAlgorithm = CipherAlgorithm.valueOf(cipherAlgorithm);
-        this.operationType = OperationType.valueOf(operationType);
         this.activeUserId = activeUserId;
     }
 
-    public String performOperation(String message) {
-        Cipher cipher = cipherFactory.getCipher(cipherAlgorithm);
+    public String performOperation(EncodeDataDTO encodeDataDTO) {
         String processedMessage = null;
+        Cipher cipher = CipherFactory.getCipher(encodeDataDTO.getCipherAlgorithm(),
+            encodeDataDTO.getShift(), encodeDataDTO.getKey());
 
         try {
-            if (message.isBlank()) {
+            if (encodeDataDTO.getOriginalMessage().isBlank()) {
                 throw new IllegalArgumentException("Incorrect data for encryption.");
             }
 
-            if (Objects.requireNonNull(operationType) == OperationType.ENCRYPTION) {
-                processedMessage = cipher.encrypt(message);
+            if (Objects.requireNonNull(encodeDataDTO.getOperationType()) == OperationType.ENCRYPTION) {
+                processedMessage = cipher.encrypt(encodeDataDTO.getOriginalMessage());
             } else {
-                processedMessage = cipher.decrypt(message);
+                processedMessage = cipher.decrypt(encodeDataDTO.getOriginalMessage());
             }
 
             OffsetDateTime dateTime = OffsetDateTime.now();
-            HistoryEntry entry = new HistoryEntry(activeUserId, message, processedMessage, cipherAlgorithm.name(), dateTime, operationType.name(), SUCCESS_OPERATION_STATUS);
+            HistoryEntry entry = new HistoryEntry(activeUserId, encodeDataDTO.getOriginalMessage(),
+                processedMessage, cipher.getCipherName(), dateTime,
+                encodeDataDTO.getOperationType().name(), SUCCESS_OPERATION_STATUS);
 
             encryptionRepository.saveEncoding(entry);
         } catch (Exception ex) {
             OffsetDateTime dateTime = OffsetDateTime.now();
-            HistoryEntry entry = new HistoryEntry(activeUserId, message, processedMessage, cipherAlgorithm.name(), dateTime, Objects.requireNonNull(operationType).name(), FAIL_OPERATION_STATUS);
+            HistoryEntry entry = new HistoryEntry(activeUserId, encodeDataDTO.getOriginalMessage(),
+                processedMessage, Objects.requireNonNull(cipher).getCipherName(), dateTime,
+                Objects.requireNonNull(encodeDataDTO.getOperationType()).name(), FAIL_OPERATION_STATUS);
 
             encryptionRepository.saveEncoding(entry);
             throw new OperationFailedException(ex);

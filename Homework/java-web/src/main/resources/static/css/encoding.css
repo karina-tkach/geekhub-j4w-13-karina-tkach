@@ -1,0 +1,63 @@
+#encodePage {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    margin: 70px 350px;
+    padding: 30px;
+    background-color: rgb(5, 5, 150, 0.77);
+}
+
+h2 {
+    margin-bottom: 40px;
+    margin-top: 0;
+    font-size: xx-large;
+    color: white;
+}
+
+label, a {
+    font-size: large;
+    color: white;
+}
+p {
+    color:white;
+     font-size:x-large;
+}
+
+.line {
+    padding: 12px 5px;
+}
+
+button {
+    background-color: #273be2;
+    border-radius: 10px;
+    border: 2px solid whitesmoke;
+    color: white;
+    padding: 6px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+.button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+a {
+    background-color: rgb(5, 5, 150,0.5);
+    border-radius: 10px;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    display: inline-block;
+    font-size: 15px;
+    margin: 4px 2px;
+    cursor: pointer;
+}

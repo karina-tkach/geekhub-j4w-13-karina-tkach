@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Encoding App</title>
+    <link rel="stylesheet" href="/static/css/encoding.css" th:href="@{/css/encoding.css}"/>
+</head>
+<body th:style="'background-image:url(' + @{/images/img_1.png} + ');'">
+<div id="encodePage">
+    <h2>Encoding Page</h2>
+    <form th:action="@{/encoding}" method="POST" th:object="${encodeDataDTO}">
+        <div class="line">
+            <label>Operation Type:</label>
+            <select name="operationType" th:field="*{operationType}">
+                <option th:each="operation:
+${T(org.geekhub.encryption.models.OperationType).values()}"
+                        th:value="${operation}"
+                        th:text="${operation.displayValue}"></option>
+            </select><br>
+        </div>
+        <div class="line">
+            <label>Cipher Name:</label>
+            <select id="cipherName" onclick="showCipherOptions()" th:field="*{cipherAlgorithm}">
+                <option th:each="cipher:
+${T(org.geekhub.encryption.models.CipherAlgorithm).values()}"
+                        th:value="${cipher}"
+                        th:text="${cipher.displayValue}"></option>
+            </select><br>
+        </div>
+        <div id="shiftField" class="line" style="display: none;">
+            <label>Shift:</label>
+            <input type="number" name="shift" value="3" th:field="*{shift}"><br>
+        </div>
+        <div id="keyField" class="line" style="display: none;">
+            <label>Key:</label>
+            <input type="text" name="key" id="key" value="Key" th:field="*{key}"
+                   onkeydown="return /[a-zA-z]/i.test(event.key)"><br>
+        </div>
+        <div class="line">
+            <label>Original Message:</label>
+            <textarea name="originalMessage" th:field="*{originalMessage}"
+                      rows="5" cols="35" th:required="required" style="resize:none;"></textarea><br>
+        </div>
+        <div class="button">
+            <button type="submit">Encode</button>
+        </div>
+    </form>
+    <div th:if="${encodedMessage != null}">
+        <p>Encoded Message: <br><span th:text="${encodedMessage}"></span></p>
+    </div>
+    <a href="/" class="button">Back to Home</a>
+</div>
+
+<script th:inline="javascript">
+    function showCipherOptions() {
+        var cipherName = document.querySelector("#cipherName").value;
+        if (cipherName === "CAESAR") {
+            document.getElementById("shiftField").style.display = "block";
+            document.getElementById("keyField").style.display = "none";
+            document.getElementById("key").removeAttribute("required");
+        } else if (cipherName === "VIGENERE") {
+            document.getElementById("shiftField").style.display = "none";
+            document.getElementById("keyField").style.display = "block";
+            document.getElementById("key").setAttribute("required", "required");
+
+        } else {
+            document.getElementById("shiftField").style.display = "none";
+            document.getElementById("keyField").style.display = "none";
+            document.getElementById("key").removeAttribute("required");
+        }
+    }
+</script>
+</body>
+</html>

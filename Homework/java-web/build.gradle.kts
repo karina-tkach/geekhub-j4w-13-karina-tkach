@@ -1,3 +1,9 @@
+plugins {
+    id("org.springframework.boot") version "3.2.2"
+    id("io.spring.dependency-management") version "1.1.4"
+    id("java")
+}
+
 val assertjVersion = "3.24.2"
 val springVersion = "6.1.3"
 val postgresqlVersion = "42.7.1"
@@ -22,6 +28,9 @@ repositories {
 
 dependencies {
     implementation("org.springframework:spring-context:$springVersion")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
 
     implementation("org.springframework:spring-jdbc:$jdbcVersion")
     implementation("org.postgresql:postgresql:$postgresqlVersion")
