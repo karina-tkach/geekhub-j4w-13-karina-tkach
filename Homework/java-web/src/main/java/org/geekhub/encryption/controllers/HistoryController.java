@@ -5,10 +5,12 @@ import org.geekhub.encryption.models.HistoryParamsDTO;
 import org.geekhub.encryption.service.HistoryService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -67,12 +69,15 @@ public class HistoryController {
         return "history";
     }
     @PostMapping("/history/date")
-    public String submitFormDate(@ModelAttribute("historyParamsDTO") HistoryParamsDTO historyParamsDTO) {
+    public String submitFormDate(@ModelAttribute("historyParamsDTO") HistoryParamsDTO historyParamsDTO,
+                                 BindingResult result,
+                                 RedirectAttributes attributes) {
+        attributes.addFlashAttribute("historyParamsDTO", historyParamsDTO);
         return "redirect:/history/date";
     }
     @GetMapping(path="/history/date")
     public String historyDate(Model model) {
-        HistoryParamsDTO historyParamsDTO = (HistoryParamsDTO) model.getAttribute("historyParamsDTO");
+        HistoryParamsDTO historyParamsDTO = (HistoryParamsDTO) model.asMap().get("historyParamsDTO");
         model.addAttribute("entries", historyService.getHistoryInDateRange(historyParamsDTO.getDateFrom(), historyParamsDTO.getDateTo()));
         return "history";
     }
