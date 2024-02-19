@@ -35,6 +35,9 @@ label, a {
     margin: 4px 2px;
     cursor: pointer;
 }
+#backButton {
+    background-color: #273be2;
+}
 button {
     background-color: #273be2;
     border-radius: 10px;

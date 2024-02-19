@@ -16,3 +16,16 @@ tbody tr:nth-child(even), thead {
 tbody tr:nth-child(odd) {
     background-color: #4581f7;
 }
+a {
+    background-color: #273be2;
+    border-radius: 10px;
+    border: 2px solid whitesmoke;
+    color: white;
+    padding: 6px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    margin: 4px 2px;
+    cursor: pointer;
+}

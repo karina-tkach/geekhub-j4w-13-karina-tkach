@@ -34,7 +34,7 @@ public class HistoryController {
                                         Model model) {
         List<HistoryEntry> history = historyService.getFullHistoryWithPagination(pageNumber, limit);
         model.addAttribute("pageNumber", pageNumber);
-        model.addAttribute("totalPages",history.size()/limit);
+        model.addAttribute("totalPages",Math.round(historyService.getFullHistory().size()/(float)limit));
         model.addAttribute("entries", history);
         return "historyPagination";
     }
