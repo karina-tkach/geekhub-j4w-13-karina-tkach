@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Encoding App</title>
+    <link rel="stylesheet" href="/static/css/table.css" th:href="@{/css/table.css}"/>
 </head>
 <body>
 <h2>History</h2>
@@ -36,7 +37,7 @@
         <a th:href="@{{pageNumber}(pageNumber=${pageNumber}-1)}">Previous</a>
     </div>
     <a href="/history">Menu</a>
-    <div id="next" th:if="${pageNumber != totalPages}">
+    <div id="next" th:if="${pageNumber != (totalPages)}">
         <a th:href="@{{pageNumber}(pageNumber=${pageNumber}+1)}">Next</a>
     </div>
 </div>
