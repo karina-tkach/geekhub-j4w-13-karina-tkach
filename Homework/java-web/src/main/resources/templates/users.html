@@ -1,10 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Encoding App</title>
 </head>
 <body>
-
+<h2>Users</h2>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.userId}">ID</td>
+        <td th:text="${user.username}">Name</td>
+        <td th:text="${user.email}">Email</td>
+    </tr>
+    </tbody>
+</table>
 </body>
 </html>

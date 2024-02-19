@@ -1,4 +1,4 @@
 package org.geekhub.encryption.models;
 
-public record User(int userId, String username) {
+public record User(int userId, String username, String email) {
 }

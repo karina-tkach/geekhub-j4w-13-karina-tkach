@@ -2,6 +2,7 @@ package org.geekhub.encryption.repository;
 
 import org.geekhub.encryption.models.User;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository {
@@ -11,4 +12,5 @@ public interface UserRepository {
     default boolean isUserExists(int userId) {
         return getUser(userId).isPresent();
     }
+    List<User> getAllUsers();
 }

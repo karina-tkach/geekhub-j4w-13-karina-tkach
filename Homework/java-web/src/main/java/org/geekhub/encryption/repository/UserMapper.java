@@ -14,7 +14,8 @@ class UserMapper {
     static User mapToPojo(ResultSet rs, int ignoredRowNum) throws SQLException {
         return new User(
             rs.getInt("id"),
-            rs.getString("name")
+            rs.getString("name"),
+            rs.getString("email")
         );
     }
 }

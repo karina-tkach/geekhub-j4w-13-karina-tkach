@@ -4,6 +4,8 @@ import org.geekhub.encryption.models.User;
 import org.geekhub.encryption.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -20,5 +22,9 @@ public class UserService {
 
     public boolean isUserExist(int userId) {
         return userRepository.isUserExists(userId);
+    }
+
+    public List<User> getAllUsers() {
+        return userRepository.getAllUsers();
     }
 }
