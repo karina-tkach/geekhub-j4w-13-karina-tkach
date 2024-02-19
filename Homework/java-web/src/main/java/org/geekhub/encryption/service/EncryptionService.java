@@ -44,14 +44,14 @@ public class EncryptionService {
 
             OffsetDateTime dateTime = OffsetDateTime.now();
             HistoryEntry entry = new HistoryEntry(activeUserId, encodeDataDTO.getOriginalMessage(),
-                processedMessage, cipher.getCipherName(), dateTime,
+                processedMessage, encodeDataDTO.getCipherAlgorithm().name(), dateTime,
                 encodeDataDTO.getOperationType().name(), SUCCESS_OPERATION_STATUS);
 
             encryptionRepository.saveEncoding(entry);
         } catch (Exception ex) {
             OffsetDateTime dateTime = OffsetDateTime.now();
             HistoryEntry entry = new HistoryEntry(activeUserId, encodeDataDTO.getOriginalMessage(),
-                processedMessage, Objects.requireNonNull(cipher).getCipherName(), dateTime,
+                processedMessage, Objects.requireNonNull(encodeDataDTO.getCipherAlgorithm()).name(), dateTime,
                 Objects.requireNonNull(encodeDataDTO.getOperationType()).name(), FAIL_OPERATION_STATUS);
 
             encryptionRepository.saveEncoding(entry);

@@ -155,6 +155,6 @@ public class EncryptionRepositoryImpl implements EncryptionRepository {
     }
 
     private static int getOffset(int pageNumber, int pageSize) {
-        return pageNumber * (pageSize - 1);
+        return (pageNumber-1) * pageSize;
     }
 }

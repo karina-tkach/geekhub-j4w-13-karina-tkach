@@ -12,7 +12,7 @@ public class HistoryParametersValidator {
     private final List<String> operationTypes;
 
     public HistoryParametersValidator() {
-        algorithms = List.of("Caesar", "Vigenere", "A1Z26", "Atbash");
+        algorithms = List.of("CAESAR", "VIGENERE", "A1Z26", "ATBASH");
         operationTypes = List.of("ENCRYPTION", "DECRYPTION");
     }
 

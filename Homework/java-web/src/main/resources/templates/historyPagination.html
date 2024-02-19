@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Encoding App</title>
+</head>
+<body>
+<h2>History</h2>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Original Message</th>
+        <th>Encoded Message</th>
+        <th>Algorithm</th>
+        <th>Date</th>
+        <th>Operation Type</th>
+        <th>Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="entry : ${entries}">
+        <td th:text="${entry.recordId}">ID</td>
+        <td th:text="${entry.originalMessage}">Original Message</td>
+        <td th:text="${entry.processedMessage}">Encoded Message</td>
+        <td th:text="${entry.algorithmName}">Algorithm</td>
+        <td th:text="${entry.date}">Date</td>
+        <td th:text="${entry.operationType}">Operation Type</td>
+        <td th:text="${entry.status}">Status</td>
+    </tr>
+    </tbody>
+</table>
+<div class="paginationButtons" style="display:flex;
+    flex-direction: row; gap:4px; margin:25px 10px;">
+    <div id="prev" th:if="${pageNumber != 1}">
+        <a th:href="@{{pageNumber}(pageNumber=${pageNumber}-1)}">Previous</a>
+    </div>
+    <a href="/history">Menu</a>
+    <div id="next" th:if="${pageNumber != totalPages}">
+        <a th:href="@{{pageNumber}(pageNumber=${pageNumber}+1)}">Next</a>
+    </div>
+</div>
+</body>
+</html>

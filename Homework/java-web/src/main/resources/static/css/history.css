@@ -1,0 +1,66 @@
+html {
+    color:white;
+    text-shadow: #273be2 1px 0 10px;
+}
+h2 {
+    font-family: "Comic Sans MS", cursive;
+    font-size: xxx-large;
+    margin:20px 0;
+}
+label, a {
+    font-size: large;
+    color: white;
+}
+.container {
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap:4px;
+}
+.buttons {
+    display: grid;
+    grid-auto-columns: 500px;
+}
+.button {
+    background-color: #395973;
+    border-radius: 10px;
+    border: 2px solid whitesmoke;
+    color: white;
+    padding: 20px 34px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+button {
+    background-color: #273be2;
+    border-radius: 10px;
+    border: 2px solid whitesmoke;
+    color: white;
+    padding: 6px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.line {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.button:hover {
+    background-color: #396985;
+}
