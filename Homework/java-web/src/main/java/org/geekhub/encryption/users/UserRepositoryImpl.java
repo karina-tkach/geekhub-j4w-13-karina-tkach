@@ -1,6 +1,5 @@
-package org.geekhub.encryption.repository;
+package org.geekhub.encryption.users;
 
-import org.geekhub.encryption.models.User;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;

@@ -1,4 +1,4 @@
-package org.geekhub.encryption.models;
+package org.geekhub.encryption.ciphers;
 
 public enum OperationType {
     ENCRYPTION("Encryption"),
@@ -6,7 +6,7 @@ public enum OperationType {
 
     private final String displayValue;
 
-    private OperationType(String displayValue) {
+    OperationType(String displayValue) {
         this.displayValue = displayValue;
     }
 

@@ -1,7 +1,7 @@
 package org.geekhub.encryption.controllers;
 
-import org.geekhub.encryption.models.EncodeDataDTO;
-import org.geekhub.encryption.service.EncryptionService;
+import org.geekhub.encryption.ciphers.EncodeDataDTO;
+import org.geekhub.encryption.ciphers.EncryptionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.ui.Model;

@@ -1,7 +1,5 @@
-package org.geekhub.encryption.service;
+package org.geekhub.encryption.history;
 
-import org.geekhub.encryption.models.HistoryEntry;
-import org.geekhub.encryption.repository.EncryptionRepository;
 import org.geekhub.encryption.validators.HistoryParametersValidator;
 import org.springframework.stereotype.Service;
 

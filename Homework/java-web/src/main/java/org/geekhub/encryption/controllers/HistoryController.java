@@ -1,8 +1,8 @@
 package org.geekhub.encryption.controllers;
 
-import org.geekhub.encryption.models.HistoryEntry;
-import org.geekhub.encryption.models.HistoryParamsDTO;
-import org.geekhub.encryption.service.HistoryService;
+import org.geekhub.encryption.history.HistoryEntry;
+import org.geekhub.encryption.history.HistoryParamsDTO;
+import org.geekhub.encryption.history.HistoryService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

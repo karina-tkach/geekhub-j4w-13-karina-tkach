@@ -1,11 +1,11 @@
 package org.geekhub.encryption;
 
 import org.geekhub.encryption.exception.OperationFailedException;
-import org.geekhub.encryption.models.CipherAlgorithm;
-import org.geekhub.encryption.models.EncodeDataDTO;
-import org.geekhub.encryption.models.OperationType;
-import org.geekhub.encryption.repository.EncryptionRepositoryImpl;
-import org.geekhub.encryption.service.EncryptionService;
+import org.geekhub.encryption.ciphers.CipherAlgorithm;
+import org.geekhub.encryption.ciphers.EncodeDataDTO;
+import org.geekhub.encryption.ciphers.OperationType;
+import org.geekhub.encryption.history.EncryptionRepositoryImpl;
+import org.geekhub.encryption.ciphers.EncryptionService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;

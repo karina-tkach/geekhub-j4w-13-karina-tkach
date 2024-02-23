@@ -1,10 +1,12 @@
-package org.geekhub.encryption.service;
+package org.geekhub.encryption.users;
 
 import org.geekhub.encryption.exception.UserException;
-import org.geekhub.encryption.models.CipherAlgorithm;
-import org.geekhub.encryption.models.EncodeDataDTO;
-import org.geekhub.encryption.models.HistoryEntry;
-import org.geekhub.encryption.models.OperationType;
+import org.geekhub.encryption.ciphers.CipherAlgorithm;
+import org.geekhub.encryption.ciphers.EncodeDataDTO;
+import org.geekhub.encryption.history.HistoryEntry;
+import org.geekhub.encryption.ciphers.OperationType;
+import org.geekhub.encryption.ciphers.EncryptionService;
+import org.geekhub.encryption.history.HistoryService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

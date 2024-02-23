@@ -1,12 +1,9 @@
-package org.geekhub.encryption.service;
+package org.geekhub.encryption.ciphers;
 
 import org.geekhub.ciphers.Cipher;
-import org.geekhub.encryption.ciphers.CipherFactory;
 import org.geekhub.encryption.exception.OperationFailedException;
-import org.geekhub.encryption.models.EncodeDataDTO;
-import org.geekhub.encryption.models.HistoryEntry;
-import org.geekhub.encryption.models.OperationType;
-import org.geekhub.encryption.repository.EncryptionRepository;
+import org.geekhub.encryption.history.EncryptionRepository;
+import org.geekhub.encryption.history.HistoryEntry;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 

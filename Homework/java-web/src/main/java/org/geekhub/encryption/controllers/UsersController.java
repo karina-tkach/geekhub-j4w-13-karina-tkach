@@ -1,6 +1,6 @@
 package org.geekhub.encryption.controllers;
 
-import org.geekhub.encryption.service.UserService;
+import org.geekhub.encryption.users.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.ui.Model;

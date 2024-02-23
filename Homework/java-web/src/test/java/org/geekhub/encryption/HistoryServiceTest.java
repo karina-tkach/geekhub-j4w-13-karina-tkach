@@ -1,8 +1,8 @@
 package org.geekhub.encryption;
 
-import org.geekhub.encryption.models.HistoryEntry;
-import org.geekhub.encryption.repository.EncryptionRepository;
-import org.geekhub.encryption.service.HistoryService;
+import org.geekhub.encryption.history.HistoryEntry;
+import org.geekhub.encryption.history.EncryptionRepository;
+import org.geekhub.encryption.history.HistoryService;
 import org.geekhub.encryption.validators.HistoryParametersValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

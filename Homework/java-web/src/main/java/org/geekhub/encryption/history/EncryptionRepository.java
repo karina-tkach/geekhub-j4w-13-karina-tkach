@@ -1,6 +1,5 @@
-package org.geekhub.encryption.repository;
+package org.geekhub.encryption.history;
 
-import org.geekhub.encryption.models.HistoryEntry;
 import org.springframework.lang.Nullable;
 
 import java.time.OffsetDateTime;

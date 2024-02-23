@@ -1,6 +1,5 @@
-package org.geekhub.encryption.repository;
+package org.geekhub.encryption.history;
 
-import org.geekhub.encryption.models.HistoryEntry;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;

@@ -1,7 +1,5 @@
-package org.geekhub.encryption.service;
+package org.geekhub.encryption.users;
 
-import org.geekhub.encryption.models.User;
-import org.geekhub.encryption.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

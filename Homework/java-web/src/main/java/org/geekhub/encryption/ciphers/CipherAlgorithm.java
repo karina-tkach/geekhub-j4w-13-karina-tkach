@@ -1,4 +1,4 @@
-package org.geekhub.encryption.models;
+package org.geekhub.encryption.ciphers;
 
 public enum CipherAlgorithm {
     ATBASH("Atbash"),
@@ -8,7 +8,7 @@ public enum CipherAlgorithm {
 
     private final String displayValue;
 
-    private CipherAlgorithm(String displayValue) {
+    CipherAlgorithm(String displayValue) {
         this.displayValue = displayValue;
     }
 

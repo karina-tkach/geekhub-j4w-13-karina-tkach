@@ -5,7 +5,6 @@ import org.geekhub.ciphers.AtbashCipher;
 import org.geekhub.ciphers.CaesarCipher;
 import org.geekhub.ciphers.Cipher;
 import org.geekhub.ciphers.VigenereCipher;
-import org.geekhub.encryption.models.CipherAlgorithm;
 import org.springframework.stereotype.Component;
 
 @Component

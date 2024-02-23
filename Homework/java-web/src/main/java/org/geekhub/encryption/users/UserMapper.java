@@ -1,6 +1,4 @@
-package org.geekhub.encryption.repository;
-
-import org.geekhub.encryption.models.User;
+package org.geekhub.encryption.users;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

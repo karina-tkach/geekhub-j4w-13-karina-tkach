@@ -1,4 +1,4 @@
-package org.geekhub.encryption.models;
+package org.geekhub.encryption.history;
 
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;

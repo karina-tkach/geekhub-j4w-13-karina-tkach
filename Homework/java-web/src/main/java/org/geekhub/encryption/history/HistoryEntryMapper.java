@@ -1,18 +1,16 @@
-package org.geekhub.encryption.repository;
-
-import org.geekhub.encryption.models.HistoryEntry;
+package org.geekhub.encryption.history;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.ZoneOffset;
 
-class HistoryEntryMapper {
+public class HistoryEntryMapper {
     private HistoryEntryMapper() {
 
     }
 
     @SuppressWarnings("java:S1172")
-    static HistoryEntry mapToPojo(ResultSet rs, int ignoredRowNum) throws SQLException {
+    public static HistoryEntry mapToPojo(ResultSet rs, int ignoredRowNum) throws SQLException {
         return new HistoryEntry(rs.getInt("id"),
         rs.getInt("user_id"),
         rs.getString("original_message"),
