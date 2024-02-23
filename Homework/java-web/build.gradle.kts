@@ -30,11 +30,9 @@ dependencies {
     implementation("org.springframework:spring-context:$springVersion")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
-    implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
 
-    implementation("org.springframework:spring-jdbc:$jdbcVersion")
     implementation("org.postgresql:postgresql:$postgresqlVersion")
-    implementation("com.zaxxer:HikariCP:$hikariVersion")
     implementation("org.geekhub:ciphers:$ciphersVersion")
 
     implementation("org.flywaydb:flyway-core:$flywayVersion")

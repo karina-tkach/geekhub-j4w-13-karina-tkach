@@ -27,4 +27,5 @@ public interface EncryptionRepository {
     List<HistoryEntry> getFullHistoryWithPagination(int pageNumber, int limit);
 
     List<HistoryEntry> getFullHistoryWithPaginationAndUserId(int userId, int pageNumber, int limit);
+    int getHistoryRowsCount();
 }

@@ -20,9 +20,10 @@ label, a {
     font-size: large;
     color: white;
 }
+
 p {
-    color:white;
-     font-size:x-large;
+    color: white;
+    font-size: x-large;
 }
 
 .line {
@@ -51,7 +52,7 @@ button {
 }
 
 a {
-    background-color: rgb(5, 5, 150,0.5);
+    background-color: rgb(5, 5, 150, 0.5);
     border-radius: 10px;
     color: white;
     padding: 5px 10px;

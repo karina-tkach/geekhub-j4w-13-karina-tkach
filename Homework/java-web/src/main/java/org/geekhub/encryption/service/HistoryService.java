@@ -75,4 +75,7 @@ public class HistoryService {
 
         throw new IllegalArgumentException("Illegal pagination parameters for search.");
     }
+    public int getHistoryRowsCount() {
+        return encryptionRepository.getHistoryRowsCount();
+    }
 }

@@ -17,7 +17,7 @@ public class EncodingController {
         this.encryptionService = encryptionService;
     }
 
-    @GetMapping(path="/")
+    @GetMapping
     public String index() {
         return "index";
     }

@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-@SuppressWarnings("java:S1192")
+@SuppressWarnings({"java:S1192", "java:S2259"})
 public class EncryptionRepositoryImpl implements EncryptionRepository {
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
@@ -154,7 +154,14 @@ public class EncryptionRepositoryImpl implements EncryptionRepository {
         return namedParameterJdbcTemplate.query(query, parameters, HistoryEntryMapper::mapToPojo);
     }
 
+    @Override
+    public int getHistoryRowsCount() {
+        String query = "SELECT COUNT(*) FROM history";
+        return namedParameterJdbcTemplate.queryForObject(query, new MapSqlParameterSource(),
+            Integer.class);
+    }
+
     private static int getOffset(int pageNumber, int pageSize) {
-        return (pageNumber-1) * pageSize;
+        return (pageNumber - 1) * pageSize;
     }
 }

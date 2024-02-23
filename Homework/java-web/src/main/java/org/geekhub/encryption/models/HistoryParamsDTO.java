@@ -50,7 +50,11 @@ public class HistoryParamsDTO {
     }
 
     public void setDateFrom(String dateFrom) {
-        this.dateFrom = LocalDateTime.parse(dateFrom, DateTimeFormatter.ISO_DATE_TIME).minusHours(2).atOffset(ZoneOffset.UTC);
+        if (!dateFrom.isEmpty()) {
+            this.dateFrom = LocalDateTime.parse(dateFrom, DateTimeFormatter.ISO_DATE_TIME).minusHours(2).atOffset(ZoneOffset.UTC);
+        } else {
+            this.dateFrom = null;
+        }
     }
 
     public OffsetDateTime getDateTo() {
@@ -58,6 +62,10 @@ public class HistoryParamsDTO {
     }
 
     public void setDateTo(String dateTo) {
-        this.dateTo = LocalDateTime.parse(dateTo, DateTimeFormatter.ISO_DATE_TIME).minusHours(2).atOffset(ZoneOffset.UTC);
+        if (!dateTo.isEmpty()) {
+            this.dateTo = LocalDateTime.parse(dateTo, DateTimeFormatter.ISO_DATE_TIME).minusHours(2).atOffset(ZoneOffset.UTC);
+        } else {
+            this.dateTo = null;
+        }
     }
 }

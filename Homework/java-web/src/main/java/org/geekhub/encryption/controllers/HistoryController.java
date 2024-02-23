@@ -5,7 +5,6 @@ import org.geekhub.encryption.models.HistoryParamsDTO;
 import org.geekhub.encryption.service.HistoryService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,79 +16,91 @@ import java.util.List;
 @Controller
 public class HistoryController {
     private final HistoryService historyService;
+    private static final String HISTORY_PAGE_NAME = "history";
+    private static final String HISTORY_DTO_NAME = "historyParamsDTO";
+    private static final String HISTORY_ENTRIES_NAME = "entries";
 
     public HistoryController(HistoryService historyService) {
         this.historyService = historyService;
     }
 
-    @GetMapping(path="/history")
+    @GetMapping(path = "/history")
     public String history(Model model) {
-        model.addAttribute("historyParamsDTO",new HistoryParamsDTO());
+        model.addAttribute(HISTORY_DTO_NAME, new HistoryParamsDTO());
         return "historyMain";
     }
 
-    @GetMapping(path="/history/{limit}/{pageNumber}")
+    @GetMapping(path = "/history/{limit}/{pageNumber}")
     public String historyWithPagination(@PathVariable int limit,
                                         @PathVariable int pageNumber,
                                         Model model) {
         List<HistoryEntry> history = historyService.getFullHistoryWithPagination(pageNumber, limit);
         model.addAttribute("pageNumber", pageNumber);
-        model.addAttribute("totalPages",Math.round(historyService.getFullHistory().size()/(float)limit));
-        model.addAttribute("entries", history);
+        model.addAttribute("totalPages", Math.round(historyService.getHistoryRowsCount() / (float) limit));
+        model.addAttribute(HISTORY_ENTRIES_NAME, history);
         return "historyPagination";
     }
+
     @PostMapping("/history/algorithm")
-    public String submitFormAlgorithm(@ModelAttribute("historyParamsDTO") HistoryParamsDTO historyParamsDTO) {
+    public String submitFormAlgorithm(@ModelAttribute(HISTORY_DTO_NAME) HistoryParamsDTO historyParamsDTO) {
         return "redirect:/history/" + historyParamsDTO.getAlgorithm();
     }
-    @GetMapping(path="/history/{algorithm}")
+
+    @GetMapping(path = "/history/{algorithm}")
     public String historyAlgorithm(@PathVariable String algorithm,
-                                                 Model model) {
-        model.addAttribute("entries", historyService.getHistoryByAlgorithm(algorithm));
-        return "history";
+                                   Model model) {
+        model.addAttribute(HISTORY_ENTRIES_NAME, historyService.getHistoryByAlgorithm(algorithm));
+        return HISTORY_PAGE_NAME;
     }
+
     @PostMapping("/history/recordId")
-    public String submitFormRecordId(@ModelAttribute("historyParamsDTO") HistoryParamsDTO historyParamsDTO) {
+    public String submitFormRecordId(@ModelAttribute(HISTORY_DTO_NAME) HistoryParamsDTO historyParamsDTO) {
         return "redirect:/history/recordId/" + historyParamsDTO.getRecordId();
     }
-    @GetMapping(path="/history/recordId/{recordId}")
+
+    @GetMapping(path = "/history/recordId/{recordId}")
     public String historyRecordId(@PathVariable int recordId,
-                                                 Model model) {
-        model.addAttribute("entries", historyService.getHistoryRecordById(recordId));
-        return "history";
+                                  Model model) {
+        model.addAttribute(HISTORY_ENTRIES_NAME, historyService.getHistoryRecordById(recordId));
+        return HISTORY_PAGE_NAME;
     }
+
     @PostMapping("/history/userId")
-    public String submitFormUserId(@ModelAttribute("historyParamsDTO") HistoryParamsDTO historyParamsDTO) {
+    public String submitFormUserId(@ModelAttribute(HISTORY_DTO_NAME) HistoryParamsDTO historyParamsDTO) {
         return "redirect:/history/userId/" + historyParamsDTO.getUserId();
     }
-    @GetMapping(path="/history/userId/{userId}")
+
+    @GetMapping(path = "/history/userId/{userId}")
     public String historyUserId(@PathVariable int userId,
-                                                 Model model) {
-        model.addAttribute("entries", historyService.getHistoryRecordsByUserId(userId));
-        return "history";
+                                Model model) {
+        model.addAttribute(HISTORY_ENTRIES_NAME, historyService.getHistoryRecordsByUserId(userId));
+        return HISTORY_PAGE_NAME;
     }
+
     @PostMapping("/history/date")
-    public String submitFormDate(@ModelAttribute("historyParamsDTO") HistoryParamsDTO historyParamsDTO,
-                                 BindingResult result,
+    public String submitFormDate(@ModelAttribute(HISTORY_DTO_NAME) HistoryParamsDTO historyParamsDTO,
                                  RedirectAttributes attributes) {
-        attributes.addFlashAttribute("historyParamsDTO", historyParamsDTO);
+        attributes.addFlashAttribute(HISTORY_DTO_NAME, historyParamsDTO);
         return "redirect:/history/date";
     }
-    @GetMapping(path="/history/date")
+
+    @GetMapping(path = "/history/date")
     public String historyDate(Model model) {
-        HistoryParamsDTO historyParamsDTO = (HistoryParamsDTO) model.asMap().get("historyParamsDTO");
-        model.addAttribute("entries", historyService.getHistoryInDateRange(historyParamsDTO.getDateFrom(), historyParamsDTO.getDateTo()));
-        return "history";
+        HistoryParamsDTO historyParamsDTO = (HistoryParamsDTO) model.asMap().get(HISTORY_DTO_NAME);
+        model.addAttribute(HISTORY_ENTRIES_NAME, historyService.getHistoryInDateRange(historyParamsDTO.getDateFrom(), historyParamsDTO.getDateTo()));
+        return HISTORY_PAGE_NAME;
     }
+
     @PostMapping("/history/algorithmAndOperation")
-    public String submitFormAlgorithmAndOperation(@ModelAttribute("historyParamsDTO") HistoryParamsDTO historyParamsDTO) {
-        return "redirect:/history/algorithmAndOperation/" + historyParamsDTO.getAlgorithm() +"/" + historyParamsDTO.getOperationType();
+    public String submitFormAlgorithmAndOperation(@ModelAttribute(HISTORY_DTO_NAME) HistoryParamsDTO historyParamsDTO) {
+        return "redirect:/history/algorithmAndOperation/" + historyParamsDTO.getAlgorithm() + "/" + historyParamsDTO.getOperationType();
     }
-    @GetMapping(path="/history/algorithmAndOperation/{algorithm}/{operation}")
+
+    @GetMapping(path = "/history/algorithmAndOperation/{algorithm}/{operation}")
     public String historyUserId(@PathVariable String algorithm,
                                 @PathVariable String operation,
                                 Model model) {
-        model.addAttribute("entries", historyService.getHistoryByAlgorithmAndOperationType(algorithm,operation));
-        return "history";
+        model.addAttribute(HISTORY_ENTRIES_NAME, historyService.getHistoryByAlgorithmAndOperationType(algorithm, operation));
+        return HISTORY_PAGE_NAME;
     }
 }

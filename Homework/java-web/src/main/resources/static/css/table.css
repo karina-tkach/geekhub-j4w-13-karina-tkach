@@ -1,21 +1,26 @@
 table {
     table-layout: fixed;
-    width:100%;
+    width: 100%;
     background-color: #4581f7;
 }
+
 table, th, td {
     border-collapse: collapse;
     border: 3px solid blue;
 }
-th,td {
+
+th, td {
     padding: 10px;
 }
+
 tbody tr:nth-child(even), thead {
     background-color: #88b1eb;
 }
+
 tbody tr:nth-child(odd) {
     background-color: #4581f7;
 }
+
 a {
     background-color: #273be2;
     border-radius: 10px;
