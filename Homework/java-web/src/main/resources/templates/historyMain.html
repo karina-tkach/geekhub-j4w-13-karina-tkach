@@ -9,7 +9,7 @@
 <div class="container">
     <h2>History</h2>
     <div class="buttons">
-        <a href="/history/8/1" class="button">Show full history</a>
+        <a href="/historyList" class="button">Show full history</a>
         <a class="button" onclick="showAlgorithm()">Show history by algorithm</a>
         <div id="algorithm" class="line" style="display: none;">
             <form th:action="@{/history/algorithm}" method="POST" th:object="${historyParamsDTO}">
@@ -17,7 +17,7 @@
                     <label>Algorithm:</label>
                     <select id="algorithmName" th:field="*{algorithm}">
                         <option th:each="cipher:
-${T(org.geekhub.encryption.models.CipherAlgorithm).values()}"
+${T(org.geekhub.encryption.ciphers.CipherAlgorithm).values()}"
                                 th:value="${cipher}"
                                 th:text="${cipher.displayValue}"></option>
                     </select><br>
@@ -74,7 +74,7 @@ ${T(org.geekhub.encryption.models.CipherAlgorithm).values()}"
                     <label>Algorithm:</label>
                     <select id="algorithmName2" th:field="*{algorithm}">
                         <option th:each="cipher:
-${T(org.geekhub.encryption.models.CipherAlgorithm).values()}"
+${T(org.geekhub.encryption.ciphers.CipherAlgorithm).values()}"
                                 th:value="${cipher}"
                                 th:text="${cipher.displayValue}"></option>
                     </select><br>
@@ -83,7 +83,7 @@ ${T(org.geekhub.encryption.models.CipherAlgorithm).values()}"
                     <label>Operation type:</label>
                     <select name="operationType" th:field="*{operationType}">
                         <option th:each="operation:
-${T(org.geekhub.encryption.models.OperationType).values()}"
+${T(org.geekhub.encryption.ciphers.OperationType).values()}"
                                 th:value="${operation}"
                                 th:text="${operation.displayValue}"></option>
                     </select><br>

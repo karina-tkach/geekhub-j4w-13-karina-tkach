@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -30,13 +31,13 @@ public class HistoryController {
         return "historyMain";
     }
 
-    @GetMapping(path = "/history/{limit}/{pageNumber}")
-    public String historyWithPagination(@PathVariable int limit,
-                                        @PathVariable int pageNumber,
+    @GetMapping(path = "/historyList")
+    public String historyWithPagination(@RequestParam(defaultValue = "1") int page,
+                                        @RequestParam(defaultValue = "8") int pageSize,
                                         Model model) {
-        List<HistoryEntry> history = historyService.getFullHistoryWithPagination(pageNumber, limit);
-        model.addAttribute("pageNumber", pageNumber);
-        model.addAttribute("totalPages", Math.round(historyService.getHistoryRowsCount() / (float) limit));
+        List<HistoryEntry> history = historyService.getFullHistoryWithPagination(page, pageSize);
+        model.addAttribute("page", page);
+        model.addAttribute("totalPages", Math.round(historyService.getHistoryRowsCount() / (float) pageSize));
         model.addAttribute(HISTORY_ENTRIES_NAME, history);
         return "historyPagination";
     }

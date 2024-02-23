@@ -13,7 +13,7 @@
             <label>Operation Type:</label>
             <select name="operationType" th:field="*{operationType}">
                 <option th:each="operation:
-${T(org.geekhub.encryption.models.OperationType).values()}"
+${T(org.geekhub.encryption.ciphers.OperationType).values()}"
                         th:value="${operation}"
                         th:text="${operation.displayValue}"></option>
             </select><br>
@@ -22,7 +22,7 @@ ${T(org.geekhub.encryption.models.OperationType).values()}"
             <label>Cipher Name:</label>
             <select id="cipherName" onclick="showCipherOptions()" th:field="*{cipherAlgorithm}">
                 <option th:each="cipher:
-${T(org.geekhub.encryption.models.CipherAlgorithm).values()}"
+${T(org.geekhub.encryption.ciphers.CipherAlgorithm).values()}"
                         th:value="${cipher}"
                         th:text="${cipher.displayValue}"></option>
             </select><br>
