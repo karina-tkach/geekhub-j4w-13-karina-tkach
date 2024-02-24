@@ -16,7 +16,7 @@ publishing {
         create<MavenPublication>("ciphers-library") {
         groupId = "org.geekhub"
         artifactId = "ciphers"
-        version = "1.0.0"
+        version = "1.0.1"
 
         from(components["java"])
         }

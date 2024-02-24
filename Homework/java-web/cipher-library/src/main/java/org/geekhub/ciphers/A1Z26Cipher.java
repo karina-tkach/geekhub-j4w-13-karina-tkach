@@ -5,19 +5,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class A1Z26Cipher implements Cipher {
-    private final AtomicBoolean lastCharIsLetter;
-    private static final int ASCII_NUMBER_OF_FIRST_LETTER = 65;
+import static org.geekhub.ciphers.CipherUtil.getKeyLetter;
 
-    public A1Z26Cipher() {
-        this.lastCharIsLetter = new AtomicBoolean();
-    }
+public class A1Z26Cipher implements Cipher {
+    private static final int ASCII_NUMBER_OF_FIRST_LETTER = 65;
 
     @Override
     public String encrypt(String message) {
-        lastCharIsLetter.set(false);
+        AtomicBoolean lastCharIsLetter = new AtomicBoolean(false);
         return message.chars()
-            .mapToObj(this::getStringForA1Z26Encryption)
+            .mapToObj(letter -> getStringForA1Z26Encryption(letter, lastCharIsLetter))
             .collect(Collectors.joining());
     }
 
@@ -64,7 +61,7 @@ public class A1Z26Cipher implements Cipher {
         return "A1Z26";
     }
 
-    private String getStringForA1Z26Encryption(int letter) {
+    private String getStringForA1Z26Encryption(int letter, AtomicBoolean lastCharIsLetter) {
         int keyLetter = getKeyLetter(letter);
         if (keyLetter == 0) {
             lastCharIsLetter.set(false);
@@ -77,17 +74,5 @@ public class A1Z26Cipher implements Cipher {
         }
         lastCharIsLetter.set(true);
         return result;
-    }
-
-    private int getKeyLetter(int letter) {
-        if (letter >= 'a' && letter <= 'z') {
-            return 'a';
-        }
-
-        if (letter >= 'A' && letter <= 'Z') {
-            return 'A';
-        }
-
-        return 0;
     }
 }

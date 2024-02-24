@@ -3,6 +3,8 @@ package org.geekhub.ciphers;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import static org.geekhub.ciphers.CipherUtil.getKeyLetter;
+
 public class VigenereCipher implements Cipher {
     public static final int NUMBER_OF_LETTERS_IN_ALPHABET = 26;
     private final String key;
@@ -78,17 +80,5 @@ public class VigenereCipher implements Cipher {
 
     private String getKeyInValidCase(int keyLetter, String keyLower, String keyUpper) {
         return keyLetter == 'a' ? keyLower : keyUpper;
-    }
-
-    private int getKeyLetter(int letter) {
-        if (letter >= 'a' && letter <= 'z') {
-            return 'a';
-        }
-
-        if (letter >= 'A' && letter <= 'Z') {
-            return 'A';
-        }
-
-        return 0;
     }
 }

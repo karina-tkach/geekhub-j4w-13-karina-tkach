@@ -10,7 +10,7 @@ val postgresqlVersion = "42.7.1"
 val hikariVersion = "5.1.0"
 val jdbcVersion = "6.1.3"
 val flywayVersion = "10.6.0"
-val ciphersVersion = "1.0.0"
+val ciphersVersion = "1.0.1"
 
 repositories {
     mavenCentral()

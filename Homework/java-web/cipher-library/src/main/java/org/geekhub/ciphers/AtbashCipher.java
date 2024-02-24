@@ -2,6 +2,8 @@ package org.geekhub.ciphers;
 
 import java.util.stream.Collectors;
 
+import static org.geekhub.ciphers.CipherUtil.getKeyLetter;
+
 public class AtbashCipher implements Cipher {
     public static final int NUMBER_OF_LETTERS_IN_ALPHABET = 26;
 
@@ -33,17 +35,5 @@ public class AtbashCipher implements Cipher {
         }
 
         return (char) (keyLetter + (keyLetter + NUMBER_OF_LETTERS_IN_ALPHABET - 1 - letter));
-    }
-
-    private int getKeyLetter(int letter) {
-        if (letter >= 'a' && letter <= 'z') {
-            return 'a';
-        }
-
-        if (letter >= 'A' && letter <= 'Z') {
-            return 'A';
-        }
-
-        return 0;
     }
 }

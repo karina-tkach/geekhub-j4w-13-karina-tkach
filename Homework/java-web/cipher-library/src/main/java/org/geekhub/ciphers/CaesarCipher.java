@@ -2,6 +2,8 @@ package org.geekhub.ciphers;
 
 import java.util.stream.Collectors;
 
+import static org.geekhub.ciphers.CipherUtil.getKeyLetter;
+
 public class CaesarCipher implements Cipher {
     public static final int NUMBER_OF_LETTERS_IN_ALPHABET = 26;
     private final int caesarKey;
@@ -45,17 +47,5 @@ public class CaesarCipher implements Cipher {
         }
 
         return (char) ((letter - keyLetter + shift) % NUMBER_OF_LETTERS_IN_ALPHABET + keyLetter);
-    }
-
-    private int getKeyLetter(int letter) {
-        if (letter >= 'a' && letter <= 'z') {
-            return 'a';
-        }
-
-        if (letter >= 'A' && letter <= 'Z') {
-            return 'A';
-        }
-
-        return 0;
     }
 }
