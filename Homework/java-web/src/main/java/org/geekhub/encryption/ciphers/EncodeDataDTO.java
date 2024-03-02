@@ -1,8 +1,5 @@
 package org.geekhub.encryption.ciphers;
 
-import org.geekhub.encryption.ciphers.CipherAlgorithm;
-import org.geekhub.encryption.ciphers.OperationType;
-
 public class EncodeDataDTO {
     private OperationType operationType;
     private String originalMessage;
