@@ -11,6 +11,7 @@ val hikariVersion = "5.1.0"
 val jdbcVersion = "6.1.3"
 val flywayVersion = "10.6.0"
 val ciphersVersion = "1.0.1"
+var swaggerVersion = "2.3.0"
 
 repositories {
     mavenCentral()
@@ -31,6 +32,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:$swaggerVersion")
 
     implementation("org.postgresql:postgresql:$postgresqlVersion")
     implementation("org.geekhub:ciphers:$ciphersVersion")

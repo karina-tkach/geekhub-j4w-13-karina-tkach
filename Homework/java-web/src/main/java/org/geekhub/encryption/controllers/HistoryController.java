@@ -1,5 +1,6 @@
 package org.geekhub.encryption.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.geekhub.encryption.history.HistoryEntry;
 import org.geekhub.encryption.history.HistoryParamsDTO;
 import org.geekhub.encryption.history.HistoryService;
@@ -25,12 +26,14 @@ public class HistoryController {
         this.historyService = historyService;
     }
 
+    @Operation(description = "Get main history page")
     @GetMapping(path = "/history")
     public String history(Model model) {
         model.addAttribute(HISTORY_DTO_NAME, new HistoryParamsDTO());
         return "historyMain";
     }
 
+    @Operation(description = "Get full history with pagination")
     @GetMapping(path = "/historyList")
     public String historyWithPagination(@RequestParam(defaultValue = "1") int page,
                                         @RequestParam(defaultValue = "8") int pageSize,
@@ -42,11 +45,13 @@ public class HistoryController {
         return "historyPagination";
     }
 
+    @Operation(description = "Submit algorithm form")
     @PostMapping("/history/algorithm")
     public String submitFormAlgorithm(@ModelAttribute(HISTORY_DTO_NAME) HistoryParamsDTO historyParamsDTO) {
         return "redirect:/history/" + historyParamsDTO.getAlgorithm();
     }
 
+    @Operation(description = "Get history by algorithm")
     @GetMapping(path = "/history/{algorithm}")
     public String historyAlgorithm(@PathVariable String algorithm,
                                    Model model) {
@@ -54,11 +59,13 @@ public class HistoryController {
         return HISTORY_PAGE_NAME;
     }
 
+    @Operation(description = "Submit form with record id")
     @PostMapping("/history/recordId")
     public String submitFormRecordId(@ModelAttribute(HISTORY_DTO_NAME) HistoryParamsDTO historyParamsDTO) {
         return "redirect:/history/recordId/" + historyParamsDTO.getRecordId();
     }
 
+    @Operation(description = "Get history by record id")
     @GetMapping(path = "/history/recordId/{recordId}")
     public String historyRecordId(@PathVariable int recordId,
                                   Model model) {
@@ -66,11 +73,13 @@ public class HistoryController {
         return HISTORY_PAGE_NAME;
     }
 
+    @Operation(description = "Submit form with user id")
     @PostMapping("/history/userId")
     public String submitFormUserId(@ModelAttribute(HISTORY_DTO_NAME) HistoryParamsDTO historyParamsDTO) {
         return "redirect:/history/userId/" + historyParamsDTO.getUserId();
     }
 
+    @Operation(description = "Get history by user id")
     @GetMapping(path = "/history/userId/{userId}")
     public String historyUserId(@PathVariable int userId,
                                 Model model) {
@@ -78,6 +87,7 @@ public class HistoryController {
         return HISTORY_PAGE_NAME;
     }
 
+    @Operation(description = "Submit form with date")
     @PostMapping("/history/date")
     public String submitFormDate(@ModelAttribute(HISTORY_DTO_NAME) HistoryParamsDTO historyParamsDTO,
                                  RedirectAttributes attributes) {
@@ -85,6 +95,7 @@ public class HistoryController {
         return "redirect:/history/date";
     }
 
+    @Operation(description = "Get history by date")
     @GetMapping(path = "/history/date")
     public String historyDate(Model model) {
         HistoryParamsDTO historyParamsDTO = (HistoryParamsDTO) model.asMap().get(HISTORY_DTO_NAME);
@@ -92,11 +103,13 @@ public class HistoryController {
         return HISTORY_PAGE_NAME;
     }
 
+    @Operation(description = "Submit form with operation and algorithm")
     @PostMapping("/history/algorithmAndOperation")
     public String submitFormAlgorithmAndOperation(@ModelAttribute(HISTORY_DTO_NAME) HistoryParamsDTO historyParamsDTO) {
         return "redirect:/history/algorithmAndOperation/" + historyParamsDTO.getAlgorithm() + "/" + historyParamsDTO.getOperationType();
     }
 
+    @Operation(description = "Get history by operation and algorithm")
     @GetMapping(path = "/history/algorithmAndOperation/{algorithm}/{operation}")
     public String historyUserId(@PathVariable String algorithm,
                                 @PathVariable String operation,

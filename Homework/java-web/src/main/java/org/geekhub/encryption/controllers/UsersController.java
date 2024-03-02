@@ -1,5 +1,6 @@
 package org.geekhub.encryption.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.geekhub.encryption.users.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,7 @@ public class UsersController {
         this.userService = userService;
     }
 
+    @Operation(description = "Get all users")
     @GetMapping(path="/users")
     public String users(Model model) {
         model.addAttribute("users", userService.getAllUsers());
