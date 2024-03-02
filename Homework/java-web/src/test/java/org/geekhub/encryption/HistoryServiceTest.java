@@ -38,9 +38,9 @@ class HistoryServiceTest {
         log.add(new HistoryEntry(1, 1, "a", "b", "Caesar",
             OffsetDateTime.now(), "ENCRYPTION", "SUCCESS"));
 
-        when(encryptionRepository.getHistoryByAlgorithm("Caesar")).thenReturn(log);
+        when(encryptionRepository.getHistoryByAlgorithm("CAESAR")).thenReturn(log);
 
-        List<HistoryEntry> history = historyService.getHistoryByAlgorithm("Caesar");
+        List<HistoryEntry> history = historyService.getHistoryByAlgorithm("CAESAR");
 
         assertEquals(log, history, "The history by algorithm is incorrect.");
     }
@@ -97,9 +97,9 @@ class HistoryServiceTest {
         List<HistoryEntry> log = new ArrayList<>();
         log.add(new HistoryEntry(1, 1, "a", "b", "Caesar", OffsetDateTime.now(), "ENCRYPTION", "SUCCESS"));
 
-        when(encryptionRepository.getHistoryByAlgorithmAndOperationType("Caesar", "ENCRYPTION")).thenReturn(log);
+        when(encryptionRepository.getHistoryByAlgorithmAndOperationType("CAESAR", "ENCRYPTION")).thenReturn(log);
 
-        List<HistoryEntry> history = historyService.getHistoryByAlgorithmAndOperationType("Caesar", "ENCRYPTION");
+        List<HistoryEntry> history = historyService.getHistoryByAlgorithmAndOperationType("CAESAR", "ENCRYPTION");
 
         assertEquals(log, history, "The history by algorithm and operation type is incorrect.");
     }
