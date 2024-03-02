@@ -18,8 +18,8 @@ repositories {
     maven {
         url = uri("https://repo.repsy.io/mvn/karinatkach/ciphers-library")
         credentials {
-            username = System.getenv("REPSY_USER") ?: providers.gradleProperty("username").get()
-            password = System.getenv("REPSY_PASSWORD") ?: providers.gradleProperty("password").get()
+            username = System.getenv("REPSY_USER")
+            password = System.getenv("REPSY_PASSWORD")
         }
         authentication {
             create<BasicAuthentication>("basic")
