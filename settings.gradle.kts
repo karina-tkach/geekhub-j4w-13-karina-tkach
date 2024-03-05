@@ -22,3 +22,5 @@ include("Homework:java-web")
 include("Homework:java-web:cipher-library")
 
 include("Coursework")
+include("Coursework:domain")
+include("Coursework:web-app")
