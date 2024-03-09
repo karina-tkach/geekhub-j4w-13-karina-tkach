@@ -2,6 +2,7 @@ subprojects {
     val assertjVersion = "3.24.2"
     val postgresqlVersion = "42.7.1"
     val flywayVersion = "10.6.0"
+    val lombokVersion = "1.18.30"
 
 
     dependencies {
@@ -11,6 +12,12 @@ subprojects {
         implementation("org.postgresql:postgresql:$postgresqlVersion")
         implementation("org.flywaydb:flyway-core:$flywayVersion")
         runtimeOnly("org.flywaydb:flyway-database-postgresql:$flywayVersion")
+
+        compileOnly("org.projectlombok:lombok:$lombokVersion")
+        annotationProcessor("org.projectlombok:lombok:$lombokVersion")
+
+        testCompileOnly("org.projectlombok:lombok:$lombokVersion")
+        testAnnotationProcessor("org.projectlombok:lombok:$lombokVersion")
 
         testImplementation(platform("org.junit:junit-bom:5.9.1"))
         testImplementation(platform("org.mockito:mockito-bom:5.7.0"))
