@@ -6,9 +6,11 @@ import org.geekhub.ticketbooking.model.Movie;
 import org.geekhub.ticketbooking.model.Show;
 import org.geekhub.ticketbooking.repository.interfaces.ShowRepository;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class ShowRepositoryImpl implements ShowRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
 

@@ -4,9 +4,11 @@ import org.geekhub.ticketbooking.model.Cinema;
 import org.geekhub.ticketbooking.model.Hall;
 import org.geekhub.ticketbooking.repository.interfaces.HallRepository;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class HallRepositoryImpl implements HallRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
 

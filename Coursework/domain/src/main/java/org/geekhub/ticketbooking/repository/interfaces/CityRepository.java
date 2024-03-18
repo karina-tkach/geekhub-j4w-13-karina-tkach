@@ -13,7 +13,7 @@ public interface CityRepository {
 
     int addCity(City city);
 
-    void updateCityById(int cityId);
+    void updateCityById(City city, int cityId);
 
     void deleteCityById(int cityId);
 }

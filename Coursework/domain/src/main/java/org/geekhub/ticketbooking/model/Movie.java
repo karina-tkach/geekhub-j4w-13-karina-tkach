@@ -20,5 +20,4 @@ public class Movie {
     private String country;
     private int ageLimit;
     private List<Genre> genres;
-    private List<Show> shows;
 }
