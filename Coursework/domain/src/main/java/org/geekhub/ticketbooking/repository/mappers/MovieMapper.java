@@ -1,8 +1,8 @@
 package org.geekhub.ticketbooking.repository.mappers;
 
 import org.geekhub.ticketbooking.model.Genre;
-import org.geekhub.ticketbooking.model.Language;
 import org.geekhub.ticketbooking.model.Movie;
+import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,6 +10,7 @@ import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+@Component
 public class MovieMapper {
     private MovieMapper() {
     }
@@ -19,7 +20,6 @@ public class MovieMapper {
             rs.getString("title"),
             rs.getString("description"),
             rs.getInt("durationInMins"),
-            Language.valueOf(rs.getString("language")),
             rs.getTimestamp("releaseDate").toInstant().atOffset(ZoneOffset.UTC),
             rs.getString("country"),
             rs.getInt("ageLimit"),

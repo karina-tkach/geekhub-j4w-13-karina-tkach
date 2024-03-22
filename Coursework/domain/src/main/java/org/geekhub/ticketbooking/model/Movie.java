@@ -15,7 +15,6 @@ public class Movie {
     private String title;
     private String description;
     private int durationInMins;
-    private Language language;
     private OffsetDateTime releaseDate;
     private String country;
     private int ageLimit;

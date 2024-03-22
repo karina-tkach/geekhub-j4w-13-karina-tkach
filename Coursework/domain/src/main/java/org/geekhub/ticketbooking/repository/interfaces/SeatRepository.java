@@ -16,7 +16,7 @@ public interface SeatRepository {
 
     int addSeat(Seat seat);
 
-    void updateSeatById(int seatId);
+    void updateSeatById(Seat seat, int seatId);
 
     void deleteSeatById(int seatId);
 }

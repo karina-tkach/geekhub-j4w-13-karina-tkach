@@ -1,10 +1,12 @@
 package org.geekhub.ticketbooking.repository.mappers;
 
 import org.geekhub.ticketbooking.model.City;
+import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+@Component
 public class CityMapper {
     private CityMapper() {
     }

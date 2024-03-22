@@ -2,10 +2,12 @@ package org.geekhub.ticketbooking.repository.mappers;
 
 import org.geekhub.ticketbooking.model.Role;
 import org.geekhub.ticketbooking.model.User;
+import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+@Component
 public class UserMapper {
     private UserMapper() {
     }

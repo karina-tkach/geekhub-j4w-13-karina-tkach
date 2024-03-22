@@ -42,7 +42,7 @@ public class SeatRepositoryImpl implements SeatRepository {
     }
 
     @Override
-    public void updateSeatById(int seatId) {
+    public void updateSeatById(Seat seat, int seatId) {
 
     }
 

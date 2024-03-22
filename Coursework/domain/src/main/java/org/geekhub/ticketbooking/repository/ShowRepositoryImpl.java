@@ -49,7 +49,7 @@ public class ShowRepositoryImpl implements ShowRepository {
     }
 
     @Override
-    public void updateShowById(int showId) {
+    public void updateShowById(Show show, int showId) {
 
     }
 

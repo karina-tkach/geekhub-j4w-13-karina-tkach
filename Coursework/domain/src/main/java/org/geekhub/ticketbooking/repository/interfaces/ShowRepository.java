@@ -20,7 +20,7 @@ public interface ShowRepository {
 
     int addShow(Show show);
 
-    void updateShowById(int showId);
+    void updateShowById(Show show, int showId);
 
     void deleteShowById(int showId);
 }

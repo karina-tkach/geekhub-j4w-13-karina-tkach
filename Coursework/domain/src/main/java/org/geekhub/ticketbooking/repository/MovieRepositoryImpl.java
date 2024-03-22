@@ -1,7 +1,6 @@
 package org.geekhub.ticketbooking.repository;
 
 import org.geekhub.ticketbooking.model.Genre;
-import org.geekhub.ticketbooking.model.Language;
 import org.geekhub.ticketbooking.model.Movie;
 import org.geekhub.ticketbooking.repository.interfaces.MovieRepository;
 import org.geekhub.ticketbooking.repository.mappers.MovieMapper;
@@ -64,18 +63,6 @@ public class MovieRepositoryImpl implements MovieRepository {
     }
 
     @Override
-    public List<Movie> getMoviesByLanguage(Language language) {
-        String query = """
-            SELECT * FROM movies WHERE language=:language
-            """;
-
-        SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
-            .addValue("language", language.toString());
-
-        return jdbcTemplate.query(query, mapSqlParameterSource, MovieMapper::mapToPojo);
-    }
-
-    @Override
     public List<Movie> getMoviesByGenre(Genre genre) {
         String query = """
             SELECT * FROM movies WHERE genres LIKE :genre
@@ -107,8 +94,8 @@ public class MovieRepositoryImpl implements MovieRepository {
     @Override
     public int addMovie(Movie movie) {
         String query = """
-            INSERT INTO movies (title, description, duration, language, releaseDate, country, ageLimit, genres)
-            VALUES (:title, :description, :duration, :language, :releaseDate, :country, :ageLimit, :genres)
+            INSERT INTO movies (title, description, duration, releaseDate, country, ageLimit, genres)
+            VALUES (:title, :description, :duration, :releaseDate, :country, :ageLimit, :genres)
             """;
 
         KeyHolder generatedKeyHolder = new GeneratedKeyHolder();
@@ -116,7 +103,6 @@ public class MovieRepositoryImpl implements MovieRepository {
             .addValue("title", movie.getTitle())
             .addValue("description", movie.getDescription())
             .addValue("duration", movie.getDurationInMins())
-            .addValue("language", movie.getLanguage().toString())
             .addValue("releaseDate", Timestamp.from(movie.getReleaseDate().toInstant()))
             .addValue("country", movie.getCountry())
             .addValue("ageLimit", movie.getAgeLimit())
@@ -136,7 +122,7 @@ public class MovieRepositoryImpl implements MovieRepository {
     public void updateMovieById(Movie movie, int movieId) {
         String query = """
             UPDATE movies SET
-            title=:title, description=:description, duration=:duration, language=:language,
+            title=:title, description=:description, duration=:duration,
             releaseDate=:releaseDate, country=:country, ageLimit=:ageLimit, genres=:genres
             WHERE id=:id
             """;
@@ -144,7 +130,6 @@ public class MovieRepositoryImpl implements MovieRepository {
             .addValue("title", movie.getTitle())
             .addValue("description", movie.getDescription())
             .addValue("duration", movie.getDurationInMins())
-            .addValue("language", movie.getLanguage().toString())
             .addValue("releaseDate", Timestamp.from(movie.getReleaseDate().toInstant()))
             .addValue("country", movie.getCountry())
             .addValue("ageLimit", movie.getAgeLimit())

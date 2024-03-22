@@ -14,7 +14,7 @@ public interface HallRepository {
 
     int addHall(Hall hall);
 
-    void updateHallById(int hallId);
+    void updateHallById(Hall hall, int hallId);
 
     void deleteHallById(int hallId);
 }

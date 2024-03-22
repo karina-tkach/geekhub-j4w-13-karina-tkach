@@ -13,6 +13,6 @@ public class Cinema {
     private int id;
     private String name;
     private City city;
-    private int numberOfHalls;
+    private String street;
     private List<Hall> halls;
 }

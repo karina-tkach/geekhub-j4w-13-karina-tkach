@@ -2,7 +2,6 @@ package org.geekhub.ticketbooking.repository.interfaces;
 
 
 import org.geekhub.ticketbooking.model.Genre;
-import org.geekhub.ticketbooking.model.Language;
 import org.geekhub.ticketbooking.model.Movie;
 import org.springframework.lang.Nullable;
 
@@ -15,8 +14,6 @@ public interface MovieRepository {
     Movie getMovieById(int movieId);
 
     Movie getMovieByTitle(String title);
-
-    List<Movie> getMoviesByLanguage(Language language);
 
     List<Movie> getMoviesByGenre(Genre genre);
 

@@ -37,7 +37,7 @@ public class HallRepositoryImpl implements HallRepository {
     }
 
     @Override
-    public void updateHallById(int hallId) {
+    public void updateHallById(Hall hall, int hallId) {
 
     }
 
