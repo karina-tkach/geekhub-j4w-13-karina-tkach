@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Repository
+@SuppressWarnings("java:S1192")
 public class MovieRepositoryImpl implements MovieRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
 

@@ -32,7 +32,7 @@ public class CinemaRepositoryImpl implements CinemaRepository {
     @Override
     public Cinema getCinemaById(int cinemaId) {
         String query = """
-            SELECT cinemas.id, cinemas.name, cinemas.city_id, cities.name, cinemas.street FROM cinemas
+            SELECT cinemas.id, cinemas.name, cinemas.city_id, cities.name AS city_name, cinemas.street FROM cinemas
             INNER JOIN cities ON cinemas.city_id = cities.id WHERE cinemas.id=:id
             """;
 
@@ -48,7 +48,7 @@ public class CinemaRepositoryImpl implements CinemaRepository {
     @Override
     public List<Cinema> getCinemasByCity(int cityId) {
         String query = """
-            SELECT cinemas.id, cinemas.name, cinemas.city_id, cities.name, cinemas.street FROM cinemas
+            SELECT cinemas.id, cinemas.name, cinemas.city_id, cities.name AS city_name, cinemas.street FROM cinemas
             INNER JOIN cities ON cinemas.city_id = cities.id WHERE cinemas.city_id=:cityId
             """;
 
@@ -61,7 +61,7 @@ public class CinemaRepositoryImpl implements CinemaRepository {
     @Override
     public Cinema getCinemaByCityAndName(int cityId, String name) {
         String query = """
-            SELECT cinemas.id, cinemas.name, cinemas.city_id, cities.name, cinemas.street FROM cinemas
+            SELECT cinemas.id, cinemas.name, cinemas.city_id, cities.name AS city_name, cinemas.street FROM cinemas
             INNER JOIN cities ON cinemas.city_id = cities.id WHERE cinemas.city_id=:cityId AND cinemas.name=:name
             """;
 

@@ -7,13 +7,12 @@ import org.springframework.stereotype.Component;
 
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
 public class MovieValidator {
     public void validate(Movie movie) {
-        if(movie == null) {
+        if (movie == null) {
             throw new MovieValidationException("Movie was null");
         }
         validateDuration(movie.getDurationInMins());
@@ -24,7 +23,7 @@ public class MovieValidator {
     }
 
     private void validateDuration(int durationInMins) {
-        if(durationInMins < 1) {
+        if (durationInMins < 1) {
             throw new MovieValidationException("Movie duration wasn't positive");
         }
     }
@@ -37,14 +36,13 @@ public class MovieValidator {
 
     private void validateCountry(String country) {
         Pattern letters = Pattern.compile("^[a-zA-Z ]+$");
-        Matcher hasLettersOnly = letters.matcher(country);
-        if (!hasLettersOnly.find()) {
+        if (country == null || !letters.matcher(country).find()) {
             throw new MovieValidationException("Movie country must contain only letters and spaces");
         }
     }
 
     private void validateAgeLimit(int ageLimit) {
-        if(ageLimit < 0) {
+        if (ageLimit < 0) {
             throw new MovieValidationException("Movie age limit was negative");
         }
     }

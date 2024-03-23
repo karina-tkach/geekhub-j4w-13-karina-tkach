@@ -8,12 +8,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.ZoneOffset;
 import java.util.Arrays;
-import java.util.stream.Collectors;
 
 @Component
 public class MovieMapper {
     private MovieMapper() {
     }
+
     @SuppressWarnings("java:S1172")
     public static Movie mapToPojo(ResultSet rs, int ignoredRowNum) throws SQLException {
         return new Movie(rs.getInt("id"),
@@ -26,7 +26,7 @@ public class MovieMapper {
             Arrays.stream(rs.getString("genres").split(", "))
                 .map(String::trim)
                 .map(Genre::valueOf)
-                .collect(Collectors.toList())
-            );
+                .toList()
+        );
     }
 }

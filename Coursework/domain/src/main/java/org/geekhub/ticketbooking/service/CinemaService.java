@@ -8,6 +8,7 @@ import org.geekhub.ticketbooking.repository.interfaces.CinemaRepository;
 import org.geekhub.ticketbooking.validator.CinemaValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -52,23 +53,23 @@ return null;
             City city = cityService.getCityByName(cinema.getCity().getName());
 
             if (city == null) {
-                throw new IllegalArgumentException("Cinema city was incorrect");
+                throw new CinemaValidationException("Cinema city was incorrect");
             }
             int cityId = city.getId();
 
             int id = cinemaRepository.addCinema(cinema, cityId);
             if (id == -1) {
-                throw new IllegalArgumentException("Unable to retrieve the generated key");
+                throw new CinemaValidationException("Unable to retrieve the generated key");
             }
 
             for (Hall hall : cinema.getHalls()) {
                 hallService.addHall(hall);
             }
 
-            logger.info("Cinema was added:\n" + cinema);
+            logger.info("Cinema was added:\n{}", cinema);
             return getCinemaById(id);
-        } catch (CinemaValidationException | IllegalArgumentException exception) {
-            logger.warn("Cinema wasn't added: " + cinema + "\n" + exception.getMessage());
+        } catch (CinemaValidationException | DataAccessException exception) {
+            logger.warn("Cinema wasn't added: {}\n{}", cinema, exception.getMessage());
             return null;
         }
 
@@ -79,6 +80,18 @@ return null;
     }
 
     public boolean deleteCinemaById(int cinemaId) {
-        return false;
+        Cinema cinemaToDel = getCinemaById(cinemaId);
+        try {
+            if (cinemaToDel == null) {
+                throw new CinemaValidationException("Cinema with id '" + cinemaId + "' not found");
+            }
+            cinemaRepository.deleteCinemaById(cinemaId);
+
+            logger.info("Cinema was deleted:\n{}", cinemaToDel);
+            return true;
+        } catch (CinemaValidationException | DataAccessException exception) {
+            logger.warn("Cinema wasn't deleted: {}\n{}",cinemaToDel, exception.getMessage());
+            return false;
+        }
     }
 }

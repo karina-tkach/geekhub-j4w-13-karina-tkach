@@ -6,6 +6,7 @@ import org.geekhub.ticketbooking.repository.interfaces.CityRepository;
 import org.geekhub.ticketbooking.validator.CityValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,17 +16,34 @@ public class CityService {
     private final CityRepository cityRepository;
     private final CityValidator cityValidator;
     private final Logger logger = LoggerFactory.getLogger(CityService.class);
+
     public CityService(CityRepository cityRepository, CityValidator cityValidator) {
         this.cityRepository = cityRepository;
         this.cityValidator = cityValidator;
     }
 
     public List<City> getAllCities() {
-        return  cityRepository.getAllCities();
+        try {
+            logger.info("Try to get all cities");
+            List<City> cities = cityRepository.getAllCities();
+            logger.info("Cities ware fetched successfully");
+            return cities;
+        } catch (DataAccessException exception) {
+            logger.warn("Cities weren't fetched\n{}", exception.getMessage());
+            return null;
+        }
     }
 
     public City getCityById(int cityId) {
-        return cityRepository.getCityById(cityId);
+        try {
+            logger.info("Try to get city by id");
+            City city = cityRepository.getCityById(cityId);
+            logger.info("City was fetched successfully");
+            return city;
+        } catch (DataAccessException exception) {
+            logger.warn("City wasn't fetched\n{}", exception.getMessage());
+            return null;
+        }
     }
 
     public City getCityByName(String name) {
@@ -35,9 +53,8 @@ public class CityService {
             City city = cityRepository.getCityByName(name);
             logger.info("City was fetched successfully");
             return city;
-        }
-        catch (CityValidationException exception) {
-            logger.warn(exception.getMessage());
+        } catch (CityValidationException | DataAccessException exception) {
+            logger.warn("City wasn't fetched\n{}", exception.getMessage());
             return null;
         }
     }
@@ -49,35 +66,37 @@ public class CityService {
 
             City existsCity = getCityByName(city.getName());
             if (existsCity != null) {
-                throw new IllegalArgumentException(
+                throw new CityValidationException(
                     "City with name '" + existsCity.getName() + "' already exists");
             }
 
             int id = cityRepository.addCity(city);
             if (id == -1) {
-                throw new IllegalArgumentException("Unable to retrieve the generated key");
+                throw new CityValidationException("Unable to retrieve the generated key");
             }
-            city.setId(id);
-            logger.info("City was added:\n" + city);
+
+            logger.info("City was added:\n{}", city);
             return getCityById(id);
-        } catch (IllegalArgumentException | CityValidationException exception) {
-            logger.warn("City wasn't added: " + city + "\n" + exception.getMessage());
+        } catch (CityValidationException | DataAccessException exception) {
+            logger.warn("City wasn't added: {}\n{}", city, exception.getMessage());
             return null;
         }
     }
 
     public City updateCityById(City city, int cityId) {
+        City cityToUpdate = getCityById(cityId);
         try {
             logger.info("Try to update city");
-            City cityToUpdate = getCityById(cityId);
+            if (cityToUpdate == null) {
+                throw new CityValidationException("City with id '" + cityId + "' not found");
+            }
             cityValidator.validate(city);
-            cityValidator.validate(cityToUpdate);
 
             cityRepository.updateCityById(city, cityId);
-            logger.info("City was updated:\n" + city);
+            logger.info("City was updated:\n{}", city);
             return getCityById(cityId);
-        } catch (IllegalArgumentException | CityValidationException exception) {
-            logger.warn("City wasn't updated: " + city + "\n" + exception.getMessage());
+        } catch (CityValidationException | DataAccessException exception) {
+            logger.warn("City wasn't updated: {}\n{}", city, exception.getMessage());
             return null;
         }
     }
@@ -86,13 +105,15 @@ public class CityService {
         City cityToDel = getCityById(cityId);
         try {
             logger.info("Try to delete city");
-            cityValidator.validate(cityToDel);
+            if (cityToDel == null) {
+                throw new CityValidationException("City with id '" + cityId + "' not found");
+            }
 
             cityRepository.deleteCityById(cityId);
-            logger.info("City was deleted:\n" + cityToDel);
+            logger.info("City was deleted:\n{}", cityToDel);
             return true;
-        } catch (IllegalArgumentException | CityValidationException exception) {
-            logger.warn("City wasn't deleted: " + cityToDel + "\n" + exception.getMessage());
+        } catch (CityValidationException | DataAccessException exception) {
+            logger.warn("City wasn't deleted: {}\n{}", cityToDel, exception.getMessage());
             return false;
         }
     }

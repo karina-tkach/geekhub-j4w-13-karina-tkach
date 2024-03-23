@@ -4,7 +4,6 @@ import org.geekhub.ticketbooking.exception.CityValidationException;
 import org.geekhub.ticketbooking.model.City;
 import org.springframework.stereotype.Component;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
@@ -19,8 +18,7 @@ public class CityValidator {
 
     public void validateName(String name) {
         Pattern letters = Pattern.compile("^[a-zA-Z ]+$");
-        Matcher hasLettersOnly = letters.matcher(name);
-        if (!hasLettersOnly.find()) {
+        if (name == null || !letters.matcher(name).find()) {
             throw new CityValidationException("City name must contain only letters and spaces");
         }
     }
