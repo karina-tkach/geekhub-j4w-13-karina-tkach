@@ -1,8 +1,5 @@
 package org.geekhub.ticketbooking.repository;
 
-import org.geekhub.ticketbooking.model.Cinema;
-import org.geekhub.ticketbooking.model.Hall;
-import org.geekhub.ticketbooking.model.Movie;
 import org.geekhub.ticketbooking.model.Show;
 import org.geekhub.ticketbooking.repository.interfaces.ShowRepository;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -29,27 +26,27 @@ public class ShowRepositoryImpl implements ShowRepository {
     }
 
     @Override
-    public List<Show> getShowsByMovie(Movie movie) {
+    public List<Show> getShowsByMovie(int movieId) {
         return null;
     }
 
     @Override
-    public List<Show> getShowsByHall(Hall hall) {
+    public List<Show> getShowsByHall(int hallId) {
         return null;
     }
 
     @Override
-    public List<Show> getShowsByCinema(Cinema cinema) {
+    public List<Show> getShowsByCinema(int cinemaId) {
         return null;
     }
 
     @Override
-    public int addShow(Show show) {
+    public int addShow(Show show, int hallId) {
         return 0;
     }
 
     @Override
-    public void updateShowById(Show show, int showId) {
+    public void updateShowById(Show show, int hallId, int showId) {
 
     }
 

@@ -1,22 +1,21 @@
 package org.geekhub.ticketbooking.repository.interfaces;
 
-import org.geekhub.ticketbooking.model.Hall;
 import org.geekhub.ticketbooking.model.Seat;
 
 import java.util.List;
 
 public interface SeatRepository {
-    List<Seat> getSeatsByHall(Hall hall);
+    List<Seat> getSeatsByHall(int hallId);
 
     Seat getSeatById(int seatId);
 
-    Seat getSeatByHallAndNumber(Hall hall, int number);
+    Seat getSeatByHallAndNumber(int hallId, int number);
 
-    List<Seat> getSeatsByHallAndStatus(Hall hall, boolean isBooked);
+    List<Seat> getSeatsByHallAndStatus(int hallId, boolean isBooked);
 
-    int addSeat(Seat seat);
+    int addSeat(Seat seat, int hallId);
 
-    void updateSeatById(Seat seat, int seatId);
+    void updateSeatById(Seat seat, int hallId, int seatId);
 
     void deleteSeatById(int seatId);
 }

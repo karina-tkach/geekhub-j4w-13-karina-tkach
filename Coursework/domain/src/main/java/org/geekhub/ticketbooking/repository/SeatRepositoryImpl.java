@@ -1,6 +1,5 @@
 package org.geekhub.ticketbooking.repository;
 
-import org.geekhub.ticketbooking.model.Hall;
 import org.geekhub.ticketbooking.model.Seat;
 import org.geekhub.ticketbooking.repository.interfaces.SeatRepository;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -17,7 +16,7 @@ public class SeatRepositoryImpl implements SeatRepository {
     }
 
     @Override
-    public List<Seat> getSeatsByHall(Hall hall) {
+    public List<Seat> getSeatsByHall(int hallId) {
         return null;
     }
 
@@ -27,22 +26,22 @@ public class SeatRepositoryImpl implements SeatRepository {
     }
 
     @Override
-    public Seat getSeatByHallAndNumber(Hall hall, int number) {
+    public Seat getSeatByHallAndNumber(int hallId, int number) {
         return null;
     }
 
     @Override
-    public List<Seat> getSeatsByHallAndStatus(Hall hall, boolean isBooked) {
+    public List<Seat> getSeatsByHallAndStatus(int hallId, boolean isBooked) {
         return null;
     }
 
     @Override
-    public int addSeat(Seat seat) {
+    public int addSeat(Seat seat, int hallId) {
         return 0;
     }
 
     @Override
-    public void updateSeatById(Seat seat, int seatId) {
+    public void updateSeatById(Seat seat, int hallId, int seatId) {
 
     }
 

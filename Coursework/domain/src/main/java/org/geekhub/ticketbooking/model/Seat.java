@@ -11,5 +11,5 @@ public class Seat {
     private int id;
     private int number;
     private boolean isBooked;
-    private Hall hall;
+    private int hallId;
 }

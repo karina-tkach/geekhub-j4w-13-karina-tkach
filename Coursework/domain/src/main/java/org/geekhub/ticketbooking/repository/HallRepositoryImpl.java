@@ -1,6 +1,5 @@
 package org.geekhub.ticketbooking.repository;
 
-import org.geekhub.ticketbooking.model.Cinema;
 import org.geekhub.ticketbooking.model.Hall;
 import org.geekhub.ticketbooking.repository.interfaces.HallRepository;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -27,17 +26,17 @@ public class HallRepositoryImpl implements HallRepository {
     }
 
     @Override
-    public List<Hall> getHallsByCinema(Cinema cinema) {
+    public List<Hall> getHallsByCinema(int cinemaId) {
         return null;
     }
 
     @Override
-    public int addHall(Hall hall) {
+    public int addHall(Hall hall, int cinemaId) {
         return 0;
     }
 
     @Override
-    public void updateHallById(Hall hall, int hallId) {
+    public void updateHallById(Hall hall, int cinemaId, int hallId) {
 
     }
 

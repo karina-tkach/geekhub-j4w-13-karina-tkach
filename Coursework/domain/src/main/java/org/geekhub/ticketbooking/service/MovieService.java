@@ -12,10 +12,12 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
 @Service
+@SuppressWarnings("java:S1192")
 public class MovieService {
     private final MovieRepository movieRepository;
     private final MovieValidator movieValidator;
@@ -34,7 +36,7 @@ public class MovieService {
             return movies;
         } catch (DataAccessException exception) {
             logger.warn("Movies weren't fetched\n{}", exception.getMessage());
-            return null;
+            return Collections.emptyList();
         }
     }
 
@@ -76,7 +78,7 @@ public class MovieService {
             return movies;
         } catch (MovieValidationException | DataAccessException exception) {
             logger.warn("Movies weren't fetched\n{}", exception.getMessage());
-            return null;
+            return Collections.emptyList();
         }
     }
 
@@ -91,7 +93,7 @@ public class MovieService {
             return movies;
         } catch (MovieValidationException | DataAccessException exception) {
             logger.warn("Movies weren't fetched\n{}", exception.getMessage());
-            return null;
+            return Collections.emptyList();
         }
     }
 

@@ -13,13 +13,14 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
+@SuppressWarnings("java:S1192")
 public class CinemaRepositoryImpl implements CinemaRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
     public CinemaRepositoryImpl(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
-//inner join
+
     @Override
     public List<Cinema> getAllCinemas() {
         String query = """

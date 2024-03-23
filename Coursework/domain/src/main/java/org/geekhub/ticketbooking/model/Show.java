@@ -15,5 +15,5 @@ public class Show {
     private OffsetDateTime start;
     private OffsetDateTime end;
     private Movie movie;
-    private Hall hall;
+    private int hallId;
 }

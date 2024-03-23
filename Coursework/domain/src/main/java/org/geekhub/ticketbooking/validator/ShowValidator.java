@@ -1,5 +1,6 @@
 package org.geekhub.ticketbooking.validator;
 
+import org.geekhub.ticketbooking.exception.MovieValidationException;
 import org.geekhub.ticketbooking.exception.ShowValidationException;
 import org.geekhub.ticketbooking.model.Movie;
 import org.geekhub.ticketbooking.model.Show;
@@ -28,7 +29,12 @@ public class ShowValidator {
         }
     }
     private void validateMovie(Movie movie) {
-        movieValidator.validate(movie);
+        try {
+            movieValidator.validate(movie);
+        }
+        catch (MovieValidationException exception) {
+            throw new ShowValidationException(exception.getMessage());
+        }
     }
     private void validateTime(Show show, OffsetDateTime start, OffsetDateTime end) {
         if(!start.plusMinutes(show.getMovie().getDurationInMins()).isEqual(end)) {

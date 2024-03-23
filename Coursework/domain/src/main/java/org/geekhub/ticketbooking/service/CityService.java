@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -30,7 +31,7 @@ public class CityService {
             return cities;
         } catch (DataAccessException exception) {
             logger.warn("Cities weren't fetched\n{}", exception.getMessage());
-            return null;
+            return Collections.emptyList();
         }
     }
 
