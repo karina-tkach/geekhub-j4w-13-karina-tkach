@@ -13,11 +13,9 @@ public interface ShowRepository {
 
     List<Show> getShowsByHall(int hallId);
 
-    List<Show> getShowsByCinema(int cinemaId);
+    int addShow(Show show, int movieId, int hallId);
 
-    int addShow(Show show, int hallId);
-
-    void updateShowById(Show show, int hallId, int showId);
+    void updateShowById(Show show, int movieId, int hallId, int showId);
 
     void deleteShowById(int showId);
 }

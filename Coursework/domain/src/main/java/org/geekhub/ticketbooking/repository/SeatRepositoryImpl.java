@@ -2,12 +2,18 @@ package org.geekhub.ticketbooking.repository;
 
 import org.geekhub.ticketbooking.model.Seat;
 import org.geekhub.ticketbooking.repository.interfaces.SeatRepository;
+import org.geekhub.ticketbooking.repository.mappers.SeatMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
+@SuppressWarnings("java:S1192")
 public class SeatRepositoryImpl implements SeatRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -17,36 +23,106 @@ public class SeatRepositoryImpl implements SeatRepository {
 
     @Override
     public List<Seat> getSeatsByHall(int hallId) {
-        return null;
+        String query = """
+            SELECT * FROM seats WHERE hall_id=:id
+            """;
+
+        SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
+            .addValue("id", hallId);
+
+        return jdbcTemplate.query(query, mapSqlParameterSource, SeatMapper::mapToPojo);
     }
 
     @Override
     public Seat getSeatById(int seatId) {
-        return null;
+        String query = """
+            SELECT * FROM seats WHERE id=:id
+            """;
+
+        SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
+            .addValue("id", seatId);
+
+        return jdbcTemplate.query(query, mapSqlParameterSource, SeatMapper::mapToPojo)
+            .stream()
+            .findFirst()
+            .orElse(null);
     }
 
     @Override
     public Seat getSeatByHallAndNumber(int hallId, int number) {
-        return null;
+        String query = """
+            SELECT * FROM seats WHERE id=:id AND number=:number
+            """;
+
+        SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
+            .addValue("id", hallId)
+            .addValue("number", number);
+
+        return jdbcTemplate.query(query, mapSqlParameterSource, SeatMapper::mapToPojo)
+            .stream()
+            .findFirst()
+            .orElse(null);
     }
 
     @Override
     public List<Seat> getSeatsByHallAndStatus(int hallId, boolean isBooked) {
-        return null;
+        String query = """
+            SELECT * FROM seats WHERE hall_id=:id AND is_booked=:isBooked
+            """;
+
+        SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
+            .addValue("id", hallId)
+            .addValue("isBooked", isBooked);
+
+        return jdbcTemplate.query(query, mapSqlParameterSource, SeatMapper::mapToPojo);
     }
 
     @Override
     public int addSeat(Seat seat, int hallId) {
-        return 0;
+        String query = """
+            INSERT INTO seats (number, is_booked, hall_id)
+            VALUES (:number, :isBooked, :hallId)
+            """;
+
+        KeyHolder generatedKeyHolder = new GeneratedKeyHolder();
+        SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
+            .addValue("number", seat.getNumber())
+            .addValue("isBooked", seat.isBooked())
+            .addValue("hallId", hallId);
+
+        jdbcTemplate.update(query, mapSqlParameterSource, generatedKeyHolder);
+
+        var keys = generatedKeyHolder.getKeys();
+        if (keys != null) {
+            return (int) keys.get("id");
+        }
+
+        return -1;
     }
 
     @Override
     public void updateSeatById(Seat seat, int hallId, int seatId) {
+        String query = """
+            UPDATE seats SET
+            number=:number, is_booked=:isBooked, hall_id=:hallId WHERE id=:id
+            """;
+        SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
+            .addValue("number", seat.getNumber())
+            .addValue("isBooked", seat.isBooked())
+            .addValue("hallId", hallId)
+            .addValue("id", seatId);
 
+        jdbcTemplate.update(query, mapSqlParameterSource);
     }
 
     @Override
     public void deleteSeatById(int seatId) {
+        String query = """
+            DELETE FROM seats WHERE id=:id
+            """;
+        SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
+            .addValue("id", seatId);
 
+        jdbcTemplate.update(query, mapSqlParameterSource);
     }
 }

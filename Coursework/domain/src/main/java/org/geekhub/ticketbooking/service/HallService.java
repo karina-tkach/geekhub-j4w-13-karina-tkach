@@ -30,23 +30,6 @@ public class HallService {
         this.showService = showService;
     }
 
-    public List<Hall> getAllHalls() {
-        try {
-            logger.info("Try to get halls");
-            List<Hall> halls = hallRepository.getAllHalls();
-            if (halls != null) {
-                for (Hall hall : halls) {
-                    setHallProperties(hall);
-                }
-            }
-            logger.info("Halls were fetched successfully");
-            return halls;
-        } catch (DataAccessException exception) {
-            logger.warn("Halls weren't fetched\n{}", exception.getMessage());
-            return Collections.emptyList();
-        }
-    }
-
     public Hall getHallById(int hallId) {
         try {
             logger.info("Try to get hall by id");

@@ -19,7 +19,7 @@ public class MovieMapper {
         return new Movie(rs.getInt("id"),
             rs.getString("title"),
             rs.getString("description"),
-            rs.getInt("durationInMins"),
+            rs.getInt("duration"),
             rs.getTimestamp("releaseDate").toInstant().atOffset(ZoneOffset.UTC),
             rs.getString("country"),
             rs.getInt("ageLimit"),

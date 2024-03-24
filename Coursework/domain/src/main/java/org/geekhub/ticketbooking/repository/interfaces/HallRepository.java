@@ -5,8 +5,6 @@ import org.geekhub.ticketbooking.model.Hall;
 import java.util.List;
 
 public interface HallRepository {
-    List<Hall> getAllHalls();
-
     Hall getHallById(int hallId);
 
     List<Hall> getHallsByCinema(int cinemaId);
