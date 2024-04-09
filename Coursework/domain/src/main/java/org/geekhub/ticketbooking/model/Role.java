@@ -1,5 +1,21 @@
 package org.geekhub.ticketbooking.model;
 
-public enum Role {
-    USER,ADMIN,SUPER_ADMIN
+import lombok.Getter;
+import org.springframework.security.core.GrantedAuthority;
+
+@Getter
+public enum Role implements GrantedAuthority {
+    USER("USER"),
+    ADMIN("ADMIN"),
+    SUPER_ADMIN("SUPER_ADMIN");
+    private final String name;
+
+    Role(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String getAuthority() {
+        return name;
+    }
 }

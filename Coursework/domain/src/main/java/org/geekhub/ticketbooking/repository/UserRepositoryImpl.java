@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
+@SuppressWarnings("java:S1192")
 public class UserRepositoryImpl implements UserRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
