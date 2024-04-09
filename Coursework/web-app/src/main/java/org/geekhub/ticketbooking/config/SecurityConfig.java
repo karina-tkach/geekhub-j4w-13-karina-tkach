@@ -17,7 +17,7 @@ import org.springframework.security.config.annotation.web.configurers.CsrfConfig
 @EnableWebSecurity
 public class SecurityConfig {
 
-    /*@Autowired
+    @Autowired
     private UserDetailsService userDetailsService;
 
     @Bean
@@ -31,6 +31,9 @@ public class SecurityConfig {
             .authorizeHttpRequests((authorize) ->
                 authorize.requestMatchers("/register/**").permitAll()
                     .requestMatchers("/index").permitAll()
+                    .requestMatchers("/css/**").permitAll()
+                    .requestMatchers("/js/**").permitAll()
+                    .requestMatchers("/img/**").permitAll()
                     .requestMatchers("/users").hasRole("ADMIN")
             ).formLogin(
                 form -> form
@@ -51,5 +54,5 @@ public class SecurityConfig {
         auth
             .userDetailsService(userDetailsService)
             .passwordEncoder(passwordEncoder());
-    }*/
+    }
 }
