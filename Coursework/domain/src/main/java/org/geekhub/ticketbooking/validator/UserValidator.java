@@ -75,6 +75,10 @@ public class UserValidator {
         if (name.length() > 100 || name.length() < 2) {
             throw new UserValidationException("User " + propertyName + " had wrong length");
         }
+        Pattern pattern = Pattern.compile("^([A-Za-z-]){2,100}$");
+        if (!pattern.matcher(name).find()) {
+            throw new UserValidationException("User name had invalid characters");
+        }
     }
 
     private void validateEmail(String email) {

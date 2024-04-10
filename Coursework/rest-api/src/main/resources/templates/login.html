@@ -14,25 +14,31 @@
     <div class="form login">
         <div class="form-content">
             <header>Log in</header>
-            <form th:action="@{/login}" method="post">
+            <div th:if="${param.error}" class="error-login">
+                Invalid username or password.
+            </div>
+            <div th:if="${param.logout}" class="error-login">
+                You have been logged out.
+            </div>
+            <form th:action="@{/login}" action="/login" method="post">
                 <div class="field input-field">
-                    <input type="email" placeholder="Email" class="input">
+                    <input type="email" id="username" name="username" placeholder="Email" class="input">
                 </div>
                 <div class="field input-field">
-                    <input type="password" placeholder="Password" class="password">
+                    <input type="password" placeholder="Password" id="password" name="password" class="password">
                     <i class='bx bx-hide eye-icon'></i>
                 </div>
                 <div class="option_div">
                     <div class="check_box">
-                        <input type="checkbox">
+                        <input type="checkbox" id="remember" name="remember-me" value="true">
                         <span>Remember me</span>
                     </div>
                     <div class="form-link">
-                        <a href="#" class="forgot-pass">Forgot password?</a>
+                        <a href="/forgot-password" class="forgot-pass">Forgot password?</a>
                     </div>
                 </div>
                 <div class="field button-field">
-                    <button>Log in</button>
+                    <button type="submit">Log in</button>
                 </div>
             </form>
             <div class="form-link">

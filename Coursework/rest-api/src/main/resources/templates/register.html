@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <script defer="defer" src="js/script.js"></script>
+    <meta th:name="_csrf" th:content="${_csrf.token}"/>
+    <meta th:name="_csrf_header" th:content="${_csrf.headerName}"/>
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"/>
     <link rel="stylesheet" href="css/main.css">
     <title>Register</title>
@@ -14,28 +16,48 @@
     <div class="form signup">
         <div class="form-content">
             <header>Register</header>
-            <form action="#">
+            <div class="formm">
+                <div class="full-field email-field">
                 <div class="field input-field">
-                    <input type="email" placeholder="Email" class="input">
+                    <input type="email" placeholder="Email" class="input email" id="email" required
+                           onkeyup="resetErrorById('error_email')">
                 </div>
-                <div class="field input-field">
-                    <input type="text" placeholder="First Name" class="input">
+                    <span class="error" id="error_email"></span>
                 </div>
+                <div class="full-field fName-field">
                 <div class="field input-field">
-                    <input type="text" placeholder="Last Name" class="input">
+                    <input type="text" placeholder="First Name" class="input fName" id="firstName" required
+                           onkeyup="resetErrorById('error_firstName')">
                 </div>
+                    <span class="error" id="error_firstName"></span>
+                </div>
+                <div class="full-field lName-field">
                 <div class="field input-field">
-                    <input type="password" placeholder="Password" class="password">
+                    <input type="text" placeholder="Last Name" class="input lName" id="lastName" required
+                           onkeyup="resetErrorById('error_lastName')">
+                </div>
+                    <span class="error" id="error_lastName"></span>
+                </div>
+                <div class="full-field create-password">
+                <div class="field input-field">
+                    <input type="password" placeholder="Password" class="password" id="password" required
+                           onkeyup="resetErrorById('error_pass')">
                     <i class='bx bx-hide eye-icon'></i>
                 </div>
+                    <span class="error" id="error_pass"></span>
+                </div>
+                <div class="full-field confirm-password">
                 <div class="field input-field">
-                    <input type="password" placeholder="Confirm password" class="password">
+                    <input type="password" placeholder="Confirm password" class="cPassword" id="passwordConfirm" required
+                           onkeyup="resetErrorById('error_passConfirm')">
                     <i class='bx bx-hide eye-icon'></i>
                 </div>
-                <div class="field button-field">
-                    <button>Register</button>
+                    <span class="error" id="error_passConfirm"></span>
                 </div>
-            </form>
+                <div class="field button-field input-field button">
+                    <button onclick="submit()">Register</button>
+                </div>
+            </div>
             <div class="form-link">
                 <span>Already have an account? <a href="/login" class="link login-link">Login</a></span>
             </div>
