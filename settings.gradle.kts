@@ -23,4 +23,6 @@ include("Homework:java-web:cipher-library")
 
 include("Coursework")
 include("Coursework:domain")
-include("Coursework:web-app")
+include("Coursework:rest-api")
+include("Coursework:rest-api:main")
+findProject(":Coursework:rest-api:main")?.name = "main"
