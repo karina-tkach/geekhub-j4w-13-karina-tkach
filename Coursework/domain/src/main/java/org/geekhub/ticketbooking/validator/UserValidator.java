@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.regex.Pattern;
 
 @Component
+@SuppressWarnings("java:S1192")
 public class UserValidator {
     public void validate(User user) {
         validateUserIsNotNull(user);

@@ -1,7 +1,6 @@
 package org.geekhub.ticketbooking.repository.interfaces;
 
 import org.geekhub.ticketbooking.model.Cinema;
-import org.geekhub.ticketbooking.model.City;
 
 import java.util.List;
 

@@ -5,7 +5,6 @@ import org.geekhub.ticketbooking.model.Role;
 import org.geekhub.ticketbooking.model.User;
 import org.geekhub.ticketbooking.security.SecurityUserDetails;
 import org.geekhub.ticketbooking.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,21 +17,20 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     private final UserService userService;
 
-    @Autowired
     public AuthController(UserService userService) {
         this.userService = userService;
     }
 
     @PostMapping("users/register")
-    public User registerUser(@RequestBody User user, HttpServletRequest request) {
+    public User register(@RequestBody User user, HttpServletRequest request) {
         user.setRole(Role.USER);
         User newUser = userService.addUser(user);
         if (newUser != null) {
-            authWithoutPassword(newUser, request);
+            authenticate(newUser, request);
         }
         return newUser;
     }
-    public void authWithoutPassword(User user, HttpServletRequest request) {
+    public void authenticate(User user, HttpServletRequest request) {
         SecurityUserDetails securityUser = new SecurityUserDetails(user);
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(

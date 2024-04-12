@@ -1,12 +1,12 @@
 package org.geekhub.ticketbooking.controller;
 
 import jakarta.mail.MessagingException;
+
 import java.io.UnsupportedEncodingException;
 import java.util.Objects;
 
 import org.geekhub.ticketbooking.model.ForgotPasswordToken;
 import org.geekhub.ticketbooking.model.User;
-import org.geekhub.ticketbooking.repository.interfaces.ForgotPasswordRepository;
 import org.geekhub.ticketbooking.service.ForgotPasswordService;
 import org.geekhub.ticketbooking.service.UserService;
 import org.springframework.data.repository.query.Param;
@@ -20,25 +20,21 @@ import jakarta.servlet.http.HttpSession;
 
 
 @Controller
+@SuppressWarnings("java:S1192")
 public class ForgotPasswordController {
 
     private final UserService userService;
 
     private final ForgotPasswordService forgotPasswordService;
 
-    private final ForgotPasswordRepository forgotPasswordRepository;
-
-    public ForgotPasswordController(UserService userService, ForgotPasswordService forgotPasswordService,
-                                    ForgotPasswordRepository forgotPasswordRepository) {
+    public ForgotPasswordController(UserService userService, ForgotPasswordService forgotPasswordService) {
         this.userService = userService;
         this.forgotPasswordService = forgotPasswordService;
-        this.forgotPasswordRepository = forgotPasswordRepository;
     }
 
 
     @GetMapping("/password-request")
     public String passwordRequest() {
-
         return "password-request";
     }
 
@@ -46,8 +42,8 @@ public class ForgotPasswordController {
     public String savePasswordRequest(@RequestParam("username") String username, Model model) {
         User user = userService.getUserByEmail(username);
         if (user == null) {
-            model.addAttribute("error", "This Email is not registered");
-            return "password-request";
+            return setAttributesAndGetProperPage(model, "error",
+                "This Email is not registered", "password-request");
         }
 
         ForgotPasswordToken forgotPasswordToken = new ForgotPasswordToken();
@@ -56,15 +52,20 @@ public class ForgotPasswordController {
         forgotPasswordToken.setUser(user);
         forgotPasswordToken.setUsed(false);
 
-        forgotPasswordRepository.addToken(forgotPasswordToken, user.getId());
+        ForgotPasswordToken token = forgotPasswordService.addToken(forgotPasswordToken);
+
+        if (token == null) {
+            return setAttributesAndGetProperPage(model, "error",
+                "Unable to add token", "password-request");
+        }
 
         String emailLink = "http://localhost:8089/reset-password?token=" + forgotPasswordToken.getToken();
 
         try {
             forgotPasswordService.sendEmail(user.getEmail(), "Password Reset Link", emailLink);
         } catch (MailException | MessagingException | UnsupportedEncodingException e) {
-            model.addAttribute("error", "Error While Sending email");
-            return "password-request";
+            return setAttributesAndGetProperPage(model, "error",
+                "Error while sending email", "password-request");
         }
 
         return "redirect:/password-request?success";
@@ -74,32 +75,48 @@ public class ForgotPasswordController {
     public String resetPassword(@Param(value = "token") String token, Model model, HttpSession session) {
 
         session.setAttribute("token", token);
-        ForgotPasswordToken forgotPasswordToken = forgotPasswordRepository.findByToken(token);
-        return forgotPasswordService.checkValidity(forgotPasswordToken, model);
+        ForgotPasswordToken forgotPasswordToken = forgotPasswordService.getTokenByValue(token);
+        String errorMessage = forgotPasswordService.checkValidity(forgotPasswordToken);
+        if (errorMessage != null) {
+            return setAttributesAndGetProperPage(model, "error",
+                errorMessage, "error-page");
+        } else {
+            return "reset-password";
+        }
 
     }
 
     @PostMapping("/reset-password")
     public String saveResetPassword(@RequestParam(name = "password") String password, @RequestParam(name = "cPassword") String cPassword, HttpSession session, Model model) {
-        if(!Objects.equals(password, cPassword)) {
-            model.addAttribute("message", "Passwords don't match");
-            return "reset-password";
+        if (!Objects.equals(password, cPassword)) {
+            return setAttributesAndGetProperPage(model, "message",
+                "Passwords don't match", "reset-password");
         }
         String token = (String) session.getAttribute("token");
 
-        ForgotPasswordToken forgotPasswordToken = forgotPasswordRepository.findByToken(token);
+        ForgotPasswordToken forgotPasswordToken = forgotPasswordService.getTokenByValue(token);
+        if (forgotPasswordToken == null) {
+            return setAttributesAndGetProperPage(model, "message",
+                "Invalid token", "reset-password");
+        }
         User user = forgotPasswordToken.getUser();
         user.setPassword(password);
         forgotPasswordToken.setUsed(true);
         User updatedUser = userService.updateUserById(user, user.getId());
         if (updatedUser == null) {
-            model.addAttribute("message", "Password must be at least 8 character long and contain at least 1 uppercase letter and 1 digit.");
-            return "reset-password";
+            return setAttributesAndGetProperPage(model, "message",
+                "Password must be at least 8 character long and contain at least 1 uppercase letter and 1 digit.",
+                "reset-password");
         }
-        forgotPasswordRepository.updateTokenById(forgotPasswordToken, forgotPasswordToken.getId(), user.getId());
+        forgotPasswordService.updateTokenById(forgotPasswordToken, forgotPasswordToken.getId());
 
-        model.addAttribute("message", "You have successfully reset your password");
+        return setAttributesAndGetProperPage(model, "message",
+            "You have successfully reset your password", "reset-password");
+    }
 
-        return "reset-password";
+    private String setAttributesAndGetProperPage(Model model, String attributeName,
+                                                 String attributeValue, String page) {
+        model.addAttribute(attributeName, attributeValue);
+        return page;
     }
 }
