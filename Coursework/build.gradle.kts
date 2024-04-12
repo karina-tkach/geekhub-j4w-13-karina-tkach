@@ -4,11 +4,13 @@ subprojects {
     val flywayVersion = "10.6.0"
     val lombokVersion = "1.18.30"
     val springTestVersion = "3.2.4"
+    val mailVersion = "3.2.4"
 
 
     dependencies {
         implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
         implementation("org.springframework.boot:spring-boot-starter-security")
+        implementation("org.springframework.boot:spring-boot-starter-mail:$mailVersion")
 
         implementation("org.postgresql:postgresql:$postgresqlVersion")
         implementation("org.flywaydb:flyway-core:$flywayVersion")

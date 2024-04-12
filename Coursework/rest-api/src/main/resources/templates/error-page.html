@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="ISO-8859-1">
+    <link rel="stylesheet" href="css/main.css">
+<title>Reset Error</title>
+    <style>
+.message{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    margin: 20px;
+    font-size: 20px;
+}
+    </style>
+</head>
+<body>
+<header class="logo"><a href="/main"><img src="img/logo.png" class="image-logo" alt="logo"></a></header>
+<section class="container forms">
+    <div class="form login">
+        <div class="form-content message">
+            <div th:if="${error != null}">
+                <h1>[[${error}]]</h1>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

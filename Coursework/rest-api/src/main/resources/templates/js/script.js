@@ -53,7 +53,6 @@ function submit() {
                 document.getElementById("error_email").innerHTML = "Email already in use";
                 return;
             }
-            alert("Register successful!");
             window.location.replace("/main");
         }
     }
@@ -118,7 +117,7 @@ function checkPasswordConfirm() {
     let password = document.getElementById("password").value;
     let passwordConfirm = document.getElementById("passwordConfirm").value;
     if (password !== passwordConfirm) {
-        document.getElementById("error_passConfirm").innerHTML = "Password don't match";
+        document.getElementById("error_passConfirm").innerHTML = "Passwords don't match";
         return false;
     }
     return true;

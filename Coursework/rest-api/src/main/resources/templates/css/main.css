@@ -137,16 +137,10 @@ input[type="checkbox"] {
 .invalid .error {
     display: flex;
 }
-.error .error-icon {
-    margin-right: 6px;
-    font-size: 15px;
-}
 .create-password .error {
     align-items: flex-start;
 }
-.create-password .error-icon {
-    margin-top: 4px;
-}
+
 .error-login, .errorEmail {
     display: flex;
     align-items: end;
@@ -155,3 +149,4 @@ input[type="checkbox"] {
     color: #d93025;
     font-size: 20px;
 }
+

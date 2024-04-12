@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -16,11 +17,16 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableMethodSecurity
 @EnableWebSecurity
 public class SecurityConfig {
+    @Bean
+    public static PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(12);
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorize ->
-                authorize.requestMatchers("/register", "/main", "/users/register").permitAll()
+                authorize.requestMatchers("/register", "/main", "/users/register",
+                        "/reset-password", "/password-request").permitAll()
                     .requestMatchers("/css/**", "/js/**", "/img/**").permitAll()
                     .requestMatchers("/admin/**").hasAnyAuthority("ADMIN", "SUPER_ADMIN")
                     .anyRequest().authenticated()
@@ -49,6 +55,6 @@ public class SecurityConfig {
         UserDetailsService userDetailsService) throws Exception {
 
         auth.userDetailsService(userDetailsService)
-            .passwordEncoder(new BCryptPasswordEncoder(12));
+            .passwordEncoder(passwordEncoder());
     }
 }
