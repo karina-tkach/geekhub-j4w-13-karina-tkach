@@ -1,8 +1,9 @@
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
+
 .container {
     min-height: 92.3vh;
     width: 100%;
@@ -15,7 +16,8 @@
     background-position: center;
     background-size: cover;
 }
-.form{
+
+.form {
     position: absolute;
     max-width: 430px;
     width: 100%;
@@ -24,23 +26,27 @@
     background: rgba(0, 0, 0, 0.95);
     box-shadow: 0px 2px 14px -4px white;
 }
-header{
+
+header {
     font-size: 28px;
     font-weight: 600;
     text-align: center;
 }
-.formm, form{
+
+.formm, form {
     margin-top: 30px;
 }
-.form .field{
+
+.form .field {
     position: relative;
     height: 50px;
     width: 100%;
     margin-top: 20px;
     border-radius: 6px;
 }
+
 .field input,
-.field button{
+.field button {
     height: 100%;
     width: 100%;
     border: none;
@@ -49,15 +55,18 @@ header{
     border-radius: 6px;
     background: transparent;
 }
-.field input{
+
+.field input {
     outline: none;
     padding: 0 15px;
-    border: 1px solid#CACACA;
+    border: 1px solid #CACACA;
 }
-.field input:focus{
+
+.field input:focus {
     border-bottom-width: 2px;
 }
-.eye-icon{
+
+.eye-icon {
     position: absolute;
     top: 50%;
     right: 10px;
@@ -67,66 +76,82 @@ header{
     cursor: pointer;
     padding: 5px;
 }
-.field button{
+
+.field button {
     color: #fff;
     background-color: #d7191c;
     transition: all 0.3s ease;
     cursor: pointer;
 }
-.field button:hover{
+
+.field button:hover {
     background-color: #bf1719;
 }
-form .option_div{
+
+form .option_div {
     margin-top: 10px;
     display: flex;
     justify-content: space-between;
 }
-.option_div .check_box{
+
+.option_div .check_box {
     display: flex;
     align-items: center;
     margin-top: 10px;
 }
-.option_div span{
+
+.option_div span {
     margin-left: 5px;
     font-size: 16px;
 }
-.option_div .forget_div a{
+
+.option_div .forget_div a {
     font-size: 16px;
 }
-.form-link{
+
+.form-link {
     text-align: center;
     margin-top: 10px;
 }
+
 .form-link span,
-.form-link a{
+.form-link a {
     font-size: 16px;
     font-weight: 500;
 }
-.form a{
+
+.form a {
     color: #0078e0;
     text-decoration: none;
 }
-.form-content a:hover{
+
+.form-content a:hover {
     text-decoration: underline;
 }
+
 input, header, span {
-    color:#F1FAFF;
+    color: #F1FAFF;
 }
+
 input[type="checkbox"] {
     accent-color: #d7191c;
 }
+
 .logo {
     background-color: #180207;
-    height:55px;
+    height: 55px;
     display: flex;
-    align-items:start;
+    align-items: start;
     justify-content: left;
 }
+
 .image-logo {
     height: 50px;
     margin-top: 3px;
     margin-left: 17px;
+    padding-right: 17px;
 }
+
 .full-field .error {
     display: flex;
     align-items: center;
@@ -134,9 +159,11 @@ input[type="checkbox"] {
     color: #d93025;
     font-size: 13px;
 }
+
 .invalid .error {
     display: flex;
 }
+
 .create-password .error {
     align-items: flex-start;
 }
@@ -150,3 +177,11 @@ input[type="checkbox"] {
     font-size: 20px;
 }
 
+header a:hover {
+    background-color: #9c1011;
+    color: white;
+}
+
+.logo a {
+    height: 100%;
+}
