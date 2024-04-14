@@ -1,6 +1,7 @@
 package org.geekhub.ticketbooking.controller;
 
 import jakarta.mail.MessagingException;
+import org.geekhub.ticketbooking.model.Role;
 import org.geekhub.ticketbooking.model.User;
 import org.geekhub.ticketbooking.service.MailSenderService;
 import org.geekhub.ticketbooking.service.UserService;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.ui.Model;
 
 import java.io.UnsupportedEncodingException;
+import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequestMapping("admin/users")
@@ -29,7 +32,22 @@ public class UsersController {
 
     @GetMapping
     public String viewHomePage(Model model) {
-        model.addAttribute("listUsers", userService.getUsers());
+        return viewHomePageWithPagination(1,7,model);
+    }
+    @GetMapping("/{page}/{pageSize}")
+    public String viewHomePageWithPagination(@PathVariable int page,
+                               @PathVariable int pageSize, Model model) {
+        List<User> users = userService.getUsersWithPagination(page, pageSize);
+        int rows = userService.getUsersRowsCount();
+        if(rows == -1 || users.isEmpty()) {
+            model.addAttribute("error", "Can't load users");
+        }
+        else {
+            model.addAttribute("page", page);
+            model.addAttribute("totalPages", Math.ceil(rows / (float) pageSize));
+            model.addAttribute("listUsers", users);
+        }
+
         return "users";
     }
 
@@ -63,7 +81,20 @@ public class UsersController {
     }
 
     @PostMapping("/updateUser")
-    public String updateUser(@ModelAttribute("user") User user, Model model) {
+    public String updateUser(@ModelAttribute("user") User user, Model model, Principal principal) {
+        User oldUser = userService.getUserById(user.getId());
+        User executor = userService.getUserByEmail(principal.getName());
+
+        if((executor.getRole() != Role.SUPER_ADMIN) && (oldUser.getRole() == Role.SUPER_ADMIN)) {
+            return setAttributesAndGetProperPage(model, "message",
+                "Cannot change super admin", "update_user");
+        }
+
+        if((executor.getRole() != Role.SUPER_ADMIN) && (oldUser.getRole() != user.getRole())) {
+            return setAttributesAndGetProperPage(model, "message",
+                "Only super admin can change roles", "update_user");
+        }
+
         String password = user.getPassword();
         int userId = user.getId();
 

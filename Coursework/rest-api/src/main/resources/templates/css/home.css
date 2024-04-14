@@ -157,3 +157,69 @@ select {
     font-weight: 600;
     text-align: center;
 }
+.table {
+    color:white;
+    text-align: center;
+}
+table {
+    width: 100%;
+    margin-bottom: 20px;
+    border: 15px solid #5e0719;
+    border-top: 5px solid #5e0719;
+    border-collapse: collapse;
+}
+table th {
+    font-weight: bold;
+    padding: 10px;
+    background: #5e0719;
+    border-bottom: 5px solid #5e0719;
+    font-size: 23px;
+}
+table td {
+    padding: 13px;
+    border-bottom: 5px solid #5e0719;
+    background-color: rgba(94, 7, 25, 0.75);
+    font-size: 20px;
+}
+.table tbody tr:nth-child(even){
+    background: rgba(74, 4, 19, 0.75);
+}
+tr:hover, .table tbody tr:nth-child(even):hover {
+    background-color: #780b0c;
+}
+th, td {
+    border: 1px solid white;
+    margin: 13px;
+}
+.paginationButtons {
+    justify-content:  center;
+}
+.table a {
+    color: #fff;
+    background-color: #bf1719;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    height: 100%;
+    width: 100%;
+    border: none;
+    font-size: 20px;
+    font-weight: 400;
+    border-radius: 6px;
+    padding:8px;
+    margin:5px;
+    text-decoration: none;
+}
+
+.table a:hover {
+    background-color: #ad1517;
+}
+.addUser {
+    margin:25px;
+}
+.addUser a {
+   font-size: 24px;
+    font-weight: 550;
+}
+.pgButton a {
+    background-color: #7d011f;
+}

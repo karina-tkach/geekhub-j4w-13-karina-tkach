@@ -18,4 +18,8 @@ public interface UserRepository {
     void updateUserById(User user, int id);
 
     void updateUserWithoutPasswordChangeById(User user, int id);
+
+    List<User> getUsersWithPagination(int pageNumber, int limit);
+
+    int getUsersRowsCount();
 }

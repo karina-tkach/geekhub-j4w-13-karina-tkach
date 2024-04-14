@@ -3,10 +3,13 @@ package org.geekhub.ticketbooking.service;
 import org.geekhub.ticketbooking.exception.UserValidationException;
 import org.geekhub.ticketbooking.model.User;
 import org.geekhub.ticketbooking.repository.interfaces.UserRepository;
+import org.geekhub.ticketbooking.repository.mappers.UserMapper;
 import org.geekhub.ticketbooking.validator.UserValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -141,4 +144,33 @@ public class UserService {
             return null;
         }
     }
+
+    public List<User> getUsersWithPagination(int pageNumber, int limit) {
+        try {
+            if(pageNumber < 0 || limit < 0) {
+                throw new IllegalArgumentException("Page number and limit must be greater than 0");
+            }
+            logger.info("Try to get users with pagination");
+            List<User> users = userRepository.getUsersWithPagination(pageNumber, limit);
+            logger.info("Users were fetched with pagination successfully");
+            return users;
+        } catch (IllegalArgumentException | DataAccessException exception) {
+            logger.warn("Users weren't fetched with pagination\n{}", exception.getMessage());
+            return Collections.emptyList();
+        }
+    }
+
+    public int getUsersRowsCount() {
+        try {
+            logger.info("Try to get users rows count");
+            int count = userRepository.getUsersRowsCount();
+            logger.info("Users rows count were fetched successfully");
+            return count;
+        }
+        catch (DataAccessException exception) {
+            logger.warn("Users rows count weren't fetched\n{}", exception.getMessage());
+            return -1;
+        }
+    }
+
 }
