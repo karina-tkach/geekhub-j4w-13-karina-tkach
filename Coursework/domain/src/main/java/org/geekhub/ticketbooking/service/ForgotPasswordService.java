@@ -5,7 +5,6 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
 import org.geekhub.ticketbooking.exception.TokenValidationException;
 import org.geekhub.ticketbooking.model.ForgotPasswordToken;
 import org.geekhub.ticketbooking.repository.interfaces.ForgotPasswordRepository;
@@ -14,22 +13,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.mail.MailException;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ForgotPasswordService {
 
     private final ForgotPasswordRepository forgotPasswordRepository;
-    private final JavaMailSender javaMailSender;
+    private final MailSenderService mailSenderService;
     private final Logger logger = LoggerFactory.getLogger(ForgotPasswordService.class);
     private final TokenValidator tokenValidator;
 
     public ForgotPasswordService(ForgotPasswordRepository forgotPasswordRepository,
-                                 JavaMailSender javaMailSender, TokenValidator tokenValidator) {
+                                 MailSenderService mailSenderService, TokenValidator tokenValidator) {
         this.forgotPasswordRepository = forgotPasswordRepository;
-        this.javaMailSender = javaMailSender;
+        this.mailSenderService = mailSenderService;
         this.tokenValidator = tokenValidator;
     }
 
@@ -44,20 +41,14 @@ public class ForgotPasswordService {
     }
 
     public void sendEmail(String to, String subject, String emailLink) throws MailException, MessagingException, UnsupportedEncodingException {
-        MimeMessage message = javaMailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message);
 
-        String emailContent = "<p>Hello</p>"
+        String emailContent = "<p>Hello!</p>"
             + "Click the link the below to reset password"
             + "<p><a href=\"" + emailLink + "\">Change My Password</a></p>"
             + "<br>"
             + "Ignore this email if you did not made the request";
 
-        helper.setText(emailContent, true);
-        helper.setFrom("cinema@gmail.com", "Cinema Support");
-        helper.setSubject(subject);
-        helper.setTo(to);
-        javaMailSender.send(message);
+        mailSenderService.sendEmail(to,subject,emailContent);
     }
 
     public boolean isExpired(ForgotPasswordToken forgotPasswordToken) {

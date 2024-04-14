@@ -16,4 +16,6 @@ public interface UserRepository {
     void deleteUserById(int id);
 
     void updateUserById(User user, int id);
+
+    void updateUserWithoutPasswordChangeById(User user, int id);
 }

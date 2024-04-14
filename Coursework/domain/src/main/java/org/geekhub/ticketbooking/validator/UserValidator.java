@@ -27,14 +27,15 @@ public class UserValidator {
     public void validateUsersForUpdate(User userToUpdate, User user) {
         validateUserIsNotNull(userToUpdate);
 
-        User userWithoutRole = new User(user);
-        userWithoutRole.setRole(Role.USER);
-
-        if (user.getPassword() != null) {
-            validate(userWithoutRole);
-        } else {
-            throw new UserValidationException("Password can't be null");
+        if(user.getRole() == null) {
+            user.setRole(Role.USER);
         }
+
+        if (user.getPassword() == null || user.getPassword().isBlank()) {
+            user.setPassword("User1234");
+        }
+
+        validate(user);
 
         if (userToUpdate.getRole() == Role.SUPER_ADMIN
             && user.getRole() != Role.SUPER_ADMIN) {

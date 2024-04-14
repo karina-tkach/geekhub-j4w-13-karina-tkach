@@ -28,7 +28,7 @@ public class SecurityConfig {
                 authorize.requestMatchers("/register", "/main", "/users/register",
                         "/reset-password", "/password-request").permitAll()
                     .requestMatchers("/css/**", "/js/**", "/img/**").permitAll()
-                    .requestMatchers("/admin/**").hasAnyAuthority("ADMIN", "SUPER_ADMIN")
+                    .requestMatchers("/admin/**","/admin/*").hasAnyAuthority("ADMIN", "SUPER_ADMIN")
                     .anyRequest().authenticated()
             )
             .formLogin(

@@ -111,4 +111,21 @@ public class UserRepositoryImpl implements UserRepository {
 
         jdbcTemplate.update(query, mapSqlParameterSource);
     }
+
+    @Override
+    public void updateUserWithoutPasswordChangeById(User user, int id) {
+        String query = """
+            UPDATE users SET
+            firstName=:firstName, lastName=:lastName, email=:email, role=:role
+            WHERE id=:id
+            """;
+        SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
+            .addValue("firstName", user.getFirstName())
+            .addValue("lastName", user.getLastName())
+            .addValue("email", user.getEmail())
+            .addValue("role", user.getRole().toString())
+            .addValue("id", id);
+
+        jdbcTemplate.update(query, mapSqlParameterSource);
+    }
 }

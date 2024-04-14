@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Users Management</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+    <link rel="stylesheet" th:href="@{https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css}"/>
+    <script defer="defer" th:src="@{/js/script.js}"></script>
+    <style>
+        .error-message {
+            color: #fff;
+            padding: 10px;
+            border-radius: 3px;
+            text-align: center;
+            margin-bottom: 15px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+<header class="logoClass">
+    <a href="/main" class="img"><img th:src="@{/img/logo.png}" class="image-logo" alt="logo"></a>
+    <div class="links">
+        <a href="/admin/cities">Manage Cities</a>
+        <a href="/admin/cinemas">Manage Cinemas</a>
+        <a href="/admin/shows">Manage Shows</a>
+        <a href="/admin/movies">Manage Movies</a>
+        <a href="/admin/users">Manage Users</a>
+        <a class="active" href="/logout">Logout</a>
+    </div>
+</header>
+
+<section class="container forms">
+    <div class="form signup">
+        <div class="form-content">
+            <div th:if="${message != null}">
+                <div class="error-message"
+                     th:style="${message == 'You have successfully updated user'} ?
+                  'background-color: green;' :'background-color: #d93025;'">
+                    <p>[[${message}]]</p>
+                </div>
+            </div>
+            <div th:if="${error != null}">
+                <div class="error-message"
+                     th:style="'background-color: #d93025;'">
+                    <p>[[${error}]]</p>
+                </div>
+            </div>
+            <div th:if="${error == null}">
+            <header class="header">Update User</header>
+            <form action="#" th:action="@{/admin/users/updateUser}" th:object="${user}" method="POST">
+                <div class="full-field id-field">
+                    <div class="field input-field">
+                        <input type="hidden" th:field="*{id}" />
+                    </div>
+                </div>
+                <div class="full-field email-field">
+                    <div class="field input-field">
+                        <input th:field="*{email}" type="email" placeholder="Email" class="input email" id="email" required>
+                    </div>
+                </div>
+                <div class="full-field fName-field">
+                    <div class="field input-field">
+                        <input th:field="*{firstName}" type="text" placeholder="First Name" class="input fName" id="firstName" required>
+                    </div>
+                </div>
+                <div class="full-field lName-field">
+                    <div class="field input-field">
+                        <input th:field="*{lastName}" type="text" placeholder="Last Name" class="input lName" id="lastName" required>
+                    </div>
+                    <span class="error" id="error_lastName"></span>
+                </div>
+                <span><h4 style="color:gray; margin-top: 18px;">Leave empty so not to reset password</h4></span>
+                <div class="full-field create-password">
+                    <div class="field input-field">
+                        <input th:field="*{password}" type="password" placeholder="Password" class="password" id="password">
+                        <i class='bx bx-hide eye-icon'></i>
+                    </div>
+                </div>
+                <div class="full-field" sec:authorize="hasAuthority('SUPER_ADMIN')">
+                    <div class="field input-field">
+                        <select name="operationType" th:field="*{role}" required>
+                            <option th:value="${T(org.geekhub.ticketbooking.model.Role).USER}"
+                                    th:text="${T(org.geekhub.ticketbooking.model.Role).USER.name}"></option>
+                            <option th:value="${T(org.geekhub.ticketbooking.model.Role).ADMIN}"
+                                    th:text="${T(org.geekhub.ticketbooking.model.Role).ADMIN.name}"></option>
+                        </select><br>
+                    </div>
+                </div>
+                <div class="field button-field input-field button">
+                    <button type="submit">Update</button>
+                </div>
+                <div class="form-link">
+                    <span> <a href="/admin/users" class="link login-link">Back to Users List</a></span>
+                </div>
+            </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+
+</html>

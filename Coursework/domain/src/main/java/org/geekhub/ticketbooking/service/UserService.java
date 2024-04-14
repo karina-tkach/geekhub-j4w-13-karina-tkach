@@ -124,4 +124,21 @@ public class UserService {
             return null;
         }
     }
+
+    public User updateUserWithoutPasswordChangeById(User user, int id) {
+        User userToUpdate = getUserById(id);
+        try {
+            logger.info("Try to update user without password change");
+
+            validator.validateUsersForUpdate(userToUpdate, user);
+
+            userRepository.updateUserWithoutPasswordChangeById(user, id);
+
+            logger.info("User was updated without password change:\n{}", user);
+            return getUserById(id);
+        } catch (UserValidationException | DataAccessException exception) {
+            logger.warn("User wasn't updated without password change: {}\n{}", id, exception.getMessage());
+            return null;
+        }
+    }
 }

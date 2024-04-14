@@ -9,14 +9,10 @@
     <title>Home</title>
 </head>
 <body>
-<!--header class="logo"><a href="/main"><img src="img/logo.png" class="image-logo" alt="logo"></a></header>
-<section class="container forms">
-
-</section-->
-<header class="logo">
+<header class="logoClass">
     <a href="/main" class="img"><img src="img/logo.png" class="image-logo" alt="logo"></a>
     <div class="links">
-        <a sec:authorize="hasAnyAuthority('ADMIN', 'SUPER_ADMIN')" href="/admin/panel">Admin Panel</a>
+        <a sec:authorize="hasAnyAuthority('ADMIN', 'SUPER_ADMIN')" href="/admin/users">Admin Panel</a>
         <a href="/shows">Shows</a>
         <a href="/cinemas">Cinemas</a>
         <a href="/about">About Us</a>
@@ -25,7 +21,6 @@
     </div>
 </header>
 <div class="container">
-
 </div>
 </body>
 </html>
