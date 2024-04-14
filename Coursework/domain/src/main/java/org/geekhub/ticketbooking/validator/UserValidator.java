@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.regex.Pattern;
 
 @Component
-@SuppressWarnings("java:S1192")
+@SuppressWarnings({"java:S1192", "java:S5998"})
 public class UserValidator {
     public void validate(User user) {
         validateUserIsNotNull(user);
@@ -77,7 +77,7 @@ public class UserValidator {
         if (name.length() > 100 || name.length() < 2) {
             throw new UserValidationException("User " + propertyName + " had wrong length");
         }
-        Pattern pattern = Pattern.compile("^([A-Za-z-]){2,100}$");
+        Pattern pattern = Pattern.compile("^[A-Z][a-zA-Z]*(-[a-zA-Z]+)*$");
         if (!pattern.matcher(name).find()) {
             throw new UserValidationException("User name had invalid characters");
         }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.regex.Pattern;
 
 @Component
+@SuppressWarnings("java:S5998")
 public class CityValidator {
     public void validate(City city) {
         if (city == null) {
@@ -17,9 +18,9 @@ public class CityValidator {
     }
 
     public void validateName(String name) {
-        Pattern letters = Pattern.compile("^[a-zA-Z ]+$");
-        if (name == null || !letters.matcher(name).find()) {
-            throw new CityValidationException("City name must contain only letters and spaces");
+        Pattern letters = Pattern.compile("^(?!-)[a-zA-Z]+(?:\\s?[a-zA-Z]+)*(?:\\s?-[a-zA-Z]+)*(?<!-)$");
+        if (name == null || !letters.matcher(name).find() || name.length() > 21 || name.length() < 3) {
+            throw new CityValidationException("City name must contain only letters and spaces or '-'");
         }
     }
 }

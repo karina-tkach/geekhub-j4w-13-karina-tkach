@@ -102,4 +102,29 @@ public class CityRepositoryImpl implements CityRepository {
 
         jdbcTemplate.update(query, mapSqlParameterSource);
     }
+
+    @Override
+    public List<City> getCitiesWithPagination(int pageNumber, int limit) {
+        String query = """
+            SELECT * FROM cities
+            ORDER BY id
+            LIMIT :limit
+            OFFSET :offset
+            """;
+        SqlParameterSource parameters = new MapSqlParameterSource()
+            .addValue("limit", limit)
+            .addValue("offset", getOffset(pageNumber, limit));
+
+        return jdbcTemplate.query(query, parameters, CityMapper::mapToPojo);
+    }
+
+    @Override
+    public int getCitiesRowsCount() {
+        String query = "SELECT COUNT(*) FROM cities";
+        return jdbcTemplate.queryForObject(query, new MapSqlParameterSource(), Integer.class);
+    }
+
+    private static int getOffset(int pageNumber, int pageSize) {
+        return (pageNumber - 1) * pageSize;
+    }
 }

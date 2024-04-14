@@ -17,4 +17,8 @@ public interface CityRepository {
     void updateCityById(City city, int cityId);
 
     void deleteCityById(int cityId);
+
+    List<City> getCitiesWithPagination(int pageNumber, int limit);
+
+    int getCitiesRowsCount();
 }

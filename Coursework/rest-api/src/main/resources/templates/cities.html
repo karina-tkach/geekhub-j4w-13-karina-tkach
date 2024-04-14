@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Cities Management</title>
+    <link rel="stylesheet" href="css/home.css" th:href="@{/css/home.css}">
+    <style>
+        .error-message {
+            color: #fff;
+            padding: 10px;
+            border-radius: 3px;
+            text-align: center;
+            margin-bottom: 15px;
+            margin-top: 10px;
+            font-size: 20px;
+        }
+    </style>
+
+</head>
+<body>
+<header class="logoClass">
+    <a href="/main" class="img"><img th:src="@{/img/logo.png}" class="image-logo" alt="logo"></a>
+    <div class="links">
+        <a href="/admin/cities">Manage Cities</a>
+        <a href="/admin/cinemas">Manage Cinemas</a>
+        <a href="/admin/shows">Manage Shows</a>
+        <a href="/admin/movies">Manage Movies</a>
+        <a href="/admin/users">Manage Users</a>
+        <a class="active" href="/logout">Logout</a>
+    </div>
+</header>
+<div class="container">
+    <div th:if="${error != null}">
+        <div class="error-message"
+             th:style="'background-color: #d93025;'">
+            <p>[[${error}]]</p>
+        </div>
+    </div>
+    <div th:if="${error == null}" class = "table">
+        <h1 style="font-size: 40px;">Cities List</h1>
+        <div class ="addUser">
+            <a th:href = "@{/admin/cities/showNewCityForm}"> Add City </a>
+        </div>
+        <table>
+            <thead>
+            <tr>
+                <th>City Name</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="city : ${listCities}">
+                <td th:text="${city.name}"></td>
+                <td><a th:href="@{/admin/cities/showFormForUpdate/{id}(id=${city.id})}">Update</a>
+                    <a th:href="@{/admin/cities/deleteCity/{id}(id=${city.id})}">Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="paginationButtons" style="display:flex;
+    flex-direction: row; gap:4px; margin:25px 10px;">
+            <div class="pgButton" id="prev" th:if="${page != 1}">
+                <a th:href="@{/admin/cities/{page}/{pageSize}(page=${page}-1,pageSize=7)}">Previous</a>
+            </div>
+            <div></div>
+            <div class="pgButton" id="next" th:if="${page != (totalPages)}">
+                <a th:href="@{/admin/cities/{page}/{pageSize}(page=${page}+1,pageSize=7)}">Next</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

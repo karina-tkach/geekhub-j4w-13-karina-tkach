@@ -118,4 +118,32 @@ public class CityService {
             return false;
         }
     }
+
+    public List<City> getCitiesWithPagination(int pageNumber, int limit) {
+        try {
+            if(pageNumber < 0 || limit < 0) {
+                throw new IllegalArgumentException("Page number and limit must be greater than 0");
+            }
+            logger.info("Try to get cities with pagination");
+            List<City> cities = cityRepository.getCitiesWithPagination(pageNumber, limit);
+            logger.info("Cities were fetched with pagination successfully");
+            return cities;
+        } catch (IllegalArgumentException | DataAccessException exception) {
+            logger.warn("Cities weren't fetched with pagination\n{}", exception.getMessage());
+            return Collections.emptyList();
+        }
+    }
+
+    public int getCitiesRowsCount() {
+        try {
+            logger.info("Try to get cities rows count");
+            int count = cityRepository.getCitiesRowsCount();
+            logger.info("Cities rows count were fetched successfully");
+            return count;
+        }
+        catch (DataAccessException exception) {
+            logger.warn("Cities rows count weren't fetched\n{}", exception.getMessage());
+            return -1;
+        }
+    }
 }
