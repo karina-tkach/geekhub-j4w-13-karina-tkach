@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.ZoneOffset;
-import java.util.Arrays;
 
 @Component
 public class MovieMapper {
@@ -23,10 +22,8 @@ public class MovieMapper {
             rs.getTimestamp("releaseDate").toInstant().atOffset(ZoneOffset.UTC),
             rs.getString("country"),
             rs.getInt("ageLimit"),
-            Arrays.stream(rs.getString("genres").split(", "))
-                .map(String::trim)
-                .map(Genre::valueOf)
-                .toList()
+            Genre.valueOf(rs.getString("genre")),
+            rs.getBytes("image")
         );
     }
 }

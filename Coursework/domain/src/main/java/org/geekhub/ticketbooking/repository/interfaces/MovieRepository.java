@@ -24,4 +24,8 @@ public interface MovieRepository {
     void updateMovieById(Movie movie, int movieId);
 
     void deleteMovieById(int movieId);
+
+    List<Movie> getMoviesWithPagination(int pageNumber, int limit);
+
+    int getMoviesRowsCount();
 }

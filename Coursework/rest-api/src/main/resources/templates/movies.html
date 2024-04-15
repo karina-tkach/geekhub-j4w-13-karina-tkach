@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="ISO-8859-1">
-    <title>Cities Management</title>
+    <title>Movies Management</title>
     <link rel="stylesheet" href="css/home.css" th:href="@{/css/home.css}">
     <style>
         .error-message {
@@ -39,23 +39,40 @@
         </div>
     </div>
     <div class = "table">
-        <h1 style="font-size: 40px;">Cities List</h1>
+        <h1 style="font-size: 40px;">Movies List</h1>
         <div class ="addUser">
-            <a th:href = "@{/admin/cities/showNewCityForm}"> Add City </a>
+            <a th:href = "@{/admin/movies/showNewMovieForm}"> Add Movie </a>
         </div>
         <div th:if="${error == null}">
         <table>
             <thead>
             <tr>
-                <th>City Name</th>
+                <th>Image</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Duration In Mins</th>
+                <th>Release Date</th>
+                <th>Country</th>
+                <th>Age Limit</th>
+                <th>Genre</th>
                 <th>Actions</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="city : ${listCities}">
-                <td th:text="${city.name}"></td>
-                <td><a th:href="@{/admin/cities/showFormForUpdate/{id}(id=${city.id})}">Update</a>
-                    <a th:href="@{/admin/cities/deleteCity/{id}(id=${city.id})}">Delete</a>
+            <tr th:each="movie : ${listMovies}">
+                <td><img th:src="@{'data:image/jpeg;base64,'+${movie.getImageDataBase64()}}" alt="Movie Image" width="50%" height="50%"/></td>
+                <td th:text="${movie.title}"></td>
+                <td th:text="${movie.description}"></td>
+                <td th:text="${movie.durationInMins}"></td>
+                <td th:text="${movie.releaseDate}"></td>
+                <td th:text="${movie.country}"></td>
+                <td th:text="${movie.ageLimit}"></td>
+                <td th:text="${movie.genre}"></td>
+                <td>
+                    <div>
+                    <a style="float: left;" th:href="@{/admin/movies/showFormForUpdate/{id}(id=${movie.id})}">Update</a>
+                    <a style="float: left;" th:href="@{/admin/movies/deleteMovie/{id}(id=${movie.id})}">Delete</a>
+                    </div>
                 </td>
             </tr>
             </tbody>
@@ -63,11 +80,11 @@
         <div class="paginationButtons" style="display:flex;
     flex-direction: row; gap:4px; margin:25px 10px;">
             <div class="pgButton" id="prev" th:if="${page != 1}">
-                <a th:href="@{/admin/cities/{page}/{pageSize}(page=${page}-1,pageSize=7)}">Previous</a>
+                <a th:href="@{/admin/movies/{page}/{pageSize}(page=${page}-1,pageSize=2)}">Previous</a>
             </div>
             <div></div>
             <div class="pgButton" id="next" th:if="${page != (totalPages)}">
-                <a th:href="@{/admin/cities/{page}/{pageSize}(page=${page}+1,pageSize=7)}">Next</a>
+                <a th:href="@{/admin/movies/{page}/{pageSize}(page=${page}+1,pageSize=2)}">Next</a>
             </div>
         </div>
         </div>

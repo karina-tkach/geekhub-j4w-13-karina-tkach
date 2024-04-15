@@ -14,10 +14,9 @@ import org.springframework.stereotype.Repository;
 import java.sql.Timestamp;
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Repository
-@SuppressWarnings("java:S1192")
+@SuppressWarnings({"java:S1192", "java:S2259"})
 public class MovieRepositoryImpl implements MovieRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -66,11 +65,11 @@ public class MovieRepositoryImpl implements MovieRepository {
     @Override
     public List<Movie> getMoviesByGenre(Genre genre) {
         String query = """
-            SELECT * FROM movies WHERE genres LIKE :genre
+            SELECT * FROM movies WHERE genre=:genre
             """;
 
         SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
-            .addValue("genre", "%" + genre.toString() + "%");
+            .addValue("genre", genre.toString());
 
         return jdbcTemplate.query(query, mapSqlParameterSource, MovieMapper::mapToPojo);
     }
@@ -95,8 +94,8 @@ public class MovieRepositoryImpl implements MovieRepository {
     @Override
     public int addMovie(Movie movie) {
         String query = """
-            INSERT INTO movies (title, description, duration, releaseDate, country, ageLimit, genres)
-            VALUES (:title, :description, :duration, :releaseDate, :country, :ageLimit, :genres)
+            INSERT INTO movies (title, description, duration, releaseDate, country, ageLimit, genre, image)
+            VALUES (:title, :description, :duration, :releaseDate, :country, :ageLimit, :genre, :image)
             """;
 
         KeyHolder generatedKeyHolder = new GeneratedKeyHolder();
@@ -107,8 +106,8 @@ public class MovieRepositoryImpl implements MovieRepository {
             .addValue("releaseDate", Timestamp.from(movie.getReleaseDate().toInstant()))
             .addValue("country", movie.getCountry())
             .addValue("ageLimit", movie.getAgeLimit())
-            .addValue("genres", movie.getGenres().stream().map(Genre::toString).collect(Collectors.joining(", ")));
-
+            .addValue("genre", movie.getGenre().toString())
+            .addValue("image", movie.getImage());
         jdbcTemplate.update(query, mapSqlParameterSource, generatedKeyHolder);
 
         var keys = generatedKeyHolder.getKeys();
@@ -124,7 +123,7 @@ public class MovieRepositoryImpl implements MovieRepository {
         String query = """
             UPDATE movies SET
             title=:title, description=:description, duration=:duration,
-            releaseDate=:releaseDate, country=:country, ageLimit=:ageLimit, genres=:genres
+            releaseDate=:releaseDate, country=:country, ageLimit=:ageLimit, genre=:genre, image=:image
             WHERE id=:id
             """;
         SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
@@ -134,7 +133,8 @@ public class MovieRepositoryImpl implements MovieRepository {
             .addValue("releaseDate", Timestamp.from(movie.getReleaseDate().toInstant()))
             .addValue("country", movie.getCountry())
             .addValue("ageLimit", movie.getAgeLimit())
-            .addValue("genres", movie.getGenres().stream().map(Genre::toString).collect(Collectors.joining(", ")))
+            .addValue("genre", movie.getGenre().toString())
+            .addValue("image", movie.getImage())
             .addValue("id", movieId);
 
         jdbcTemplate.update(query, mapSqlParameterSource);
@@ -149,5 +149,30 @@ public class MovieRepositoryImpl implements MovieRepository {
             .addValue("id", movieId);
 
         jdbcTemplate.update(query, mapSqlParameterSource);
+    }
+
+    @Override
+    public List<Movie> getMoviesWithPagination(int pageNumber, int limit) {
+        String query = """
+            SELECT * FROM movies
+            ORDER BY id
+            LIMIT :limit
+            OFFSET :offset
+            """;
+        SqlParameterSource parameters = new MapSqlParameterSource()
+            .addValue("limit", limit)
+            .addValue("offset", getOffset(pageNumber, limit));
+
+        return jdbcTemplate.query(query, parameters, MovieMapper::mapToPojo);
+    }
+
+    @Override
+    public int getMoviesRowsCount() {
+        String query = "SELECT COUNT(*) FROM movies";
+        return jdbcTemplate.queryForObject(query, new MapSqlParameterSource(), Integer.class);
+    }
+
+    private static int getOffset(int pageNumber, int pageSize) {
+        return (pageNumber - 1) * pageSize;
     }
 }

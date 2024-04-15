@@ -31,17 +31,19 @@
     </div>
 </header>
 <div class="container">
+    <div style="display: block;">
     <div th:if="${error != null}">
         <div class="error-message"
              th:style="'background-color: #d93025;'">
             <p>[[${error}]]</p>
         </div>
     </div>
-<div th:if="${error == null}" class = "table">
+<div class = "table">
     <h1 style="font-size: 40px;">Users List</h1>
     <div class ="addUser">
     <a th:href = "@{/admin/users/showNewUserForm}"> Add User </a>
     </div>
+    <div th:if="${error == null}">
     <table>
         <thead>
         <tr>
@@ -74,6 +76,8 @@
             <a th:href="@{/admin/users/{page}/{pageSize}(page=${page}+1,pageSize=7)}">Next</a>
         </div>
     </div>
+    </div>
+</div>
 </div>
 </div>
 </body>

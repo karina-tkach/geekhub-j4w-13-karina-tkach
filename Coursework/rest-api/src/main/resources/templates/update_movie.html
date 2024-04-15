@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Movies Management</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}" href="css/home.css">
+    <style>
+        .error-message {
+            color: #fff;
+            padding: 10px;
+            border-radius: 3px;
+            text-align: center;
+            margin-bottom: 15px;
+            margin-top: 10px;
+        }
+        .characteristics {
+            font-size: 19px;
+            color: white;
+        }
+        #button {
+            margin-top:40px;
+        }
+        .form .field {
+            margin-top: 30px;
+        }
+    </style>
+</head>
+
+<body>
+<header class="logoClass">
+    <a href="/main" class="img"><img th:src="@{/img/logo.png}" class="image-logo" alt="logo"></a>
+    <div class="links">
+        <a href="/admin/cities">Manage Cities</a>
+        <a href="/admin/cinemas">Manage Cinemas</a>
+        <a href="/admin/shows">Manage Shows</a>
+        <a href="/admin/movies">Manage Movies</a>
+        <a href="/admin/users">Manage Users</a>
+        <a class="active" href="/logout">Logout</a>
+    </div>
+</header>
+
+<section class="container forms" style="height:160vh;">
+    <div class="form signup">
+        <div class="form-content">
+            <div th:if="${message != null}">
+                <div class="error-message"
+                     th:style="${message == 'You have successfully updated movie'} ?
+                  'background-color: green;' :'background-color: #d93025;'">
+                    <p>[[${message}]]</p>
+                </div>
+            </div>
+            <div th:if="${error != null}">
+                <div class="error-message"
+                     th:style="'background-color: #d93025;'">
+                    <p>[[${error}]]</p>
+                </div>
+            </div>
+            <div th:if="${error == null}">
+            <header class="header">Update Movie</header>
+            <form action="#" th:action="@{/admin/movies/updateMovie}" th:object="${movie}" method="POST" enctype="multipart/form-data" class="subform">
+                <div class="full-field id-field">
+                    <div class="field input-field">
+                        <input type="hidden" th:field="*{id}" />
+                    </div>
+                </div>
+                <div class="full-field title-field">
+                    <div class="field input-field">
+                        <label class="characteristics">Title</label>
+                        <input th:field="*{title}" type="text" name = "title" placeholder="Title" class="input title" id="title" required>
+                    </div>
+                </div>
+                <div class="full-field description-field">
+                    <div class="field input-field">
+                        <label class="characteristics">Description</label>
+                        <input th:field="*{description}" type="text" name = "description" placeholder="Description" class="input description" id="description" required>
+                    </div>
+                </div>
+                <div class="full-field durationInMins">
+                    <div class="field input-field">
+                        <label class="characteristics">Duration in minutes</label>
+                        <input th:field="*{durationInMins}" type="number" value="60" min="1" max="300" name = "durationInMins" placeholder="Duration In Mins" class="durationInMins" id="durationInMins" required>
+                    </div>
+                </div>
+                <span style="font-size: 20px;"><h4 style="color:gray; margin-top: 38px;">Leave empty so not to update release date</h4></span>
+                <div class="full-field releaseDate">
+                    <div class="field input-field">
+                        <label class="characteristics">Release date</label>
+                        <input type="datetime-local" th:field="*{formattedReleaseDate}" name="date">
+                    </div>
+                </div>
+                <div class="full-field country-field">
+                    <div class="field input-field">
+                        <label class="characteristics">Country</label>
+                        <input th:field="*{country}" type="text" name = "country" placeholder="Country" class="input country" id="country" required>
+                    </div>
+                </div>
+                <div class="full-field ageLimit">
+                    <div class="field input-field">
+                        <label class="characteristics">Age limit</label>
+                        <input th:field="*{ageLimit}" type="number" th:value="60" min="0" max="100" name = "ageLimit" placeholder="Age Limit" class="ageLimit" id="ageLimit" required>
+                    </div>
+                </div>
+                <div class="full-field genre">
+                    <div class="field input-field">
+                        <label class="characteristics">Genre</label>
+                        <select name="genre" id="genre" class="genre" th:field="*{genre}" required>
+                            <option th:each="genre:
+${T(org.geekhub.ticketbooking.model.Genre).values()}"
+                                    th:value="${genre}"
+                                    th:text="${genre.displayValue}"></option>
+                        </select><br>
+                    </div>
+                </div>
+                <span style="font-size: 20px;"><h4 style="color:gray; margin-top: 38px;">Leave empty so not to update image</h4></span>
+                <div class="full-field image">
+                    <div class="field input-field">
+                        <label class="characteristics">Image</label>
+                        <input type="file" name="file" id="file" accept="image/png, image/jpeg, image/jpg"/>
+                    </div>
+                </div>
+                <div class="field button-field input-field button" id="button">
+                    <button type="submit">Update</button>
+                </div>
+                <div class="form-link">
+                    <span> <a href="/admin/movies" class="link login-link">Back to Movies List</a></span>
+                </div>
+            </form>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

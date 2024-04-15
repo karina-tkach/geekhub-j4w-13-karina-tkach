@@ -102,8 +102,8 @@ public class MovieService {
             logger.info("Try to add movie");
             movieValidator.validate(movie);
 
-            boolean existsCity = movie.equals(movieRepository.getMovieByTitle(movie.getTitle()));
-            if (existsCity) {
+            boolean existsMovie = movie.equals(movieRepository.getMovieByTitle(movie.getTitle()));
+            if (existsMovie) {
                 throw new MovieValidationException(
                     "Movie " + movie + " already exists");
             }
@@ -153,6 +153,34 @@ public class MovieService {
         } catch (MovieValidationException | DataAccessException exception) {
             logger.warn("Movie wasn't deleted: {}\n{}", movieToDel, exception.getMessage());
             return false;
+        }
+    }
+
+    public List<Movie> getMoviesWithPagination(int pageNumber, int limit) {
+        try {
+            if(pageNumber < 0 || limit < 0) {
+                throw new IllegalArgumentException("Page number and limit must be greater than 0");
+            }
+            logger.info("Try to get movies with pagination");
+            List<Movie> movies = movieRepository.getMoviesWithPagination(pageNumber, limit);
+            logger.info("Movies were fetched with pagination successfully");
+            return movies;
+        } catch (IllegalArgumentException | DataAccessException exception) {
+            logger.warn("Movies weren't fetched with pagination\n{}", exception.getMessage());
+            return Collections.emptyList();
+        }
+    }
+
+    public int getMoviesRowsCount() {
+        try {
+            logger.info("Try to get movies rows count");
+            int count = movieRepository.getMoviesRowsCount();
+            logger.info("Movies rows count were fetched successfully");
+            return count;
+        }
+        catch (DataAccessException exception) {
+            logger.warn("Movies rows count weren't fetched\n{}", exception.getMessage());
+            return -1;
         }
     }
 }

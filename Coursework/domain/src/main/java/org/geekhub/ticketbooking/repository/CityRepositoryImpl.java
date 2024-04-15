@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
+@SuppressWarnings({"java:S1192", "java:S2259"})
 public class CityRepositoryImpl implements CityRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
 

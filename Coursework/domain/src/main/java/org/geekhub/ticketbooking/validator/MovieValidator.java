@@ -6,7 +6,7 @@ import org.geekhub.ticketbooking.model.Movie;
 import org.springframework.stereotype.Component;
 
 import java.time.OffsetDateTime;
-import java.util.List;
+import java.util.Arrays;
 import java.util.regex.Pattern;
 
 @Component
@@ -19,7 +19,8 @@ public class MovieValidator {
         validateReleaseDate(movie.getReleaseDate());
         validateCountry(movie.getCountry());
         validateAgeLimit(movie.getAgeLimit());
-        validateGenres(movie.getGenres());
+        validateGenre(movie.getGenre());
+        validateImage(movie.getImage());
     }
 
     private void validateDuration(int durationInMins) {
@@ -47,9 +48,15 @@ public class MovieValidator {
         }
     }
 
-    private void validateGenres(List<Genre> genres) {
-        if (genres == null) {
-            throw new MovieValidationException("Movie genres were null");
+    private void validateGenre(Genre genre) {
+        if (genre == null) {
+            throw new MovieValidationException("Movie genre was null");
+        }
+    }
+
+    private void validateImage(byte[] image) {
+        if (image == null || Arrays.equals(image, "".getBytes())) {
+            throw new MovieValidationException("Movie image was null or empty");
         }
     }
 }
