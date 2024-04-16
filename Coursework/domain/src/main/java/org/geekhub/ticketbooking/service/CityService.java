@@ -121,7 +121,7 @@ public class CityService {
 
     public List<City> getCitiesWithPagination(int pageNumber, int limit) {
         try {
-            if(pageNumber < 0 || limit < 0) {
+            if (pageNumber < 0 || limit < 0) {
                 throw new IllegalArgumentException("Page number and limit must be greater than 0");
             }
             logger.info("Try to get cities with pagination");
@@ -140,8 +140,7 @@ public class CityService {
             int count = cityRepository.getCitiesRowsCount();
             logger.info("Cities rows count were fetched successfully");
             return count;
-        }
-        catch (DataAccessException exception) {
+        } catch (DataAccessException exception) {
             logger.warn("Cities rows count weren't fetched\n{}", exception.getMessage());
             return -1;
         }

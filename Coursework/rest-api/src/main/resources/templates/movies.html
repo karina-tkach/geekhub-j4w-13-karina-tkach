@@ -80,11 +80,11 @@
         <div class="paginationButtons" style="display:flex;
     flex-direction: row; gap:4px; margin:25px 10px;">
             <div class="pgButton" id="prev" th:if="${page != 1}">
-                <a th:href="@{/admin/movies/{page}/{pageSize}(page=${page}-1,pageSize=2)}">Previous</a>
+                <a th:href="@{/admin/movies(page=@{{page}(page=${page}-1)},pageSize=2)}">Previous</a>
             </div>
             <div></div>
             <div class="pgButton" id="next" th:if="${page != (totalPages)}">
-                <a th:href="@{/admin/movies/{page}/{pageSize}(page=${page}+1,pageSize=2)}">Next</a>
+                <a th:href="@{/admin/movies(page=@{{page}(page=${page}+1)},pageSize=2)}">Next</a>
             </div>
         </div>
         </div>

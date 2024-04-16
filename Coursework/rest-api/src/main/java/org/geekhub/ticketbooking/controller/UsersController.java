@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.UnsupportedEncodingException;
 import java.security.Principal;
@@ -31,18 +32,13 @@ public class UsersController {
     }
 
     @GetMapping
-    public String viewHomePage(Model model) {
-        return viewHomePageWithPagination(1,7,model);
-    }
-    @GetMapping("/{page}/{pageSize}")
-    public String viewHomePageWithPagination(@PathVariable int page,
-                               @PathVariable int pageSize, Model model) {
+    public String viewHomePageWithPagination(@RequestParam(defaultValue = "1") int page,
+                                             @RequestParam(defaultValue = "7") int pageSize, Model model) {
         List<User> users = userService.getUsersWithPagination(page, pageSize);
         int rows = userService.getUsersRowsCount();
-        if(rows == -1 || users.isEmpty()) {
+        if (rows == -1 || users.isEmpty()) {
             model.addAttribute("error", "Can't load users");
-        }
-        else {
+        } else {
             model.addAttribute("page", page);
             model.addAttribute("totalPages", Math.ceil(rows / (float) pageSize));
             model.addAttribute("listUsers", users);
@@ -70,7 +66,7 @@ public class UsersController {
     }
 
     @GetMapping("/showFormForUpdate/{id}")
-    public String showFormForUpdate(@PathVariable( value = "id") int id, Model model) {
+    public String showFormForUpdate(@PathVariable(value = "id") int id, Model model) {
         User user = userService.getUserById(id);
         model.addAttribute("user", user);
         if (user == null) {
@@ -85,12 +81,12 @@ public class UsersController {
         User oldUser = userService.getUserById(user.getId());
         User executor = userService.getUserByEmail(principal.getName());
 
-        if((executor.getRole() != Role.SUPER_ADMIN) && (oldUser.getRole() == Role.SUPER_ADMIN)) {
+        if ((executor.getRole() != Role.SUPER_ADMIN) && (oldUser.getRole() == Role.SUPER_ADMIN)) {
             return setAttributesAndGetProperPage(model, "message",
                 "Cannot change super admin", "update_user");
         }
 
-        if((executor.getRole() != Role.SUPER_ADMIN) && (oldUser.getRole() != user.getRole())) {
+        if ((executor.getRole() != Role.SUPER_ADMIN) && (oldUser.getRole() != user.getRole())) {
             return setAttributesAndGetProperPage(model, "message",
                 "Only super admin can change roles", "update_user");
         }
@@ -99,12 +95,11 @@ public class UsersController {
         int userId = user.getId();
 
         User updatedUser;
-        if(user.getPassword() == null || user.getPassword().isBlank()) {
+        if (user.getPassword() == null || user.getPassword().isBlank()) {
             updatedUser = userService.updateUserWithoutPasswordChangeById(user, userId);
-        }
-        else {
-            updatedUser = userService.updateUserById(user,userId);
-            if(updatedUser != null) {
+        } else {
+            updatedUser = userService.updateUserById(user, userId);
+            if (updatedUser != null) {
                 String mail = "<p>Hello!</p>"
                     + "Your password was changed by administrator"
                     + "<br>"
@@ -131,7 +126,7 @@ public class UsersController {
     @GetMapping("/deleteUser/{id}")
     public String deleteUser(@PathVariable(value = "id") int id, Model model) {
         boolean result = userService.deleteUserById(id);
-        if(!result) {
+        if (!result) {
             return setAttributesAndGetProperPage(model, "error",
                 "Cannot delete user by this id", "update_user");
         }

@@ -39,7 +39,7 @@ public class HallService {
             }
             logger.info("Hall was fetched successfully");
             return hall;
-        } catch (DataAccessException exception) {
+        } catch (HallValidationException | DataAccessException exception) {
             logger.warn("Hall wasn't fetched\n{}", exception.getMessage());
             return null;
         }
@@ -56,7 +56,7 @@ public class HallService {
             }
             logger.info("Halls were fetched successfully");
             return halls;
-        } catch (DataAccessException exception) {
+        } catch (HallValidationException | DataAccessException exception) {
             logger.warn("Halls weren't fetched\n{}", exception.getMessage());
             return Collections.emptyList();
         }
@@ -66,6 +66,7 @@ public class HallService {
         try {
             logger.info("Try to add hall");
             hallValidator.validate(hall);
+            hall.setSeats();
 
             int id = hallRepository.addHall(hall, cinemaId);
             if (id == -1) {
@@ -91,6 +92,7 @@ public class HallService {
                 throw new HallValidationException("Hall with id '" + hallId + "' not found");
             }
             hallValidator.validate(hall);
+            hall.setSeats();
 
             for (Seat seat : hallToUpdate.getSeats()) {
                 seatService.deleteSeatById(seat.getId());
@@ -99,10 +101,11 @@ public class HallService {
                 showService.deleteShowById(show.getId());
             }
 
+            hallRepository.updateHallById(hall, cinemaId, hallId);
+
             setHallSeats(hall, hallId);
             setHallShows(hall, hallId);
 
-            hallRepository.updateHallById(hall, cinemaId, hallId);
             logger.info("Hall was updated:\n{}", hall);
             return getHallById(hallId);
         } catch (HallValidationException | DataAccessException exception) {

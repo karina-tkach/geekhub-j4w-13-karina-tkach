@@ -22,7 +22,6 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 @SuppressWarnings("java:S1192")
 public class ForgotPasswordController {
-
     private final UserService userService;
 
     private final ForgotPasswordService forgotPasswordService;
@@ -59,7 +58,7 @@ public class ForgotPasswordController {
                 "Unable to add token", "password-request");
         }
 
-        String emailLink = "http://localhost:8089/reset-password?token=" + forgotPasswordToken.getToken();
+        String emailLink = "http://localhost:8080/reset-password?token=" + forgotPasswordToken.getToken();
 
         try {
             forgotPasswordService.sendEmail(user.getEmail(), "Password Reset Link", emailLink);

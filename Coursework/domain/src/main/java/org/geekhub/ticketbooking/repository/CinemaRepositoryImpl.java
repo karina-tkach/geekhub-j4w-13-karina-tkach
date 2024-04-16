@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-@SuppressWarnings("java:S1192")
+@SuppressWarnings({"java:S1192", "java:S2259"})
 public class CinemaRepositoryImpl implements CinemaRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -125,5 +125,30 @@ public class CinemaRepositoryImpl implements CinemaRepository {
             .addValue("id", cinemaId);
 
         jdbcTemplate.update(query, mapSqlParameterSource);
+    }
+
+    @Override
+    public List<Cinema> getCinemasWithPagination(int pageNumber, int limit) {
+        String query = """
+            SELECT cinemas.id, cinemas.name, cinemas.city_id, cities.name AS city_name, cinemas.street FROM cinemas
+            INNER JOIN cities ON cinemas.city_id = cities.id ORDER BY cinemas.id
+            LIMIT :limit
+            OFFSET :offset
+            """;
+        SqlParameterSource parameters = new MapSqlParameterSource()
+            .addValue("limit", limit)
+            .addValue("offset", getOffset(pageNumber, limit));
+
+        return jdbcTemplate.query(query, parameters, CinemaMapper::mapToPojo);
+    }
+
+    @Override
+    public int getCinemasRowsCount() {
+        String query = "SELECT COUNT(*) FROM cinemas";
+        return jdbcTemplate.queryForObject(query, new MapSqlParameterSource(), Integer.class);
+    }
+
+    private static int getOffset(int pageNumber, int pageSize) {
+        return (pageNumber - 1) * pageSize;
     }
 }

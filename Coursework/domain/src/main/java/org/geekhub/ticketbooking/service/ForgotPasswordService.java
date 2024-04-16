@@ -48,7 +48,7 @@ public class ForgotPasswordService {
             + "<br>"
             + "Ignore this email if you did not made the request";
 
-        mailSenderService.sendEmail(to,subject,emailContent);
+        mailSenderService.sendEmail(to, subject, emailContent);
     }
 
     public boolean isExpired(ForgotPasswordToken forgotPasswordToken) {

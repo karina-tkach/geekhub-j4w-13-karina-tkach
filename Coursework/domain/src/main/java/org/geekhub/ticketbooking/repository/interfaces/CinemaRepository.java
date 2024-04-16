@@ -19,4 +19,7 @@ public interface CinemaRepository {
 
     void deleteCinemaById(int cinemaId);
 
+    List<Cinema> getCinemasWithPagination(int pageNumber, int limit);
+
+    int getCinemasRowsCount();
 }

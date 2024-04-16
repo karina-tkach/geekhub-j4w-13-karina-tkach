@@ -158,7 +158,7 @@ public class MovieService {
 
     public List<Movie> getMoviesWithPagination(int pageNumber, int limit) {
         try {
-            if(pageNumber < 0 || limit < 0) {
+            if (pageNumber < 0 || limit < 0) {
                 throw new IllegalArgumentException("Page number and limit must be greater than 0");
             }
             logger.info("Try to get movies with pagination");
@@ -177,8 +177,7 @@ public class MovieService {
             int count = movieRepository.getMoviesRowsCount();
             logger.info("Movies rows count were fetched successfully");
             return count;
-        }
-        catch (DataAccessException exception) {
+        } catch (DataAccessException exception) {
             logger.warn("Movies rows count weren't fetched\n{}", exception.getMessage());
             return -1;
         }

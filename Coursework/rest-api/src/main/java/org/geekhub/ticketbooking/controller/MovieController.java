@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,13 +29,8 @@ public class MovieController {
     }
 
     @GetMapping
-    public String viewHomePage(Model model) {
-        return viewHomePageWithPagination(1, 2, model);
-    }
-
-    @GetMapping("/{page}/{pageSize}")
-    public String viewHomePageWithPagination(@PathVariable int page,
-                                             @PathVariable int pageSize, Model model) {
+    public String viewHomePageWithPagination(@RequestParam(defaultValue = "1") int page,
+                                             @RequestParam(defaultValue = "2") int pageSize, Model model) {
         List<Movie> movies = movieService.getMoviesWithPagination(page, pageSize);
         int rows = movieService.getMoviesRowsCount();
         if (rows == -1 || movies.isEmpty()) {

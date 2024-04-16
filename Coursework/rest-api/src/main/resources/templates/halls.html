@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Halls Management</title>
+    <link rel="stylesheet" href="css/home.css" th:href="@{/css/home.css}">
+    <style>
+        .error-message {
+            color: #fff;
+            padding: 10px;
+            border-radius: 3px;
+            text-align: center;
+            margin-bottom: 15px;
+            margin-top: 10px;
+            font-size: 20px;
+        }
+    </style>
+
+</head>
+<body>
+<header class="logoClass">
+    <a href="/main" class="img"><img th:src="@{/img/logo.png}" class="image-logo" alt="logo"></a>
+    <div class="links">
+        <a href="/admin/cities">Manage Cities</a>
+        <a href="/admin/cinemas">Manage Cinemas</a>
+        <a href="/admin/shows">Manage Shows</a>
+        <a href="/admin/movies">Manage Movies</a>
+        <a href="/admin/users">Manage Users</a>
+        <a class="active" href="/logout">Logout</a>
+    </div>
+</header>
+<div class="container">
+    <div style="display: block;">
+        <div th:if="${error != null}">
+            <div class="error-message"
+                 th:style="'background-color: #d93025;'">
+                <p>[[${error}]]</p>
+            </div>
+        </div>
+        <div class = "table">
+            <h1 style="font-size: 40px;">Halls List</h1>
+            <div class ="addUser">
+                <a th:href = "@{{cinemaId}/showNewHallForm(cinemaId=${cinemaId})}"> Add Hall </a> <!--check-->
+            </div>
+            <div th:if="${error == null}">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Rows</th>
+                        <th>Columns</th>
+                        <th>Seats</th>
+                        <th>Shows</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="hall : ${listHalls}">
+                        <td th:text="${hall.name}"></td>
+                        <td th:text="${hall.rows}"></td>
+                        <td th:text="${hall.columns}"></td>
+                        <td>
+                            <a style="background-color: #0078e0" th:href="@{/admin/cinemas/{id}/halls(id=${hall.id})}">View Seats</a>
+                        </td>
+                        <td>
+                            <a style="background-color: #0078e0" th:href="@{/admin/cinemas/{id}/halls(id=${hall.id})}">View Shows</a>
+                        </td>
+                        <td><a th:href="@{/admin/halls/{cinemaId}/showFormForUpdate/{id}(cinemaId=${cinemaId}, id=${hall.id})}">Update</a>
+                            <a th:href="@{/admin/halls/{cinemaId}/deleteCinema/{id}(cinemaId=${cinemaId}, id=${hall.id})}">Delete</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="form-link">
+                    <span> <a href="/admin/cinemas" class="link login-link">Back to Cinemas List</a></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

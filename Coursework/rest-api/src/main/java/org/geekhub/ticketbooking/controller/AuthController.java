@@ -30,6 +30,7 @@ public class AuthController {
         }
         return newUser;
     }
+
     public void authenticate(User user, HttpServletRequest request) {
         SecurityUserDetails securityUser = new SecurityUserDetails(user);
 

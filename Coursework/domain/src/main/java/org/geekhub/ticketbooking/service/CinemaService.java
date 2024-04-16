@@ -178,4 +178,31 @@ public class CinemaService {
             return false;
         }
     }
+
+    public List<Cinema> getCinemasWithPagination(int pageNumber, int limit) {
+        try {
+            if (pageNumber < 0 || limit < 0) {
+                throw new IllegalArgumentException("Page number and limit must be greater than 0");
+            }
+            logger.info("Try to get cinemas with pagination");
+            List<Cinema> cinemas = cinemaRepository.getCinemasWithPagination(pageNumber, limit);
+            logger.info("Cinemas were fetched with pagination successfully");
+            return cinemas;
+        } catch (IllegalArgumentException | DataAccessException exception) {
+            logger.warn("Cinemas weren't fetched with pagination\n{}", exception.getMessage());
+            return Collections.emptyList();
+        }
+    }
+
+    public int getCinemasRowsCount() {
+        try {
+            logger.info("Try to get cinemas rows count");
+            int count = cinemaRepository.getCinemasRowsCount();
+            logger.info("Cinemas rows count were fetched successfully");
+            return count;
+        } catch (DataAccessException exception) {
+            logger.warn("Cinemas rows count weren't fetched\n{}", exception.getMessage());
+            return -1;
+        }
+    }
 }

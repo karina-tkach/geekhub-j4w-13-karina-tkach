@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Halls Management</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+    <style>
+        .error-message {
+            color: #fff;
+            padding: 10px;
+            border-radius: 3px;
+            text-align: center;
+            margin-bottom: 15px;
+            margin-top: 10px;
+        }
+        .characteristics {
+            font-size: 19px;
+            color: white;
+        }
+        #button {
+            margin-top:40px;
+        }
+        .form .field {
+            margin-top: 30px;
+        }
+    </style>
+</head>
+
+<body>
+<header class="logoClass">
+    <a href="/main" class="img"><img th:src="@{/img/logo.png}" class="image-logo" alt="logo"></a>
+    <div class="links">
+        <a href="/admin/cities">Manage Cities</a>
+        <a href="/admin/cinemas">Manage Cinemas</a>
+        <a href="/admin/shows">Manage Shows</a>
+        <a href="/admin/movies">Manage Movies</a>
+        <a href="/admin/users">Manage Users</a>
+        <a class="active" href="/logout">Logout</a>
+    </div>
+</header>
+
+<section class="container forms" style="height:110vh;">
+    <div class="form signup">
+        <div class="form-content">
+            <div th:if="${message != null}">
+                <div class="error-message"
+                     th:style="${message == 'You have successfully added hall'} ?
+                  'background-color: green;' :'background-color: #d93025;'">
+                    <p>[[${message}]]</p>
+                </div>
+            </div>
+            <header class="header">Save Hall</header>
+            <form th:action="@{saveHall}" th:object="${hall}" method="POST" class="subform">
+                <div class="full-field name-field">
+                    <div class="field input-field">
+                        <label class="characteristics">Hall Name</label>
+                        <input th:field="*{name}" type="text" name = "name" placeholder="Name" class="input name" id="hallName" required>
+                    </div>
+                </div>
+                <div class="full-field rows">
+                    <div class="field input-field">
+                        <label class="characteristics">Rows</label>
+                        <input th:field="*{rows}" type="number" value="1" min="1" max="150" name = "rows" placeholder="Rows" class="rows" id="rows" required>
+                    </div>
+                </div>
+                <div class="full-field rows">
+                    <div class="field input-field">
+                        <label class="characteristics">Columns</label>
+                        <input th:field="*{columns}" type="number" value="1" min="1" max="150" name = "columns" placeholder="Columns" class="columns" id="columns" required>
+                    </div>
+                </div>
+                <div class="field button-field input-field button" id="button">
+                    <button type="submit">Save</button>
+                </div>
+                <div class="form-link">
+                    <span> <a href="/admin/cinemas" class="link login-link">Back to Cinemas List</a></span>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+</body>
+</html>

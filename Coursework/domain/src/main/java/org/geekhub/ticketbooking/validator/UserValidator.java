@@ -27,7 +27,7 @@ public class UserValidator {
     public void validateUsersForUpdate(User userToUpdate, User user) {
         validateUserIsNotNull(userToUpdate);
 
-        if(user.getRole() == null) {
+        if (user.getRole() == null) {
             user.setRole(Role.USER);
         }
 

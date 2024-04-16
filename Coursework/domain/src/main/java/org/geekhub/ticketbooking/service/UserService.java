@@ -144,7 +144,7 @@ public class UserService {
 
     public List<User> getUsersWithPagination(int pageNumber, int limit) {
         try {
-            if(pageNumber < 0 || limit < 0) {
+            if (pageNumber < 0 || limit < 0) {
                 throw new IllegalArgumentException("Page number and limit must be greater than 0");
             }
             logger.info("Try to get users with pagination");
@@ -163,8 +163,7 @@ public class UserService {
             int count = userRepository.getUsersRowsCount();
             logger.info("Users rows count were fetched successfully");
             return count;
-        }
-        catch (DataAccessException exception) {
+        } catch (DataAccessException exception) {
             logger.warn("Users rows count weren't fetched\n{}", exception.getMessage());
             return -1;
         }

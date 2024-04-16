@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -23,13 +24,8 @@ public class CitiesController {
     }
 
     @GetMapping
-    public String viewHomePage(Model model) {
-        return viewHomePageWithPagination(1,7,model);
-    }
-
-    @GetMapping("/{page}/{pageSize}")
-    public String viewHomePageWithPagination(@PathVariable int page,
-                                             @PathVariable int pageSize, Model model) {
+    public String viewHomePageWithPagination(@RequestParam(defaultValue = "1") int page,
+                                             @RequestParam(defaultValue = "7") int pageSize, Model model) {
         List<City> cities = cityService.getCitiesWithPagination(page, pageSize);
         int rows = cityService.getCitiesRowsCount();
         if(rows == -1 || cities.isEmpty()) {
@@ -75,9 +71,9 @@ public class CitiesController {
 
     @PostMapping("/updateCity")
     public String updateCity(@ModelAttribute("city") City city, Model model) {
-        int userId = city.getId();
+        int cityId = city.getId();
 
-        City updatedCity = cityService.updateCityById(city,userId);
+        City updatedCity = cityService.updateCityById(city, cityId);
 
         if (updatedCity == null) {
             return setAttributesAndGetProperPage(model, "message",
