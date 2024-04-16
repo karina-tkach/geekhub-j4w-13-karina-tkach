@@ -72,6 +72,16 @@
                     </tr>
                     </tbody>
                 </table>
+                <div class="paginationButtons" style="display:flex;
+    flex-direction: row; gap:4px; margin:25px 10px;">
+                    <div class="pgButton" id="prev" th:if="${page != 1}">
+                        <a th:href="@{/admin/halls/{cinemaId}(cinemaId = ${cinemaId}, page=@{{page}(page=${page}-1)},pageSize=3)}">Previous</a>
+                    </div>
+                    <div></div>
+                    <div class="pgButton" id="next" th:if="${page != (totalPages)}">
+                        <a th:href="@{/admin/halls/{cinemaId}(cinemaId = ${cinemaId}, page=@{{page}(page=${page}+1)},pageSize=3)}">Next</a>
+                    </div>
+                </div>
                 <div class="form-link">
                     <span> <a href="/admin/cinemas" class="link login-link">Back to Cinemas List</a></span>
                 </div>

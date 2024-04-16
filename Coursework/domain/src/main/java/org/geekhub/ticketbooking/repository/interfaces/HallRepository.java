@@ -14,4 +14,8 @@ public interface HallRepository {
     void updateHallById(Hall hall, int cinemaId, int hallId);
 
     void deleteHallById(int hallId);
+
+    List<Hall> getHallsByCinemaWithPagination(int cinemaId, int pageNumber, int limit);
+
+    int getHallsByCinemaRowsCount(int cinemaId);
 }

@@ -74,7 +74,7 @@
                     <button type="submit">Save</button>
                 </div>
                 <div class="form-link">
-                    <span> <a href="/admin/cinemas" class="link login-link">Back to Cinemas List</a></span>
+                    <span> <a th:href="@{/admin/halls/{cinemaId}(cinemaId=${cinemaId})}" class="link login-link">Back to Halls List</a></span>
                 </div>
             </form>
         </div>

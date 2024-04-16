@@ -1,5 +1,6 @@
 package org.geekhub.ticketbooking.service;
 
+import jakarta.mail.MessagingException;
 import org.geekhub.ticketbooking.exception.UserValidationException;
 import org.geekhub.ticketbooking.model.User;
 import org.geekhub.ticketbooking.repository.interfaces.UserRepository;
@@ -7,10 +8,12 @@ import org.geekhub.ticketbooking.validator.UserValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
+import org.springframework.mail.MailException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Collections;
 import java.util.List;
 
@@ -19,27 +22,18 @@ public class UserService {
     private final UserValidator validator;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final MailSenderService mailSenderService;
 
     private final Logger logger = LoggerFactory.getLogger(UserService.class);
     private final UserValidator userValidator;
 
-    public UserService(UserValidator validator, UserRepository userRepository, UserValidator userValidator) {
+    public UserService(UserValidator validator, UserRepository userRepository,
+                       UserValidator userValidator, MailSenderService mailSenderService) {
         this.validator = validator;
         this.userRepository = userRepository;
         this.passwordEncoder = new BCryptPasswordEncoder(12);
         this.userValidator = userValidator;
-    }
-
-    public List<User> getUsers() {
-        try {
-            logger.info("Try to get users");
-            List<User> users = userRepository.getUsers();
-            logger.info("Users were fetched successfully");
-            return users;
-        } catch (DataAccessException exception) {
-            logger.warn("Users weren't fetched\n{}", exception.getMessage());
-            return Collections.emptyList();
-        }
+        this.mailSenderService = mailSenderService;
     }
 
     public User addUser(User user) {
@@ -163,10 +157,28 @@ public class UserService {
             int count = userRepository.getUsersRowsCount();
             logger.info("Users rows count were fetched successfully");
             return count;
-        } catch (DataAccessException exception) {
+        } catch (DataAccessException | NullPointerException exception) {
             logger.warn("Users rows count weren't fetched\n{}", exception.getMessage());
             return -1;
         }
     }
 
+    public boolean sendPasswordResetEmail(String password, String email) {
+        String mail = this.getPasswordResetEmailContent(password);
+        try {
+            mailSenderService.sendEmail(email, "Password Change By Admin", mail);
+            return true;
+        } catch (MailException | MessagingException | UnsupportedEncodingException e) {
+            return false;
+        }
+    }
+
+    public String getPasswordResetEmailContent(String password) {
+        return "<p>Hello!</p>"
+            + "Your password was changed by administrator"
+            + "<br>"
+            + "<p>Your new password: " + password + "</p>"
+            + "<br>"
+            + "You can always reset it!";
+    }
 }

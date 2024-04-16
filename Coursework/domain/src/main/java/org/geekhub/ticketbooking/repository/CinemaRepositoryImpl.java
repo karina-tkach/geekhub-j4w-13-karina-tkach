@@ -60,23 +60,6 @@ public class CinemaRepositoryImpl implements CinemaRepository {
     }
 
     @Override
-    public Cinema getCinemaByCityAndName(int cityId, String name) {
-        String query = """
-            SELECT cinemas.id, cinemas.name, cinemas.city_id, cities.name AS city_name, cinemas.street FROM cinemas
-            INNER JOIN cities ON cinemas.city_id = cities.id WHERE cinemas.city_id=:cityId AND cinemas.name=:name
-            """;
-
-        SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
-            .addValue("cityId", cityId)
-            .addValue("name", name);
-
-        return jdbcTemplate.query(query, mapSqlParameterSource, CinemaMapper::mapToPojo)
-            .stream()
-            .findFirst()
-            .orElse(null);
-    }
-
-    @Override
     public int addCinema(Cinema cinema, int cityId) {
         String query = """
             INSERT INTO cinemas (name, city_id, street)

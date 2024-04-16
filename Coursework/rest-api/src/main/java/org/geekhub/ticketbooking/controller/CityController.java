@@ -16,10 +16,10 @@ import java.util.List;
 @Controller
 @RequestMapping("admin/cities")
 @SuppressWarnings("java:S1192")
-public class CitiesController {
+public class CityController {
     private final CityService cityService;
 
-    public CitiesController(CityService cityService) {
+    public CityController(CityService cityService) {
         this.cityService = cityService;
     }
 

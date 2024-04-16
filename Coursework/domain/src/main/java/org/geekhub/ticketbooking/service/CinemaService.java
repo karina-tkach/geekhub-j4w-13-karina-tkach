@@ -81,22 +81,6 @@ public class CinemaService {
         }
     }
 
-    public Cinema getCinemaByCityAndName(int cityId, String name) {
-        try {
-            logger.info("Try to get cinema by city and name");
-            Cinema cinema = cinemaRepository.getCinemaByCityAndName(cityId, name);
-            if (cinema != null) {
-                List<Hall> halls = hallService.getHallsByCinema(cinema.getId());
-                cinema.setHalls(halls);
-            }
-            logger.info("Cinema was fetched successfully");
-            return cinema;
-        } catch (DataAccessException exception) {
-            logger.warn("Cinema wasn't fetched\n{}", exception.getMessage());
-            return null;
-        }
-    }
-
     public Cinema addCinema(Cinema cinema) {
         try {
             logger.info("Try to add cinema");
@@ -200,7 +184,7 @@ public class CinemaService {
             int count = cinemaRepository.getCinemasRowsCount();
             logger.info("Cinemas rows count were fetched successfully");
             return count;
-        } catch (DataAccessException exception) {
+        } catch (DataAccessException | NullPointerException exception) {
             logger.warn("Cinemas rows count weren't fetched\n{}", exception.getMessage());
             return -1;
         }

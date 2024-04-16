@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
+@SuppressWarnings({"java:S1192", "java:S2259"})
 public class HallRepositoryImpl implements HallRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -96,5 +97,35 @@ public class HallRepositoryImpl implements HallRepository {
             .addValue("id", hallId);
 
         jdbcTemplate.update(query, mapSqlParameterSource);
+    }
+
+    @Override
+    public List<Hall> getHallsByCinemaWithPagination(int cinemaId, int pageNumber, int limit) {
+        String query = """
+            SELECT * FROM halls WHERE cinema_id=:id
+            LIMIT :limit
+            OFFSET :offset
+            """;
+
+        SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
+            .addValue("id", cinemaId)
+            .addValue("limit", limit)
+            .addValue("offset", getOffset(pageNumber, limit));
+
+        return jdbcTemplate.query(query, mapSqlParameterSource, HallMapper::mapToPojo);
+    }
+
+    @Override
+    public int getHallsByCinemaRowsCount(int cinemaId) {
+        String query = "SELECT COUNT(*) FROM halls WHERE cinema_id=:id";
+
+        SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
+            .addValue("id", cinemaId);
+
+        return jdbcTemplate.queryForObject(query, mapSqlParameterSource, Integer.class);
+    }
+
+    private static int getOffset(int pageNumber, int pageSize) {
+        return (pageNumber - 1) * pageSize;
     }
 }

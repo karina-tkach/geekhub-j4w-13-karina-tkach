@@ -1,8 +1,5 @@
 package org.geekhub.ticketbooking.model;
 
-import lombok.Getter;
-
-@Getter
 public enum Genre {
     ACTION("Action"),
     DRAMA("Drama"),
@@ -19,6 +16,10 @@ public enum Genre {
     MYSTERY("Mystery");
 
     private final String displayValue;
+
+    public String getDisplayValue() {
+        return displayValue;
+    }
 
     Genre(String displayValue) {
         this.displayValue = displayValue;

@@ -11,8 +11,6 @@ public interface CinemaRepository {
 
     List<Cinema> getCinemasByCity(int cityId);
 
-    Cinema getCinemaByCityAndName(int cityId, String name);
-
     int addCinema(Cinema cinema, int cityId);
 
     void updateCinemaById(Cinema cinema, int cinemaId, int cityId);

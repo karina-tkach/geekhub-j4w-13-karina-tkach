@@ -1,6 +1,5 @@
 package org.geekhub.ticketbooking.controller;
 
-import org.geekhub.ticketbooking.model.Cinema;
 import org.geekhub.ticketbooking.model.Hall;
 import org.geekhub.ticketbooking.service.HallService;
 import org.springframework.stereotype.Controller;
@@ -10,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -24,11 +24,17 @@ public class HallController {
     }
 
     @GetMapping("/{cinemaId}")
-    public String viewCinemaHalls(@PathVariable int cinemaId, Model model) {
-        List<Hall> halls = hallService.getHallsByCinema(cinemaId);
-        if (halls.isEmpty()) {
+    public String viewCinemaHalls(@PathVariable int cinemaId,
+                                  @RequestParam(defaultValue = "1") int page,
+                                  @RequestParam(defaultValue = "3") int pageSize, Model model) {
+        List<Hall> halls = hallService.getHallsByCinemaWithPagination(cinemaId, page, pageSize);
+        int rows = hallService.getHallsByCinemaRowsCount(cinemaId);
+
+        if (rows == -1 || halls.isEmpty()) {
             model.addAttribute("error", "Can't load halls for this cinema");
         } else {
+            model.addAttribute("page", page);
+            model.addAttribute("totalPages", Math.ceil(rows / (float) pageSize));
             model.addAttribute("listHalls", halls);
         }
 

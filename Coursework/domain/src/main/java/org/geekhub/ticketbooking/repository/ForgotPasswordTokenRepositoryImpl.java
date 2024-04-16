@@ -1,7 +1,7 @@
 package org.geekhub.ticketbooking.repository;
 
 import org.geekhub.ticketbooking.model.ForgotPasswordToken;
-import org.geekhub.ticketbooking.repository.interfaces.ForgotPasswordRepository;
+import org.geekhub.ticketbooking.repository.interfaces.ForgotPasswordTokenRepository;
 import org.geekhub.ticketbooking.repository.mappers.TokenMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -14,11 +14,11 @@ import java.sql.Timestamp;
 
 @Repository
 @SuppressWarnings("java:S1192")
-public class ForgotPasswordRepositoryImpl implements ForgotPasswordRepository {
+public class ForgotPasswordTokenRepositoryImpl implements ForgotPasswordTokenRepository {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
-    public ForgotPasswordRepositoryImpl(NamedParameterJdbcTemplate jdbcTemplate) {
+    public ForgotPasswordTokenRepositoryImpl(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 

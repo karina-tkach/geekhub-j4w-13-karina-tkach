@@ -33,6 +33,7 @@ public class MovieController {
                                              @RequestParam(defaultValue = "2") int pageSize, Model model) {
         List<Movie> movies = movieService.getMoviesWithPagination(page, pageSize);
         int rows = movieService.getMoviesRowsCount();
+
         if (rows == -1 || movies.isEmpty()) {
             model.addAttribute("error", "Can't load movies");
         } else {

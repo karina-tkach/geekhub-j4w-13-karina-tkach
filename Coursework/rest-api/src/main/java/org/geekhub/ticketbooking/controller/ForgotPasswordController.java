@@ -7,7 +7,7 @@ import java.util.Objects;
 
 import org.geekhub.ticketbooking.model.ForgotPasswordToken;
 import org.geekhub.ticketbooking.model.User;
-import org.geekhub.ticketbooking.service.ForgotPasswordService;
+import org.geekhub.ticketbooking.service.ForgotPasswordTokenService;
 import org.geekhub.ticketbooking.service.UserService;
 import org.springframework.data.repository.query.Param;
 import org.springframework.mail.MailException;
@@ -24,9 +24,9 @@ import jakarta.servlet.http.HttpSession;
 public class ForgotPasswordController {
     private final UserService userService;
 
-    private final ForgotPasswordService forgotPasswordService;
+    private final ForgotPasswordTokenService forgotPasswordService;
 
-    public ForgotPasswordController(UserService userService, ForgotPasswordService forgotPasswordService) {
+    public ForgotPasswordController(UserService userService, ForgotPasswordTokenService forgotPasswordService) {
         this.userService = userService;
         this.forgotPasswordService = forgotPasswordService;
     }
@@ -45,11 +45,7 @@ public class ForgotPasswordController {
                 "This Email is not registered", "password-request");
         }
 
-        ForgotPasswordToken forgotPasswordToken = new ForgotPasswordToken();
-        forgotPasswordToken.setExpireTime(forgotPasswordService.expireTimeRange());
-        forgotPasswordToken.setToken(forgotPasswordService.generateToken());
-        forgotPasswordToken.setUser(user);
-        forgotPasswordToken.setUsed(false);
+        ForgotPasswordToken forgotPasswordToken = forgotPasswordService.generateTokenForUser(user);
 
         ForgotPasswordToken token = forgotPasswordService.addToken(forgotPasswordToken);
 
@@ -58,10 +54,10 @@ public class ForgotPasswordController {
                 "Unable to add token", "password-request");
         }
 
-        String emailLink = "http://localhost:8080/reset-password?token=" + forgotPasswordToken.getToken();
 
         try {
-            forgotPasswordService.sendEmail(user.getEmail(), "Password Reset Link", emailLink);
+            forgotPasswordService.sendEmail(user.getEmail(), "Password Reset Link",
+                forgotPasswordToken.getToken());
         } catch (MailException | MessagingException | UnsupportedEncodingException e) {
             return setAttributesAndGetProperPage(model, "error",
                 "Error while sending email", "password-request");
@@ -98,9 +94,9 @@ public class ForgotPasswordController {
             return setAttributesAndGetProperPage(model, "message",
                 "Invalid token", "reset-password");
         }
-        User user = forgotPasswordToken.getUser();
-        user.setPassword(password);
-        forgotPasswordToken.setUsed(true);
+
+        User user = forgotPasswordService.useToken(forgotPasswordToken, password);
+
         User updatedUser = userService.updateUserById(user, user.getId());
         if (updatedUser == null) {
             return setAttributesAndGetProperPage(model, "message",

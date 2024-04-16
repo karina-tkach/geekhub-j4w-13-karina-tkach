@@ -131,6 +131,33 @@ public class HallService {
         }
     }
 
+    public List<Hall> getHallsByCinemaWithPagination(int cinemaId, int pageNumber, int limit) {
+        try {
+            if (pageNumber < 0 || limit < 0) {
+                throw new IllegalArgumentException("Page number and limit must be greater than 0");
+            }
+            logger.info("Try to get halls by cinema with pagination");
+            List<Hall> halls = hallRepository.getHallsByCinemaWithPagination(cinemaId, pageNumber, limit);
+            logger.info("Halls by cinema were fetched with pagination successfully");
+            return halls;
+        } catch (IllegalArgumentException | DataAccessException exception) {
+            logger.warn("Halls by cinema weren't fetched with pagination\n{}", exception.getMessage());
+            return Collections.emptyList();
+        }
+    }
+
+    public int getHallsByCinemaRowsCount(int cinemaId) {
+        try {
+            logger.info("Try to get halls by cinema rows count");
+            int count = hallRepository.getHallsByCinemaRowsCount(cinemaId);
+            logger.info("Halls by cinema rows count were fetched successfully");
+            return count;
+        } catch (DataAccessException | NullPointerException exception) {
+            logger.warn("Halls by cinema rows count weren't fetched\n{}", exception.getMessage());
+            return -1;
+        }
+    }
+
     private void setHallSeats(Hall hall, int hallId) {
         List<Seat> hallSeats = hall.getSeats();
         for (Seat seat : hallSeats) {

@@ -22,14 +22,6 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<User> getUsers() {
-        String query = """
-            SELECT * FROM users ORDER BY id
-            """;
-        return jdbcTemplate.query(query, UserMapper::mapToPojo);
-    }
-
-    @Override
     public int addUser(User user) {
         String query = """
             INSERT INTO users (firstName, lastName, password, email, role)

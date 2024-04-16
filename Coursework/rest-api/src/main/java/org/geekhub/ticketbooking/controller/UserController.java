@@ -1,11 +1,8 @@
 package org.geekhub.ticketbooking.controller;
 
-import jakarta.mail.MessagingException;
 import org.geekhub.ticketbooking.model.Role;
 import org.geekhub.ticketbooking.model.User;
-import org.geekhub.ticketbooking.service.MailSenderService;
 import org.geekhub.ticketbooking.service.UserService;
-import org.springframework.mail.MailException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -15,20 +12,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 import java.util.List;
 
 @Controller
 @RequestMapping("admin/users")
 @SuppressWarnings("java:S1192")
-public class UsersController {
+public class UserController {
     private final UserService userService;
-    private final MailSenderService mailSenderService;
 
-    public UsersController(UserService userService, MailSenderService mailSenderService) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.mailSenderService = mailSenderService;
     }
 
     @GetMapping
@@ -36,6 +30,7 @@ public class UsersController {
                                              @RequestParam(defaultValue = "7") int pageSize, Model model) {
         List<User> users = userService.getUsersWithPagination(page, pageSize);
         int rows = userService.getUsersRowsCount();
+
         if (rows == -1 || users.isEmpty()) {
             model.addAttribute("error", "Can't load users");
         } else {
@@ -100,15 +95,9 @@ public class UsersController {
         } else {
             updatedUser = userService.updateUserById(user, userId);
             if (updatedUser != null) {
-                String mail = "<p>Hello!</p>"
-                    + "Your password was changed by administrator"
-                    + "<br>"
-                    + "<p>Your new password: " + password + "</p>"
-                    + "<br>"
-                    + "You can always reset it!";
-                try {
-                    mailSenderService.sendEmail(updatedUser.getEmail(), "Password Change By Admin", mail);
-                } catch (MailException | MessagingException | UnsupportedEncodingException e) {
+                boolean result = userService.sendPasswordResetEmail(password, updatedUser.getEmail());
+
+                if(!result) {
                     return setAttributesAndGetProperPage(model, "message",
                         "Cannot send email to user, but user was updated", "update_user");
                 }

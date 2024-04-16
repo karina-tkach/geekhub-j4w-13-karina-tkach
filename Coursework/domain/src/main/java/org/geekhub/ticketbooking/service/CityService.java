@@ -140,7 +140,7 @@ public class CityService {
             int count = cityRepository.getCitiesRowsCount();
             logger.info("Cities rows count were fetched successfully");
             return count;
-        } catch (DataAccessException exception) {
+        } catch (DataAccessException | NullPointerException exception) {
             logger.warn("Cities rows count weren't fetched\n{}", exception.getMessage());
             return -1;
         }

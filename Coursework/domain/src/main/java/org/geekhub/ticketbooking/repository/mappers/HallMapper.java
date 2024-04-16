@@ -18,15 +18,15 @@ public class HallMapper {
             rs.getString("name"),
             rs.getInt("rows"),
             rs.getInt("columns"),
-            initializeSeats(rs.getInt("rows") * rs.getInt("columns"), (rs.getInt("id"))),
+            initializeSeats(rs.getInt("rows") * rs.getInt("columns")),
             rs.getInt("cinema_id"),
             null);
     }
 
-    private static List<Seat> initializeSeats(int numberOfSeats, int id) {
+    private static List<Seat> initializeSeats(int numberOfSeats) {
         List<Seat> seatsList = new ArrayList<>(numberOfSeats);
         for (int i = 0; i < numberOfSeats; i++) {
-            seatsList.add(Seat.builder().number(i + 1).hallId(id).build());
+            seatsList.add(new Seat());
         }
         return seatsList;
     }

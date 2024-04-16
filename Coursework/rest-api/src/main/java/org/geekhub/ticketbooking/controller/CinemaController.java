@@ -29,7 +29,7 @@ public class CinemaController {
 
     @GetMapping
     public String viewHomePageWithPagination(@RequestParam(defaultValue = "1") int page,
-                                             @RequestParam(defaultValue = "7") int pageSize, Model model) {
+                                             @RequestParam(defaultValue = "5") int pageSize, Model model) {
         List<Cinema> cinemas = cinemaService.getCinemasWithPagination(page, pageSize);
         int rows = cinemaService.getCinemasRowsCount();
         if (rows == -1 || cinemas.isEmpty()) {

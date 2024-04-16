@@ -177,7 +177,7 @@ public class MovieService {
             int count = movieRepository.getMoviesRowsCount();
             logger.info("Movies rows count were fetched successfully");
             return count;
-        } catch (DataAccessException exception) {
+        } catch (DataAccessException | NullPointerException exception) {
             logger.warn("Movies rows count weren't fetched\n{}", exception.getMessage());
             return -1;
         }

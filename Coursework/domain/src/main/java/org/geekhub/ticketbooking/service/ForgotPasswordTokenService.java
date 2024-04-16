@@ -7,40 +7,59 @@ import java.util.UUID;
 import jakarta.mail.MessagingException;
 import org.geekhub.ticketbooking.exception.TokenValidationException;
 import org.geekhub.ticketbooking.model.ForgotPasswordToken;
-import org.geekhub.ticketbooking.repository.interfaces.ForgotPasswordRepository;
+import org.geekhub.ticketbooking.model.User;
+import org.geekhub.ticketbooking.repository.interfaces.ForgotPasswordTokenRepository;
 import org.geekhub.ticketbooking.validator.TokenValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ForgotPasswordService {
-
-    private final ForgotPasswordRepository forgotPasswordRepository;
+public class ForgotPasswordTokenService {
+    private final ForgotPasswordTokenRepository forgotPasswordRepository;
     private final MailSenderService mailSenderService;
-    private final Logger logger = LoggerFactory.getLogger(ForgotPasswordService.class);
+    private final Logger logger = LoggerFactory.getLogger(ForgotPasswordTokenService.class);
     private final TokenValidator tokenValidator;
 
-    public ForgotPasswordService(ForgotPasswordRepository forgotPasswordRepository,
-                                 MailSenderService mailSenderService, TokenValidator tokenValidator) {
+    private final String host;
+    private final String port;
+
+    public ForgotPasswordTokenService(ForgotPasswordTokenRepository forgotPasswordRepository,
+                                      MailSenderService mailSenderService, TokenValidator tokenValidator,
+                                      @Value("${spring.datasource.host}") String host,
+                                      @Value("${server.port}") String port) {
         this.forgotPasswordRepository = forgotPasswordRepository;
         this.mailSenderService = mailSenderService;
         this.tokenValidator = tokenValidator;
+        this.host = host;
+        this.port = port;
     }
 
     private static final int MINUTES_ACTIVE_TIME = 10;
 
-    public String generateToken() {
+    public ForgotPasswordToken generateTokenForUser(User user) {
+        ForgotPasswordToken forgotPasswordToken = new ForgotPasswordToken();
+        forgotPasswordToken.setExpireTime(this.expireTimeRange());
+        forgotPasswordToken.setToken(this.generateToken());
+        forgotPasswordToken.setUser(user);
+        forgotPasswordToken.setUsed(false);
+
+        return forgotPasswordToken;
+    }
+
+    private String generateToken() {
         return UUID.randomUUID().toString();
     }
 
-    public OffsetDateTime expireTimeRange() {
+    private OffsetDateTime expireTimeRange() {
         return OffsetDateTime.now().plusMinutes(MINUTES_ACTIVE_TIME);
     }
 
-    public void sendEmail(String to, String subject, String emailLink) throws MailException, MessagingException, UnsupportedEncodingException {
+    public void sendEmail(String to, String subject, String token) throws MailException, MessagingException, UnsupportedEncodingException {
+        String emailLink = "http://" + host + ":" + port + "/reset-password?token=" + token;
 
         String emailContent = "<p>Hello!</p>"
             + "Click the link the below to reset password"
@@ -51,7 +70,7 @@ public class ForgotPasswordService {
         mailSenderService.sendEmail(to, subject, emailContent);
     }
 
-    public boolean isExpired(ForgotPasswordToken forgotPasswordToken) {
+    private boolean isExpired(ForgotPasswordToken forgotPasswordToken) {
         return OffsetDateTime.now().isAfter(forgotPasswordToken.getExpireTime());
     }
 
@@ -132,5 +151,13 @@ public class ForgotPasswordService {
             logger.warn("Token wasn't fetched\n{}", exception.getMessage());
             return null;
         }
+    }
+
+    public User useToken(ForgotPasswordToken forgotPasswordToken, String password) {
+        User user = forgotPasswordToken.getUser();
+        user.setPassword(password);
+        forgotPasswordToken.setUsed(true);
+
+        return user;
     }
 }
