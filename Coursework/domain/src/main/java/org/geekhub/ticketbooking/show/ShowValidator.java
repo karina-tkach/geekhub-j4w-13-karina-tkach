@@ -2,12 +2,10 @@ package org.geekhub.ticketbooking.show;
 
 import org.geekhub.ticketbooking.exception.ShowValidationException;
 import org.geekhub.ticketbooking.movie.Movie;
-import org.geekhub.ticketbooking.show_seat.ShowSeat;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.List;
 
 @Component
 public class ShowValidator {

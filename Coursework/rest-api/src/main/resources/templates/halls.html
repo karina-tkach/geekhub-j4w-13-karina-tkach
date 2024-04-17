@@ -50,7 +50,6 @@
                         <th>Name</th>
                         <th>Rows</th>
                         <th>Columns</th>
-                        <th>Seats</th>
                         <th>Shows</th>
                         <th>Actions</th>
                     </tr>
@@ -60,9 +59,6 @@
                         <td th:text="${hall.name}"></td>
                         <td th:text="${hall.rows}"></td>
                         <td th:text="${hall.columns}"></td>
-                        <td>
-                            <a style="background-color: #0078e0" th:href="@{/admin/seats/{hallId}(hallId=${hall.id})}">View Seats</a>
-                        </td>
                         <td>
                             <a style="background-color: #0078e0" th:href="@{/admin/shows/{hallId}(hallId=${hall.id})}">View Shows</a>
                         </td>
