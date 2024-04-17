@@ -6,6 +6,7 @@ import org.geekhub.ticketbooking.movie.Movie;
 import org.geekhub.ticketbooking.movie.MovieValidator;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 @Component
@@ -26,8 +27,8 @@ public class ShowValidator {
         validateTime(show, show.getStart(), show.getEnd());
     }
 
-    private void validatePrice(int price) {
-        if (price < 0) {
+    private void validatePrice(BigDecimal price) {
+        if (price.compareTo(BigDecimal.valueOf(0)) < 0) {
             throw new ShowValidationException("Show price was negative");
         }
     }

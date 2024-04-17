@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Dependent Drop-down List</title>
+</head>
+<body>
+<form>
+    <!-- First drop-down list for countries -->
+    <select id="cinemaSelect" onchange="populateHalls()">
+        <option th:each="cinema : ${cinemas}" th:value="${cinema.id}" th:text="${cinema.name}"></option>
+    </select>
+
+    <!-- Second drop-down list for cities -->
+    <select id="hallSelect">
+    </select>
+</form>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var hallsByCinema = /*[[${hallsByCinema}]]*/ {};
+
+    function populateHalls() {
+        var cinemaId = document.getElementById("cinemaSelect").value;
+        var halls = hallsByCinema[cinemaId];
+        var hallSelect = document.getElementById("hallSelect");
+        // Clear existing options
+        hallSelect.innerHTML = "";
+        // Populate with cities based on selected country
+        halls.forEach(function(hall) {
+            var option = document.createElement("option");
+            option.value = hall.id;
+            option.text = hall.name;
+            hallSelect.appendChild(option);
+        });
+    }
+    /*]]>*/
+</script>
+</body>
+</html>

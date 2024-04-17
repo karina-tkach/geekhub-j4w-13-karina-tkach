@@ -1,7 +1,7 @@
 CREATE TABLE shows
 (
     id SERIAL PRIMARY KEY,
-    price INT NOT NULL,
+    price DECIMAL NOT NULL,
     start_time TIMESTAMP NOT NULL,
     end_time TIMESTAMP NOT NULL,
     movie_id INT NOT NULL,

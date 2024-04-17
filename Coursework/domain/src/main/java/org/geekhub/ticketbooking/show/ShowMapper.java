@@ -14,7 +14,7 @@ public class ShowMapper {
     @SuppressWarnings("java:S1172")
     public static Show mapToPojo(ResultSet rs, int ignoredRowNum) throws SQLException {
         return new Show(rs.getInt("id"),
-            rs.getInt("price"),
+            rs.getBigDecimal("price"),
             rs.getTimestamp("start_time").toInstant().atOffset(ZoneOffset.UTC),
             rs.getTimestamp("end_time").toInstant().atOffset(ZoneOffset.UTC),
             new Movie(rs.getInt("movie_id"),

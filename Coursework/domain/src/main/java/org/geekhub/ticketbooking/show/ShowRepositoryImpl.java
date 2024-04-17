@@ -11,6 +11,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Repository
+@SuppressWarnings("java:S2259")
 public class ShowRepositoryImpl implements ShowRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -23,7 +24,7 @@ public class ShowRepositoryImpl implements ShowRepository {
         String query = """
             SELECT shows.id, shows.price, shows.start_time, shows.end_time,
             shows.movie_id, movies.title, movies.description, movies.duration,
-             movies.releaseDate, movies.country, movies.ageLimit, movies.genres FROM shows
+             movies.releaseDate, movies.country, movies.ageLimit, movies.genre, movies.image FROM shows
             INNER JOIN movies ON shows.movie_id = movies.id ORDER BY shows.id
             """;
         return jdbcTemplate.query(query, ShowMapper::mapToPojo);
@@ -34,7 +35,8 @@ public class ShowRepositoryImpl implements ShowRepository {
         String query = """
             SELECT shows.id, shows.price, shows.start_time, shows.end_time,
             shows.movie_id, movies.title, movies.description, movies.duration,
-             movies.releaseDate, movies.country, movies.ageLimit, movies.genres, shows.hall_id FROM shows
+             movies.releaseDate, movies.country, movies.ageLimit, movies.genre,
+             movies.image, shows.hall_id FROM shows
             INNER JOIN movies ON shows.movie_id = movies.id WHERE shows.id=:id
             """;
         SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
@@ -51,7 +53,8 @@ public class ShowRepositoryImpl implements ShowRepository {
         String query = """
             SELECT shows.id, shows.price, shows.start_time, shows.end_time,
             shows.movie_id, movies.title, movies.description, movies.duration,
-             movies.releaseDate, movies.country, movies.ageLimit, movies.genres, shows.hall_id FROM shows
+             movies.releaseDate, movies.country, movies.ageLimit, movies.genre,
+             movies.image, shows.hall_id FROM shows
             INNER JOIN movies ON shows.movie_id = movies.id WHERE shows.movie_id=:id ORDER BY shows.id
             """;
         SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
@@ -65,11 +68,31 @@ public class ShowRepositoryImpl implements ShowRepository {
         String query = """
             SELECT shows.id, shows.price, shows.start_time, shows.end_time,
             shows.movie_id, movies.title, movies.description, movies.duration,
-             movies.releaseDate, movies.country, movies.ageLimit, movies.genres, shows.hall_id FROM shows
+             movies.releaseDate, movies.country, movies.ageLimit, movies.genre,
+             movies.image, shows.hall_id FROM shows
             INNER JOIN movies ON shows.movie_id = movies.id WHERE shows.hall_id=:id ORDER BY shows.id
             """;
         SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
             .addValue("id", hallId);
+
+        return jdbcTemplate.query(query, mapSqlParameterSource, ShowMapper::mapToPojo);
+    }
+
+    @Override
+    public List<Show> getShowsByHallWithPagination(int hallId, int pageNumber, int limit) {
+        String query = """
+            SELECT shows.id, shows.price, shows.start_time, shows.end_time,
+            shows.movie_id, movies.title, movies.description, movies.duration,
+             movies.releaseDate, movies.country, movies.ageLimit, movies.genre,
+             movies.image, shows.hall_id FROM shows
+            INNER JOIN movies ON shows.movie_id = movies.id WHERE shows.hall_id=:id ORDER BY shows.id
+            LIMIT :limit
+            OFFSET :offset
+            """;
+        SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
+            .addValue("id", hallId)
+            .addValue("limit", limit)
+            .addValue("offset", getOffset(pageNumber, limit));
 
         return jdbcTemplate.query(query, mapSqlParameterSource, ShowMapper::mapToPojo);
     }
@@ -105,7 +128,7 @@ public class ShowRepositoryImpl implements ShowRepository {
         String query = """
             UPDATE shows SET
             price=:price, start_time=:startTime,
-             end_time=:endTime, movie_id=:movieId, hall_id=:hallId
+            end_time=:endTime, movie_id=:movieId, hall_id=:hallId
             WHERE id=:id
             """;
         SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
@@ -128,5 +151,42 @@ public class ShowRepositoryImpl implements ShowRepository {
             .addValue("id", showId);
 
         jdbcTemplate.update(query, mapSqlParameterSource);
+    }
+
+    @Override
+    public List<Show> getShowsWithPagination(int pageNumber, int limit) {
+        String query = """
+            SELECT shows.id, shows.price, shows.start_time, shows.end_time,
+            shows.movie_id, movies.title, movies.description, movies.duration,
+             movies.releaseDate, movies.country, movies.ageLimit, movies.genre, movies.image FROM shows
+            INNER JOIN movies ON shows.movie_id = movies.id ORDER BY shows.id
+            LIMIT :limit
+            OFFSET :offset
+            """;
+        SqlParameterSource parameters = new MapSqlParameterSource()
+            .addValue("limit", limit)
+            .addValue("offset", getOffset(pageNumber, limit));
+
+        return jdbcTemplate.query(query, parameters, ShowMapper::mapToPojo);
+    }
+
+    @Override
+    public int getShowsRowsCount() {
+        String query = "SELECT COUNT(*) FROM shows";
+        return jdbcTemplate.queryForObject(query, new MapSqlParameterSource(), Integer.class);
+    }
+
+    @Override
+    public int getShowsByHallRowsCount(int hallId) {
+        String query = "SELECT COUNT(*) FROM shows WHERE hall_id=:id";
+
+        SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
+            .addValue("id", hallId);
+
+        return jdbcTemplate.queryForObject(query, mapSqlParameterSource, Integer.class);
+    }
+
+    private static int getOffset(int pageNumber, int pageSize) {
+        return (pageNumber - 1) * pageSize;
     }
 }

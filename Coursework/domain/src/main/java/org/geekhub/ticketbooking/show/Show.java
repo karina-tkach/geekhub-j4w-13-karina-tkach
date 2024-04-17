@@ -2,12 +2,13 @@ package org.geekhub.ticketbooking.show;
 
 import org.geekhub.ticketbooking.movie.Movie;
 
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 
 public class Show {
     private int id;
-    private int price;
+    private BigDecimal price;
     private OffsetDateTime start;
     private OffsetDateTime end;
     private Movie movie;
@@ -15,14 +16,14 @@ public class Show {
 
     public Show() {
         this.id = -1;
-        this.price = 0;
+        this.price = BigDecimal.valueOf(0);
         this.start = null;
         this.end = null;
         this.movie = null;
         this.hallId = -1;
     }
 
-    public Show(int id, int price, OffsetDateTime start, OffsetDateTime end, Movie movie, int hallId) {
+    public Show(int id, BigDecimal price, OffsetDateTime start, OffsetDateTime end, Movie movie, int hallId) {
         this.id = id;
         this.price = price;
         this.start = start;
@@ -39,11 +40,11 @@ public class Show {
         this.id = id;
     }
 
-    public int getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
@@ -84,7 +85,7 @@ public class Show {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Show show = (Show) o;
-        return id == show.id && price == show.price &&
+        return id == show.id && Objects.equals(price, show.price) &&
             hallId == show.hallId && Objects.equals(start, show.start) &&
             Objects.equals(end, show.end) && Objects.equals(movie, show.movie);
     }

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Shows Management</title>
+    <link rel="stylesheet" href="css/home.css" th:href="@{/css/home.css}">
+    <style>
+        .error-message {
+            color: #fff;
+            padding: 10px;
+            border-radius: 3px;
+            text-align: center;
+            margin-bottom: 15px;
+            margin-top: 10px;
+            font-size: 20px;
+        }
+    </style>
+
+</head>
+<body>
+<header class="logoClass">
+    <a href="/main" class="img"><img th:src="@{/img/logo.png}" class="image-logo" alt="logo"></a>
+    <div class="links">
+        <a href="/admin/cities">Manage Cities</a>
+        <a href="/admin/cinemas">Manage Cinemas</a>
+        <a href="/admin/shows">Manage Shows</a>
+        <a href="/admin/movies">Manage Movies</a>
+        <a href="/admin/users">Manage Users</a>
+        <a class="active" href="/logout">Logout</a>
+    </div>
+</header>
+<div class="container">
+    <div style="display: block;">
+        <div th:if="${error != null}">
+            <div class="error-message"
+                 th:style="'background-color: #d93025;'">
+                <p>[[${error}]]</p>
+            </div>
+        </div>
+        <div class = "table">
+            <h1 style="font-size: 40px;">Shows List</h1>
+            <div class ="addUser">
+                <a th:href = "@{/admin/shows/showNewShowForm}"> Add Show </a>
+            </div>
+            <div th:if="${error == null}">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Movie</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Price</th>
+                        <th>Age Limit</th>
+                        <th>Genre</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="movie : ${listMovies}">
+                        <td><img th:src="@{'data:image/jpeg;base64,'+${movie.getImageDataBase64()}}" alt="Movie Image" width="50%" height="50%"/></td>
+                        <td th:text="${movie.title}"></td>
+                        <td th:text="${movie.description}"></td>
+                        <td th:text="${movie.durationInMins}"></td>
+                        <td th:text="${movie.releaseDate}"></td>
+                        <td th:text="${movie.country}"></td>
+                        <td th:text="${movie.ageLimit}"></td>
+                        <td th:text="${movie.genre}"></td>
+                        <td>
+                            <div>
+                                <a style="float: left;" th:href="@{/admin/movies/showFormForUpdate/{id}(id=${movie.id})}">Update</a>
+                                <a style="float: left;" th:href="@{/admin/movies/deleteMovie/{id}(id=${movie.id})}">Delete</a>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="paginationButtons" style="display:flex;
+    flex-direction: row; gap:4px; margin:25px 10px;">
+                    <div class="pgButton" id="prev" th:if="${page != 1}">
+                        <a th:href="@{/admin/movies(page=@{{page}(page=${page}-1)},pageSize=2)}">Previous</a>
+                    </div>
+                    <div></div>
+                    <div class="pgButton" id="next" th:if="${page != (totalPages)}">
+                        <a th:href="@{/admin/movies(page=@{{page}(page=${page}+1)},pageSize=2)}">Next</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

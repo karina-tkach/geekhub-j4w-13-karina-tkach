@@ -74,6 +74,18 @@ public class ShowService {
         }
     }
 
+    public List<Show> getShowsByHallWithPagination(int hallId, int pageNumber, int limit) {
+        try {
+            logger.info("Try to get shows by hall with pagination");
+            List<Show> shows = showRepository.getShowsByHallWithPagination(hallId, pageNumber, limit);
+            logger.info("Shows were fetched successfully with pagination");
+            return shows;
+        } catch (DataAccessException exception) {
+            logger.warn("Shows weren't fetched with pagination\n{}", exception.getMessage());
+            return Collections.emptyList();
+        }
+    }
+
     public Show addShow(Show show, int hallId) {
         try {
             logger.info("Try to add show");
@@ -138,6 +150,45 @@ public class ShowService {
         } catch (ShowValidationException | DataAccessException exception) {
             logger.warn("Show wasn't deleted: {}\n{}", showToDel, exception.getMessage());
             return false;
+        }
+    }
+
+    public List<Show> getShowsWithPagination(int pageNumber, int limit) {
+        try {
+            if (pageNumber < 0 || limit < 0) {
+                throw new IllegalArgumentException("Page number and limit must be greater than 0");
+            }
+            logger.info("Try to get shows with pagination");
+            List<Show> shows = showRepository.getShowsWithPagination(pageNumber, limit);
+            logger.info("Shows were fetched with pagination successfully");
+            return shows;
+        } catch (IllegalArgumentException | DataAccessException exception) {
+            logger.warn("Shows weren't fetched with pagination\n{}", exception.getMessage());
+            return Collections.emptyList();
+        }
+    }
+
+    public int getShowsRowsCount() {
+        try {
+            logger.info("Try to get shows rows count");
+            int count = showRepository.getShowsRowsCount();
+            logger.info("Shows rows count were fetched successfully");
+            return count;
+        } catch (DataAccessException | NullPointerException exception) {
+            logger.warn("Shows rows count weren't fetched\n{}", exception.getMessage());
+            return -1;
+        }
+    }
+
+    public int getShowsByHallRowsCount(int hallId) {
+        try {
+            logger.info("Try to get shows by hall rows count");
+            int count = showRepository.getShowsByHallRowsCount(hallId);
+            logger.info("Shows by hall rows count were fetched successfully");
+            return count;
+        } catch (DataAccessException | NullPointerException exception) {
+            logger.warn("Shows by hall rows count weren't fetched\n{}", exception.getMessage());
+            return -1;
         }
     }
 }
