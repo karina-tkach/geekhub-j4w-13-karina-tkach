@@ -16,7 +16,6 @@
             font-size: 20px;
         }
     </style>
-
 </head>
 <body>
 <header class="logoClass">
@@ -51,25 +50,23 @@
                         <th>Start Time</th>
                         <th>End Time</th>
                         <th>Price</th>
-                        <th>Age Limit</th>
-                        <th>Genre</th>
+                        <th>Seats</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="movie : ${listMovies}">
-                        <td><img th:src="@{'data:image/jpeg;base64,'+${movie.getImageDataBase64()}}" alt="Movie Image" width="50%" height="50%"/></td>
-                        <td th:text="${movie.title}"></td>
-                        <td th:text="${movie.description}"></td>
-                        <td th:text="${movie.durationInMins}"></td>
-                        <td th:text="${movie.releaseDate}"></td>
-                        <td th:text="${movie.country}"></td>
-                        <td th:text="${movie.ageLimit}"></td>
-                        <td th:text="${movie.genre}"></td>
+                    <tr th:each="show : ${listShows}">
+                        <td th:text="${show.movie.title}"></td>
+                        <td th:text="${show.start}"></td>
+                        <td th:text="${show.end}"></td>
+                        <td th:text="${show.price}"></td>
+                        <td>
+                            <a style="background-color: #0078e0" th:href="@{/admin/showseats/{showId}(showId=${show.id})}">View Seats</a>
+                        </td>
                         <td>
                             <div>
-                                <a style="float: left;" th:href="@{/admin/movies/showFormForUpdate/{id}(id=${movie.id})}">Update</a>
-                                <a style="float: left;" th:href="@{/admin/movies/deleteMovie/{id}(id=${movie.id})}">Delete</a>
+                                <!--a style="float: left;" th:href="@{/admin/movies/showFormForUpdate/{id}(id=${movie.id})}">Update</a>
+                                <a style="float: left;" th:href="@{/admin/movies/deleteMovie/{id}(id=${movie.id})}">Delete</a-->
                             </div>
                         </td>
                     </tr>
@@ -78,11 +75,11 @@
                 <div class="paginationButtons" style="display:flex;
     flex-direction: row; gap:4px; margin:25px 10px;">
                     <div class="pgButton" id="prev" th:if="${page != 1}">
-                        <a th:href="@{/admin/movies(page=@{{page}(page=${page}-1)},pageSize=2)}">Previous</a>
+                        <a th:href="@{/admin/shows(page=@{{page}(page=${page}-1)},pageSize=3)}">Previous</a>
                     </div>
                     <div></div>
                     <div class="pgButton" id="next" th:if="${page != (totalPages)}">
-                        <a th:href="@{/admin/movies(page=@{{page}(page=${page}+1)},pageSize=2)}">Next</a>
+                        <a th:href="@{/admin/shows(page=@{{page}(page=${page}+1)},pageSize=3)}">Next</a>
                     </div>
                 </div>
             </div>

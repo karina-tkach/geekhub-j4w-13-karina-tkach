@@ -1,20 +1,112 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <title>Dependent Drop-down List</title>
+    <meta charset="ISO-8859-1">
+    <title>Shows Management</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+    <style>
+        .error-message {
+            color: #fff;
+            padding: 10px;
+            border-radius: 3px;
+            text-align: center;
+            margin-bottom: 15px;
+            margin-top: 10px;
+        }
+        .characteristics {
+            font-size: 19px;
+            color: white;
+        }
+        #button {
+            margin-top:40px;
+        }
+        .form .field {
+            margin-top: 30px;
+        }
+    </style>
 </head>
+
 <body>
-<form>
-    <!-- First drop-down list for countries -->
-    <select id="cinemaSelect" onchange="populateHalls()">
-        <option th:each="cinema : ${cinemas}" th:value="${cinema.id}" th:text="${cinema.name}"></option>
-    </select>
+<header class="logoClass">
+    <a href="/main" class="img"><img th:src="@{/img/logo.png}" class="image-logo" alt="logo"></a>
+    <div class="links">
+        <a href="/admin/cities">Manage Cities</a>
+        <a href="/admin/cinemas">Manage Cinemas</a>
+        <a href="/admin/shows">Manage Shows</a>
+        <a href="/admin/movies">Manage Movies</a>
+        <a href="/admin/users">Manage Users</a>
+        <a class="active" href="/logout">Logout</a>
+    </div>
+</header>
 
-    <!-- Second drop-down list for cities -->
-    <select id="hallSelect">
-    </select>
-</form>
-
+<section class="container forms" style="height:110vh;">
+    <div class="form signup">
+        <div class="form-content">
+            <div th:if="${message != null}">
+                <div class="error-message"
+                     th:style="${message == 'You have successfully added show'} ?
+                  'background-color: green;' :'background-color: #d93025;'">
+                    <p>[[${message}]]</p>
+                </div>
+            </div>
+            <header class="header">Save Show</header>
+            <form th:action="@{saveShow}" th:object="${show}" method="POST" class="subform">
+                <div class="full-field price-field">
+                    <div class="field input-field">
+                        <label class="characteristics">Price</label>
+                        <input th:field="*{price}" type="number" name = "price" placeholder="Price" class="input price" id="price" required>
+                    </div>
+                </div>
+                <div class="full-field movie">
+                    <div class="field input-field">
+                        <label class="characteristics">Movie</label>
+                        <select name="movie" id="movie" class="movie" th:field="*{movie.title}" required>
+                            <option th:each="movie:${movies}"
+                                    th:value="${movie.title}"
+                                    th:text="${movie.title}"></option>
+                        </select><br>
+                    </div>
+                </div>
+                <div class="full-field start">
+                    <div class="field input-field">
+                        <label class="characteristics">Start time</label>
+                        <input type="datetime-local" th:field="*{formattedStartDate}" name="date" required>
+                    </div>
+                </div>
+                <div class="full-field end">
+                    <div class="field input-field">
+                        <label class="characteristics">End time</label>
+                        <input type="datetime-local" th:field="*{formattedEndDate}" name="date" required>
+                    </div>
+                </div>
+                <div class="full-field cinema">
+                    <div class="field input-field">
+                        <label class="characteristics">Cinema</label>
+                        <select id="cinemaSelect" onchange="populateHalls()" required>
+                            <option value='0' disabled selected>Select Cinema</option>
+                            <option th:each="cinema : ${cinemas}" th:value="${cinema.id}" th:text="${cinema.name}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="full-field hall">
+                    <div class="field input-field">
+                        <label class="characteristics">Hall</label>
+                        <select id="hallSelect" th:field="*{hallId}" required>
+                            <option value='0' disabled selected>Select Hall</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="field button-field input-field button" id="button">
+                    <button type="submit">Save</button>
+                </div>
+                <div class="form-link">
+                    <span> <a href="/admin/shows" class="link login-link">Back to Shows List</a></span>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
 <script th:inline="javascript">
     /*<![CDATA[*/
     var hallsByCinema = /*[[${hallsByCinema}]]*/ {};
@@ -23,9 +115,9 @@
         var cinemaId = document.getElementById("cinemaSelect").value;
         var halls = hallsByCinema[cinemaId];
         var hallSelect = document.getElementById("hallSelect");
-        // Clear existing options
-        hallSelect.innerHTML = "";
-        // Populate with cities based on selected country
+
+        hallSelect.innerHTML = "<option value='0' disabled selected>Select Hall</option>";
+
         halls.forEach(function(hall) {
             var option = document.createElement("option");
             option.value = hall.id;

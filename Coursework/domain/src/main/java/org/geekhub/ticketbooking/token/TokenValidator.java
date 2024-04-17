@@ -1,4 +1,4 @@
-package org.geekhub.ticketbooking.forgotPasswordToken;
+package org.geekhub.ticketbooking.token;
 
 import org.geekhub.ticketbooking.exception.TokenValidationException;
 import org.geekhub.ticketbooking.user.User;

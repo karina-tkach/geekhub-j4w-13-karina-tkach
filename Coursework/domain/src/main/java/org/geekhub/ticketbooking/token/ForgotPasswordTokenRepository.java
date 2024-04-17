@@ -1,4 +1,4 @@
-package org.geekhub.ticketbooking.forgotPasswordToken;
+package org.geekhub.ticketbooking.token;
 
 public interface ForgotPasswordTokenRepository {
     int addToken(ForgotPasswordToken token, int userId);

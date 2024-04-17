@@ -45,30 +45,6 @@ public class SeatService {
         }
     }
 
-    public Seat getSeatByHallAndNumber(int hallId, int number) {
-        try {
-            logger.info("Try to get seat by hall and number");
-            Seat seat = seatRepository.getSeatByHallAndNumber(hallId, number);
-            logger.info("Seat was fetched successfully");
-            return seat;
-        } catch (DataAccessException exception) {
-            logger.warn("Seat wasn't fetched\n{}", exception.getMessage());
-            return null;
-        }
-    }
-
-    public List<Seat> getSeatsByHallAndStatus(int hallId, boolean isBooked) {
-        try {
-            logger.info("Try to get seats by hall and status");
-            List<Seat> seats = seatRepository.getSeatsByHallAndStatus(hallId, isBooked);
-            logger.info("Seats were fetched successfully");
-            return seats;
-        } catch (DataAccessException exception) {
-            logger.warn("Seats weren't fetched\n{}", exception.getMessage());
-            return Collections.emptyList();
-        }
-    }
-
     public Seat addSeat(Seat seat, int hallId) {
         try {
             logger.info("Try to add seat");
@@ -83,24 +59,6 @@ public class SeatService {
             return getSeatById(id);
         } catch (SeatValidationException | DataAccessException exception) {
             logger.warn("Seat wasn't added: {}\n{}", seat, exception.getMessage());
-            return null;
-        }
-    }
-
-    public Seat updateSeatById(Seat seat, int hallId, int seatId) {
-        Seat seatToUpdate = getSeatById(seatId);
-        try {
-            logger.info("Try to update seat");
-            if (seatToUpdate == null) {
-                throw new SeatValidationException("Seat with id '" + seatId + "' not found");
-            }
-            seatValidator.validate(seat);
-
-            seatRepository.updateSeatById(seat, hallId, seatId);
-            logger.info("Seat was updated:\n{}", seat);
-            return getSeatById(seatId);
-        } catch (SeatValidationException | DataAccessException exception) {
-            logger.warn("Seat wasn't updated: {}\n{}", seat, exception.getMessage());
             return null;
         }
     }

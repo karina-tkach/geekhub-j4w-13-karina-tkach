@@ -3,6 +3,10 @@ package org.geekhub.ticketbooking.show;
 import org.geekhub.ticketbooking.exception.ShowValidationException;
 import org.geekhub.ticketbooking.movie.Movie;
 import org.geekhub.ticketbooking.movie.MovieService;
+import org.geekhub.ticketbooking.seat.Seat;
+import org.geekhub.ticketbooking.seat.SeatService;
+import org.geekhub.ticketbooking.show_seat.ShowSeat;
+import org.geekhub.ticketbooking.show_seat.ShowSeatService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
@@ -12,24 +16,37 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
-@SuppressWarnings("java:S1192")
+@SuppressWarnings({"java:S1192", "java:S3516"})
 public class ShowService {
     private final ShowRepository showRepository;
     private final ShowValidator showValidator;
     private final MovieService movieService;
+    private final ShowSeatService showSeatService;
+    private final SeatService seatService;
 
     private final Logger logger = LoggerFactory.getLogger(ShowService.class);
 
-    public ShowService(ShowRepository showRepository, ShowValidator showValidator, MovieService movieService) {
+    public ShowService(ShowRepository showRepository, ShowValidator showValidator,
+                       MovieService movieService, ShowSeatService showSeatService,
+                       SeatService seatService) {
         this.showRepository = showRepository;
         this.showValidator = showValidator;
         this.movieService = movieService;
+        this.showSeatService = showSeatService;
+        this.seatService = seatService;
     }
 
     public List<Show> getAllShows() {
         try {
             logger.info("Try to get shows");
             List<Show> shows = showRepository.getAllShows();
+
+            if (shows != null) {
+                for (Show show : shows) {
+                    setShowSeats(show);
+                }
+            }
+
             logger.info("Shows were fetched successfully");
             return shows;
         } catch (DataAccessException exception) {
@@ -42,6 +59,11 @@ public class ShowService {
         try {
             logger.info("Try to get show by id");
             Show show = showRepository.getShowById(showId);
+
+            if (show != null) {
+                setShowSeats(show);
+            }
+
             logger.info("Show was fetched successfully");
             return show;
         } catch (DataAccessException exception) {
@@ -50,26 +72,21 @@ public class ShowService {
         }
     }
 
-    public List<Show> getShowsByMovie(int movieId) {
-        try {
-            logger.info("Try to get shows by movie");
-            List<Show> shows = showRepository.getShowsByMovie(movieId);
-            logger.info("Shows were fetched successfully");
-            return shows;
-        } catch (DataAccessException exception) {
-            logger.warn("Shows weren't fetched\n{}", exception.getMessage());
-            return Collections.emptyList();
-        }
-    }
-
     public List<Show> getShowsByHall(int hallId) {
         try {
             logger.info("Try to get shows by hall");
             List<Show> shows = showRepository.getShowsByHall(hallId);
-            logger.info("Shows were fetched successfully");
+
+            if (shows != null) {
+                for (Show show : shows) {
+                    setShowSeats(show);
+                }
+            }
+
+            logger.info("Shows by hall were fetched successfully");
             return shows;
         } catch (DataAccessException exception) {
-            logger.warn("Shows weren't fetched\n{}", exception.getMessage());
+            logger.warn("Shows by hall weren't fetched\n{}", exception.getMessage());
             return Collections.emptyList();
         }
     }
@@ -78,10 +95,17 @@ public class ShowService {
         try {
             logger.info("Try to get shows by hall with pagination");
             List<Show> shows = showRepository.getShowsByHallWithPagination(hallId, pageNumber, limit);
-            logger.info("Shows were fetched successfully with pagination");
+
+            if (shows != null) {
+                for (Show show : shows) {
+                    setShowSeats(show);
+                }
+            }
+
+            logger.info("Shows by hall were fetched successfully with pagination");
             return shows;
         } catch (DataAccessException exception) {
-            logger.warn("Shows weren't fetched with pagination\n{}", exception.getMessage());
+            logger.warn("Shows by hall weren't fetched with pagination\n{}", exception.getMessage());
             return Collections.emptyList();
         }
     }
@@ -89,19 +113,23 @@ public class ShowService {
     public Show addShow(Show show, int hallId) {
         try {
             logger.info("Try to add show");
-            showValidator.validate(show);
-
             Movie movie = movieService.getMovieByTitle(show.getMovie().getTitle());
 
             if (movie == null) {
                 throw new ShowValidationException("Show movie was incorrect");
             }
+
+            show.setMovie(movie);
+            showValidator.validate(show);
+
             int movieId = movie.getId();
 
             int id = showRepository.addShow(show, movieId, hallId);
             if (id == -1) {
                 throw new ShowValidationException("Unable to retrieve the generated key");
             }
+
+            addShowSeats(id, hallId);
 
             logger.info("Show was added:\n{}", show);
             return getShowById(id);
@@ -160,6 +188,13 @@ public class ShowService {
             }
             logger.info("Try to get shows with pagination");
             List<Show> shows = showRepository.getShowsWithPagination(pageNumber, limit);
+
+            if (shows != null) {
+                for (Show show : shows) {
+                    setShowSeats(show);
+                }
+            }
+
             logger.info("Shows were fetched with pagination successfully");
             return shows;
         } catch (IllegalArgumentException | DataAccessException exception) {
@@ -189,6 +224,23 @@ public class ShowService {
         } catch (DataAccessException | NullPointerException exception) {
             logger.warn("Shows by hall rows count weren't fetched\n{}", exception.getMessage());
             return -1;
+        }
+    }
+
+    private void setShowSeats(Show show) {
+        List<ShowSeat> seats = showSeatService.getSeatsByHallAndShow(show.getHallId(), show.getId());
+        show.setSeats(seats);
+    }
+
+    private void addShowSeats(int showId, int hallId) {
+        List<Seat> seats = seatService.getSeatsByHall(hallId);
+
+        for (Seat seat : seats) {
+            ShowSeat showSeat = new ShowSeat();
+            showSeat.setNumber(seat.getNumber());
+            showSeat.setHallId(hallId);
+            showSeat.setShowId(showId);
+            showSeatService.addSeat(showSeat, hallId, showId);
         }
     }
 }

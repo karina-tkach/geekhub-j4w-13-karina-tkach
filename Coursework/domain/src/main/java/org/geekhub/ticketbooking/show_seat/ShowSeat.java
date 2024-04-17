@@ -1,22 +1,28 @@
-package org.geekhub.ticketbooking.seat;
+package org.geekhub.ticketbooking.show_seat;
 
 import java.util.Objects;
 
-public class Seat {
+public class ShowSeat {
     private int id;
     private int number;
+    private boolean booked;
     private int hallId;
+    private int showId;
 
-    public Seat() {
+    public ShowSeat() {
         this.id = -1;
         this.number = 0;
+        this.booked = false;
         this.hallId = -1;
+        this.showId = -1;
     }
 
-    public Seat(int id, int number, int hallId) {
+    public ShowSeat(int id, int number, boolean booked, int hallId, int showId) {
         this.id = id;
         this.number = number;
+        this.booked = booked;
         this.hallId = hallId;
+        this.showId = showId;
     }
 
     public int getId() {
@@ -35,6 +41,14 @@ public class Seat {
         this.number = number;
     }
 
+    public boolean isBooked() {
+        return booked;
+    }
+
+    public void setBooked(boolean booked) {
+        this.booked = booked;
+    }
+
     public int getHallId() {
         return hallId;
     }
@@ -43,25 +57,36 @@ public class Seat {
         this.hallId = hallId;
     }
 
+    public int getShowId() {
+        return showId;
+    }
+
+    public void setShowId(int showId) {
+        this.showId = showId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Seat seat = (Seat) o;
-        return id == seat.id && number == seat.number && hallId == seat.hallId;
+        ShowSeat showSeat = (ShowSeat) o;
+        return id == showSeat.id && number == showSeat.number &&
+            booked == showSeat.booked && hallId == showSeat.hallId && showId == showSeat.showId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, number, hallId);
+        return Objects.hash(id, number, booked, hallId, showId);
     }
 
     @Override
     public String toString() {
-        return "Seat{" +
+        return "ShowSeat{" +
             "id=" + id +
             ", number=" + number +
+            ", booked=" + booked +
             ", hallId=" + hallId +
+            ", showId=" + showId +
             '}';
     }
 }

@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="ISO-8859-1">
-    <title>Seats Management</title>
+    <title>Shows Management</title>
     <link rel="stylesheet" href="css/home.css" th:href="@{/css/home.css}">
     <style>
         .error-message {
@@ -16,7 +16,6 @@
             font-size: 20px;
         }
     </style>
-
 </head>
 <body>
 <header class="logoClass">
@@ -38,35 +37,47 @@
                 <p>[[${error}]]</p>
             </div>
         </div>
-        <div class = "table" th:if="${error == null}">
-            <h1 style="font-size: 40px;">Seats List</h1>
-            <div>
+        <div class = "table">
+            <h1 style="font-size: 40px; margin-bottom:10px;">Shows List For Hall</h1>
+            <div th:if="${error == null}">
                 <table>
                     <thead>
                     <tr>
-                        <th>Number</th>
-                        <th>Hall Id</th>
+                        <th>Movie</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Price</th>
+                        <th>Seats</th>
+                        <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="seat : ${listSeats}">
-                        <td th:text="${seat.number}"></td>
-                        <td th:text="${seat.hallId}"></td>
+                    <tr th:each="show : ${listShows}">
+                        <td th:text="${show.movie.title}"></td>
+                        <td th:text="${show.start}"></td>
+                        <td th:text="${show.end}"></td>
+                        <td th:text="${show.price}"></td>
+                        <td>
+                            <a style="background-color: #0078e0" th:href="@{/admin/showseats/{showId}(showId=${show.id})}">View Seats</a>
+                        </td>
+                        <td>
+                            <div>
+                                <!--a style="float: left;" th:href="@{/admin/movies/showFormForUpdate/{id}(id=${movie.id})}">Update</a>
+                                <a style="float: left;" th:href="@{/admin/movies/deleteMovie/{id}(id=${movie.id})}">Delete</a-->
+                            </div>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
                 <div class="paginationButtons" style="display:flex;
     flex-direction: row; gap:4px; margin:25px 10px;">
                     <div class="pgButton" id="prev" th:if="${page != 1}">
-                        <a th:href="@{/admin/seats/{hallId}(hallId = ${hallId}, page=@{{page}(page=${page}-1)},pageSize=6)}">Previous</a>
+                        <a th:href="@{/admin/shows/{hallId}(hallId = ${hallId}, page=@{{page}(page=${page}-1)},pageSize=3)}">Previous</a>
                     </div>
                     <div></div>
                     <div class="pgButton" id="next" th:if="${page != (totalPages)}">
-                        <a th:href="@{/admin/seats/{hallId}(hallId = ${hallId}, page=@{{page}(page=${page}+1)},pageSize=6)}">Next</a>
+                        <a th:href="@{/admin/shows/{hallId}(hallId = ${hallId}, page=@{{page}(page=${page}+1)},pageSize=3)}">Next</a>
                     </div>
-                </div>
-                <div class="form-link">
-                    <span> <a href="/admin/cinemas" class="link login-link">Back to Cinemas List</a></span>
                 </div>
             </div>
         </div>

@@ -11,8 +11,6 @@ public class SeatMapper {
     public static Seat mapToPojo(ResultSet rs, int ignoredRowNum) throws SQLException {
         return new Seat(rs.getInt("id"),
             rs.getInt("number"),
-            rs.getBoolean("is_booked"),
-            rs.getInt("hall_id"),
-            rs.getInt("show_id"));
+            rs.getInt("hall_id"));
     }
 }

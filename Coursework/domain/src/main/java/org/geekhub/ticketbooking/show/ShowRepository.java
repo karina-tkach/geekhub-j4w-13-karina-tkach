@@ -7,8 +7,6 @@ public interface ShowRepository {
 
     Show getShowById(int showId);
 
-    List<Show> getShowsByMovie(int movieId);
-
     List<Show> getShowsByHall(int hallId);
 
     List<Show> getShowsByHallWithPagination(int hallId, int pageNumber, int limit);

@@ -1,4 +1,4 @@
-package org.geekhub.ticketbooking.forgotPasswordToken;
+package org.geekhub.ticketbooking.token;
 
 import java.io.UnsupportedEncodingException;
 import java.time.OffsetDateTime;

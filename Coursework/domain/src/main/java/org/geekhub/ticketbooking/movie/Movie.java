@@ -166,7 +166,6 @@ public class Movie {
             ", country='" + country + '\'' +
             ", ageLimit=" + ageLimit +
             ", genre=" + genre +
-            ", image=" + Arrays.toString(image) +
             '}';
     }
 }

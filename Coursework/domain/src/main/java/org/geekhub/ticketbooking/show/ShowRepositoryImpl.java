@@ -49,21 +49,6 @@ public class ShowRepositoryImpl implements ShowRepository {
     }
 
     @Override
-    public List<Show> getShowsByMovie(int movieId) {
-        String query = """
-            SELECT shows.id, shows.price, shows.start_time, shows.end_time,
-            shows.movie_id, movies.title, movies.description, movies.duration,
-             movies.releaseDate, movies.country, movies.ageLimit, movies.genre,
-             movies.image, shows.hall_id FROM shows
-            INNER JOIN movies ON shows.movie_id = movies.id WHERE shows.movie_id=:id ORDER BY shows.id
-            """;
-        SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
-            .addValue("id", movieId);
-
-        return jdbcTemplate.query(query, mapSqlParameterSource, ShowMapper::mapToPojo);
-    }
-
-    @Override
     public List<Show> getShowsByHall(int hallId) {
         String query = """
             SELECT shows.id, shows.price, shows.start_time, shows.end_time,
@@ -158,7 +143,8 @@ public class ShowRepositoryImpl implements ShowRepository {
         String query = """
             SELECT shows.id, shows.price, shows.start_time, shows.end_time,
             shows.movie_id, movies.title, movies.description, movies.duration,
-             movies.releaseDate, movies.country, movies.ageLimit, movies.genre, movies.image FROM shows
+             movies.releaseDate, movies.country, movies.ageLimit, movies.genre, movies.image,
+             shows.hall_id FROM shows
             INNER JOIN movies ON shows.movie_id = movies.id ORDER BY shows.id
             LIMIT :limit
             OFFSET :offset

@@ -1,21 +1,16 @@
 package org.geekhub.ticketbooking.show;
 
-import org.geekhub.ticketbooking.exception.MovieValidationException;
 import org.geekhub.ticketbooking.exception.ShowValidationException;
 import org.geekhub.ticketbooking.movie.Movie;
-import org.geekhub.ticketbooking.movie.MovieValidator;
+import org.geekhub.ticketbooking.show_seat.ShowSeat;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Component
 public class ShowValidator {
-    private final MovieValidator movieValidator;
-
-    public ShowValidator(MovieValidator movieValidator) {
-        this.movieValidator = movieValidator;
-    }
 
     public void validate(Show show) {
         if (show == null) {
@@ -34,10 +29,8 @@ public class ShowValidator {
     }
 
     private void validateMovie(Movie movie) {
-        try {
-            movieValidator.validate(movie);
-        } catch (MovieValidationException exception) {
-            throw new ShowValidationException(exception.getMessage());
+        if(movie == null) {
+            throw new ShowValidationException("Movie was null");
         }
     }
 
@@ -46,4 +39,5 @@ public class ShowValidator {
             throw new ShowValidationException("Show time was incorrect");
         }
     }
+
 }

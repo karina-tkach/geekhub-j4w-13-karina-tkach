@@ -1,4 +1,4 @@
-package org.geekhub.ticketbooking.seat;
+package org.geekhub.ticketbooking.show_seat;
 
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -11,51 +11,54 @@ import java.util.List;
 
 @Repository
 @SuppressWarnings({"java:S1192", "java:S2259"})
-public class SeatRepositoryImpl implements SeatRepository {
+public class ShowSeatRepositoryImpl implements ShowSeatRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
-    public SeatRepositoryImpl(NamedParameterJdbcTemplate jdbcTemplate) {
+    public ShowSeatRepositoryImpl(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
-    public List<Seat> getSeatsByHall(int hallId) {
+    public List<ShowSeat> getSeatsByHallAndShow(int hallId, int showId) {
         String query = """
-            SELECT * FROM seats WHERE hall_id=:id ORDER BY id
+            SELECT * FROM show_seats WHERE hall_id=:hallId AND show_id=:showId ORDER BY id
             """;
 
         SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
-            .addValue("id", hallId);
+            .addValue("hallId", hallId)
+            .addValue("showId", showId);
 
-        return jdbcTemplate.query(query, mapSqlParameterSource, SeatMapper::mapToPojo);
+        return jdbcTemplate.query(query, mapSqlParameterSource, ShowSeatMapper::mapToPojo);
     }
 
     @Override
-    public Seat getSeatById(int seatId) {
+    public ShowSeat getSeatById(int seatId) {
         String query = """
-            SELECT * FROM seats WHERE id=:id
+            SELECT * FROM show_seats WHERE id=:id
             """;
 
         SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
             .addValue("id", seatId);
 
-        return jdbcTemplate.query(query, mapSqlParameterSource, SeatMapper::mapToPojo)
+        return jdbcTemplate.query(query, mapSqlParameterSource, ShowSeatMapper::mapToPojo)
             .stream()
             .findFirst()
             .orElse(null);
     }
 
     @Override
-    public int addSeat(Seat seat, int hallId) {
+    public int addSeat(ShowSeat seat, int hallId, int showId) {
         String query = """
-            INSERT INTO seats (number, hall_id)
-            VALUES (:number, :hallId)
+            INSERT INTO show_seats (number, is_booked, hall_id, show_id)
+            VALUES (:number, :isBooked, :hallId, :showId)
             """;
 
         KeyHolder generatedKeyHolder = new GeneratedKeyHolder();
         SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
             .addValue("number", seat.getNumber())
-            .addValue("hallId", hallId);
+            .addValue("isBooked", seat.isBooked())
+            .addValue("hallId", hallId)
+            .addValue("showId", showId);
 
         jdbcTemplate.update(query, mapSqlParameterSource, generatedKeyHolder);
 
@@ -70,7 +73,7 @@ public class SeatRepositoryImpl implements SeatRepository {
     @Override
     public void deleteSeatById(int seatId) {
         String query = """
-            DELETE FROM seats WHERE id=:id
+            DELETE FROM show_seats WHERE id=:id
             """;
         SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
             .addValue("id", seatId);
@@ -79,28 +82,45 @@ public class SeatRepositoryImpl implements SeatRepository {
     }
 
     @Override
-    public List<Seat> getSeatsByHallWithPagination(int hallId, int pageNumber, int limit) {
+    public void updateSeatById(ShowSeat seat, int seatId, int hallId, int showId) {
         String query = """
-            SELECT * FROM seats WHERE hall_id=:id
-            ORDER BY id
+            UPDATE show_seats SET
+            number=:number, is_booked=:isBooked, hall_id=:hallId, show_id=:showId WHERE id=:id
+            """;
+        SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
+            .addValue("number", seat.getNumber())
+            .addValue("isBooked", seat.isBooked())
+            .addValue("hallId", hallId)
+            .addValue("showId", showId)
+            .addValue("id", seatId);
+
+        jdbcTemplate.update(query, mapSqlParameterSource);
+    }
+
+    @Override
+    public List<ShowSeat> getSeatsByHallAndShowWithPagination(int hallId, int showId, int pageNumber, int limit) {
+        String query = """
+            SELECT * FROM show_seats WHERE hall_id=:hallId AND show_id=:showId ORDER BY id
             LIMIT :limit
             OFFSET :offset
             """;
 
         SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
-            .addValue("id", hallId)
+            .addValue("hallId", hallId)
+            .addValue("showId", showId)
             .addValue("limit", limit)
             .addValue("offset", getOffset(pageNumber, limit));
 
-        return jdbcTemplate.query(query, mapSqlParameterSource, SeatMapper::mapToPojo);
+        return jdbcTemplate.query(query, mapSqlParameterSource, ShowSeatMapper::mapToPojo);
     }
 
     @Override
-    public int getSeatsByHallRowsCount(int hallId) {
-        String query = "SELECT COUNT(*) FROM seats WHERE hall_id=:id";
+    public int getSeatsByHallAndShowRowsCount(int hallId, int showId) {
+        String query = "SELECT COUNT(*) FROM show_seats WHERE hall_id=:hallId AND show_id=:showId";
 
         SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
-            .addValue("id", hallId);
+            .addValue("hallId", hallId)
+            .addValue("showId", showId);
 
         return jdbcTemplate.queryForObject(query, mapSqlParameterSource, Integer.class);
     }

@@ -1,4 +1,4 @@
-package org.geekhub.ticketbooking.forgotPasswordToken;
+package org.geekhub.ticketbooking.token;
 
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;

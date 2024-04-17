@@ -5,9 +5,9 @@ import jakarta.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
 import java.util.Objects;
 
-import org.geekhub.ticketbooking.forgotPasswordToken.ForgotPasswordToken;
+import org.geekhub.ticketbooking.token.ForgotPasswordToken;
 import org.geekhub.ticketbooking.user.User;
-import org.geekhub.ticketbooking.forgotPasswordToken.ForgotPasswordTokenService;
+import org.geekhub.ticketbooking.token.ForgotPasswordTokenService;
 import org.geekhub.ticketbooking.user.UserService;
 import org.springframework.data.repository.query.Param;
 import org.springframework.mail.MailException;
