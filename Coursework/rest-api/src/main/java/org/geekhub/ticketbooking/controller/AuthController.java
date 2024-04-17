@@ -1,10 +1,10 @@
 package org.geekhub.ticketbooking.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.geekhub.ticketbooking.model.Role;
-import org.geekhub.ticketbooking.model.User;
+import org.geekhub.ticketbooking.user.Role;
+import org.geekhub.ticketbooking.user.User;
 import org.geekhub.ticketbooking.security.SecurityUserDetails;
-import org.geekhub.ticketbooking.service.UserService;
+import org.geekhub.ticketbooking.user.UserService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

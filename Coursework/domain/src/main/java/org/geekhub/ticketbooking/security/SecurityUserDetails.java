@@ -1,7 +1,7 @@
 package org.geekhub.ticketbooking.security;
 
 import org.springframework.security.core.userdetails.UserDetails;
-import org.geekhub.ticketbooking.model.User;
+import org.geekhub.ticketbooking.user.User;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.ArrayList;

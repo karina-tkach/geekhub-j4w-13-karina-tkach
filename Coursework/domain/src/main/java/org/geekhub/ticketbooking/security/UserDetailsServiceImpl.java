@@ -1,7 +1,7 @@
 package org.geekhub.ticketbooking.security;
 
-import org.geekhub.ticketbooking.model.User;
-import org.geekhub.ticketbooking.repository.interfaces.UserRepository;
+import org.geekhub.ticketbooking.user.User;
+import org.geekhub.ticketbooking.user.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

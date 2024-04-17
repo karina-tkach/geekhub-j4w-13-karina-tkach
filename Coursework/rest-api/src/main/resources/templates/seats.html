@@ -53,7 +53,9 @@
                     <tr th:each="seat : ${listSeats}">
                         <td th:text="${seat.number}"></td>
                         <td th:style="${seat.isBooked() == true} ?
-                  'background-color: green;' :'background-color: #d93025;'" th:text="${seat.isBooked()}"></td>
+                   'background-color: #d93025;' : 'background-color: green;'"
+                            th:text="${seat.isBooked() == true} ?
+                   'Booked' : 'Free'"></td>
                         <td><a th:href="@{/admin/seats/{hallId}/showFormForUpdate/{id}(hallId=${hallId}, id=${seat.id})}">Update</a>
                         </td>
                     </tr>

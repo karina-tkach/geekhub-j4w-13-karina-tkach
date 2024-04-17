@@ -93,7 +93,7 @@
                         <label class="characteristics">Genre</label>
                         <select name="genre" id="genre" class="genre" th:field="*{genre}" required>
                             <option th:each="genre:
-${T(org.geekhub.ticketbooking.model.Genre).values()}"
+${T(org.geekhub.ticketbooking.movie.Genre).values()}"
                                     th:value="${genre}"
                                     th:text="${genre.displayValue}"></option>
                         </select><br>

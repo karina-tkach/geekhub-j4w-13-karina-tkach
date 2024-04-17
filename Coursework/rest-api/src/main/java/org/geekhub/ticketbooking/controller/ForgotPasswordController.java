@@ -5,10 +5,10 @@ import jakarta.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
 import java.util.Objects;
 
-import org.geekhub.ticketbooking.model.ForgotPasswordToken;
-import org.geekhub.ticketbooking.model.User;
-import org.geekhub.ticketbooking.service.ForgotPasswordTokenService;
-import org.geekhub.ticketbooking.service.UserService;
+import org.geekhub.ticketbooking.forgotPasswordToken.ForgotPasswordToken;
+import org.geekhub.ticketbooking.user.User;
+import org.geekhub.ticketbooking.forgotPasswordToken.ForgotPasswordTokenService;
+import org.geekhub.ticketbooking.user.UserService;
 import org.springframework.data.repository.query.Param;
 import org.springframework.mail.MailException;
 import org.springframework.stereotype.Controller;

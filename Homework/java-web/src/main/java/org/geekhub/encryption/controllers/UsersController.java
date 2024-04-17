@@ -13,7 +13,7 @@ public class UsersController {
         this.userService = userService;
     }
 
-    @Operation(description = "Get all users")
+    @Operation(description = "Get all user")
     @GetMapping(path="/users")
     public String users(Model model) {
         model.addAttribute("users", userService.getAllUsers());
