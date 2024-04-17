@@ -18,4 +18,8 @@ public interface SeatRepository {
     void updateSeatById(Seat seat, int hallId, int seatId);
 
     void deleteSeatById(int seatId);
+
+    List<Seat> getSeatsByHallWithPagination(int hallId, int pageNumber, int limit);
+
+    int getSeatsByHallRowsCount(int hallId);
 }

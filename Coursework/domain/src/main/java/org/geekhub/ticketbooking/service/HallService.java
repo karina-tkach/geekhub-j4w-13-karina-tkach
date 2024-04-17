@@ -66,6 +66,7 @@ public class HallService {
         try {
             logger.info("Try to add hall");
             hallValidator.validate(hall);
+
             hall.setSeats();
 
             int id = hallRepository.addHall(hall, cinemaId);
@@ -91,21 +92,24 @@ public class HallService {
             if (hallToUpdate == null) {
                 throw new HallValidationException("Hall with id '" + hallId + "' not found");
             }
+
+
             hallValidator.validate(hall);
             hall.setSeats();
 
-            for (Seat seat : hallToUpdate.getSeats()) {
-                seatService.deleteSeatById(seat.getId());
-            }
-            for (Show show : hallToUpdate.getShows()) {
-                showService.deleteShowById(show.getId());
-            }
-
             hallRepository.updateHallById(hall, cinemaId, hallId);
 
-            setHallSeats(hall, hallId);
-            setHallShows(hall, hallId);
+            if (!(hallToUpdate.getRows() == hall.getRows() && hallToUpdate.getColumns() == hall.getColumns())) {
+                for (Seat seat : hallToUpdate.getSeats()) {
+                    seatService.deleteSeatById(seat.getId());
+                }
+                for (Show show : hallToUpdate.getShows()) {
+                    showService.deleteShowById(show.getId());
+                }
 
+                setHallSeats(hall, hallId);
+                setHallShows(hall, hallId);
+            }
             logger.info("Hall was updated:\n{}", hall);
             return getHallById(hallId);
         } catch (HallValidationException | DataAccessException exception) {
@@ -121,6 +125,12 @@ public class HallService {
             if (hallToDel == null) {
                 throw new HallValidationException("Hall with id '" + hallId + "' not found");
             }
+
+            List<Hall> halls = this.getHallsByCinema(hallToDel.getCinemaId());
+            if (halls.size() == 1) {
+                throw new HallValidationException("Can't delete hall with id '" + hallId + "' as it is last");
+            }
+
             hallRepository.deleteHallById(hallId);
 
             logger.info("Hall was deleted:\n{}", hallToDel);

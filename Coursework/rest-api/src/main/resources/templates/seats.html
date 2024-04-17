@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="ISO-8859-1">
-    <title>Halls Management</title>
+    <title>Seats Management</title>
     <link rel="stylesheet" href="css/home.css" th:href="@{/css/home.css}">
     <style>
         .error-message {
@@ -39,35 +39,22 @@
             </div>
         </div>
         <div class = "table" th:if="${error == null}">
-            <h1 style="font-size: 40px;">Halls List</h1>
-            <div class ="addUser">
-                <a th:href = "@{{cinemaId}/showNewHallForm(cinemaId=${cinemaId})}"> Add Hall </a>
-            </div>
+            <h1 style="font-size: 40px;">Seats List</h1>
             <div>
                 <table>
                     <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Rows</th>
-                        <th>Columns</th>
-                        <th>Seats</th>
-                        <th>Shows</th>
+                        <th>Number</th>
+                        <th>Is Booked</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="hall : ${listHalls}">
-                        <td th:text="${hall.name}"></td>
-                        <td th:text="${hall.rows}"></td>
-                        <td th:text="${hall.columns}"></td>
-                        <td>
-                            <a style="background-color: #0078e0" th:href="@{/admin/seats/{hallId}(hallId=${hall.id})}">View Seats</a>
-                        </td>
-                        <td>
-                            <a style="background-color: #0078e0" th:href="@{/admin/shows/{hallId}(hallId=${hall.id})}">View Shows</a>
-                        </td>
-                        <td><a th:href="@{/admin/halls/{cinemaId}/showFormForUpdate/{id}(cinemaId=${cinemaId}, id=${hall.id})}">Update</a>
-                            <a th:href="@{/admin/halls/{cinemaId}/deleteHall/{id}(cinemaId=${cinemaId}, id=${hall.id})}">Delete</a>
+                    <tr th:each="seat : ${listSeats}">
+                        <td th:text="${seat.number}"></td>
+                        <td th:style="${seat.isBooked() == true} ?
+                  'background-color: green;' :'background-color: #d93025;'" th:text="${seat.isBooked()}"></td>
+                        <td><a th:href="@{/admin/seats/{hallId}/showFormForUpdate/{id}(hallId=${hallId}, id=${seat.id})}">Update</a>
                         </td>
                     </tr>
                     </tbody>
@@ -75,11 +62,11 @@
                 <div class="paginationButtons" style="display:flex;
     flex-direction: row; gap:4px; margin:25px 10px;">
                     <div class="pgButton" id="prev" th:if="${page != 1}">
-                        <a th:href="@{/admin/halls/{cinemaId}(cinemaId = ${cinemaId}, page=@{{page}(page=${page}-1)},pageSize=3)}">Previous</a>
+                        <a th:href="@{/admin/seats/{hallId}(hallId = ${hallId}, page=@{{page}(page=${page}-1)},pageSize=6)}">Previous</a>
                     </div>
                     <div></div>
                     <div class="pgButton" id="next" th:if="${page != (totalPages)}">
-                        <a th:href="@{/admin/halls/{cinemaId}(cinemaId = ${cinemaId}, page=@{{page}(page=${page}+1)},pageSize=3)}">Next</a>
+                        <a th:href="@{/admin/seats/{hallId}(hallId = ${hallId}, page=@{{page}(page=${page}+1)},pageSize=6)}">Next</a>
                     </div>
                 </div>
                 <div class="form-link">

@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-@SuppressWarnings("java:S1192")
+@SuppressWarnings({"java:S1192", "java:S2259"})
 public class SeatRepositoryImpl implements SeatRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -24,7 +24,7 @@ public class SeatRepositoryImpl implements SeatRepository {
     @Override
     public List<Seat> getSeatsByHall(int hallId) {
         String query = """
-            SELECT * FROM seats WHERE hall_id=:id
+            SELECT * FROM seats WHERE hall_id=:id ORDER BY id
             """;
 
         SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
@@ -67,7 +67,7 @@ public class SeatRepositoryImpl implements SeatRepository {
     @Override
     public List<Seat> getSeatsByHallAndStatus(int hallId, boolean isBooked) {
         String query = """
-            SELECT * FROM seats WHERE hall_id=:id AND is_booked=:isBooked
+            SELECT * FROM seats WHERE hall_id=:id AND is_booked=:isBooked ORDER BY id
             """;
 
         SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
@@ -124,5 +124,36 @@ public class SeatRepositoryImpl implements SeatRepository {
             .addValue("id", seatId);
 
         jdbcTemplate.update(query, mapSqlParameterSource);
+    }
+
+    @Override
+    public List<Seat> getSeatsByHallWithPagination(int hallId, int pageNumber, int limit) {
+        String query = """
+            SELECT * FROM seats WHERE hall_id=:id
+            ORDER BY id
+            LIMIT :limit
+            OFFSET :offset
+            """;
+
+        SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
+            .addValue("id", hallId)
+            .addValue("limit", limit)
+            .addValue("offset", getOffset(pageNumber, limit));
+
+        return jdbcTemplate.query(query, mapSqlParameterSource, SeatMapper::mapToPojo);
+    }
+
+    @Override
+    public int getSeatsByHallRowsCount(int hallId) {
+        String query = "SELECT COUNT(*) FROM seats WHERE hall_id=:id";
+
+        SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
+            .addValue("id", hallId);
+
+        return jdbcTemplate.queryForObject(query, mapSqlParameterSource, Integer.class);
+    }
+
+    private static int getOffset(int pageNumber, int pageSize) {
+        return (pageNumber - 1) * pageSize;
     }
 }

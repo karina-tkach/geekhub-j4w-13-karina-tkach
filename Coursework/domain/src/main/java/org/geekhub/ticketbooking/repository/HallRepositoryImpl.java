@@ -40,6 +40,7 @@ public class HallRepositoryImpl implements HallRepository {
     public List<Hall> getHallsByCinema(int cinemaId) {
         String query = """
             SELECT * FROM halls WHERE cinema_id=:id
+            ORDER BY id
             """;
 
         SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
@@ -103,6 +104,7 @@ public class HallRepositoryImpl implements HallRepository {
     public List<Hall> getHallsByCinemaWithPagination(int cinemaId, int pageNumber, int limit) {
         String query = """
             SELECT * FROM halls WHERE cinema_id=:id
+            ORDER BY id
             LIMIT :limit
             OFFSET :offset
             """;

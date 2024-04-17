@@ -58,9 +58,9 @@
             </div>
             <div th:if="${error == null}">
                 <header class="header">Update Hall</header>
-                <form action="#" th:action="@{/admin/halls/{cinemaId}/updateHall(cinemaId=${cinemaId})}" th:object="${hall}" method="POST" enctype="multipart/form-data" class="subform">
+                <form action="#" th:action="@{/admin/halls/{cinemaId}/updateHall(cinemaId=${cinemaId})}" th:object="${hall}" method="POST" class="subform">
                     <div class="full-field id-field">
-                        <div class="field input-field">
+                        <div class="field input-field" style="height: 0;">
                             <input type="hidden" th:field="*{id}" />
                         </div>
                     </div>

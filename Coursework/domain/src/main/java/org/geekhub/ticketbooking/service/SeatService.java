@@ -124,4 +124,31 @@ public class SeatService {
             return false;
         }
     }
+
+    public List<Seat> getSeatsByHallWithPagination(int hallId, int pageNumber, int limit) {
+        try {
+            if (pageNumber < 0 || limit < 0) {
+                throw new IllegalArgumentException("Page number and limit must be greater than 0");
+            }
+            logger.info("Try to get seats by hall with pagination");
+            List<Seat> seats = seatRepository.getSeatsByHallWithPagination(hallId, pageNumber, limit);
+            logger.info("Seats by hall were fetched with pagination successfully");
+            return seats;
+        } catch (IllegalArgumentException | DataAccessException exception) {
+            logger.warn("Seats by hall weren't fetched with pagination\n{}", exception.getMessage());
+            return Collections.emptyList();
+        }
+    }
+
+    public int getSeatsByHallRowsCount(int hallId) {
+        try {
+            logger.info("Try to get seats by hall rows count");
+            int count = seatRepository.getSeatsByHallRowsCount(hallId);
+            logger.info("Seats by hall rows count were fetched successfully");
+            return count;
+        } catch (DataAccessException | NullPointerException exception) {
+            logger.warn("Seats by hall rows count weren't fetched\n{}", exception.getMessage());
+            return -1;
+        }
+    }
 }

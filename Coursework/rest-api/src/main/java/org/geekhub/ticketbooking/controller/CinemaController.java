@@ -98,7 +98,7 @@ public class CinemaController {
     }
 
     @GetMapping("/deleteCinema/{id}")
-    public String deleteCity(@PathVariable(value = "id") int id, Model model) {
+    public String deleteCinema(@PathVariable(value = "id") int id, Model model) {
         boolean result = cinemaService.deleteCinemaById(id);
         if (!result) {
             return setAttributesAndGetProperPage(model, "error",

@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="ISO-8859-1">
-    <title>Cinemas Management</title>
-    <link rel="stylesheet" th:href="@{/css/home.css}">
+    <title>Seats Management</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}" href="css/home.css">
     <style>
         .error-message {
             color: #fff;
@@ -14,6 +13,16 @@
             text-align: center;
             margin-bottom: 15px;
             margin-top: 10px;
+        }
+        #button {
+            margin-top:40px;
+        }
+        .form .field {
+            margin-top: 30px;
+        }
+        .characteristics {
+            font-size: 19px;
+            color: white;
         }
     </style>
 </head>
@@ -31,12 +40,12 @@
     </div>
 </header>
 
-<section class="container forms">
+<section class="container forms" style="height:92.5vh;">
     <div class="form signup">
         <div class="form-content">
             <div th:if="${message != null}">
                 <div class="error-message"
-                     th:style="${message == 'You have successfully updated cinema'} ?
+                     th:style="${message == 'You have successfully updated seat'} ?
                   'background-color: green;' :'background-color: #d93025;'">
                     <p>[[${message}]]</p>
                 </div>
@@ -48,47 +57,41 @@
                 </div>
             </div>
             <div th:if="${error == null}">
-                <header class="header">Update Cinema</header>
-                <form action="#" th:action="@{/admin/cinemas/updateCinema}" th:object="${cinema}" method="POST">
+                <header class="header">Update Seat</header>
+                <form action="#" th:action="@{/admin/seats/{hallId}/updateSeat(hallId=${hallId})}" th:object="${seat}" method="POST">
                     <div class="full-field id-field">
                         <div class="field input-field" style="height: 0;">
                             <input type="hidden" th:field="*{id}" />
                         </div>
                     </div>
-                    <div class="full-field name-field">
-                        <div class="field input-field">
-                            <label class="characteristics">Name</label>
-                            <input th:field="*{name}" type="text" name = "name" placeholder="Name" class="input name" id="name" required>
+                    <div class="full-field number-field">
+                        <div class="field input-field" style="height: 0;">
+                            <input type="hidden" th:field="*{number}" />
                         </div>
                     </div>
-                    <div class="full-field city">
+
+
+                    <div class="full-field">
                         <div class="field input-field">
-                            <label class="characteristics">City</label>
-                            <select name="city" id="city" class="city" th:field="*{city.name}" required>
-                                <option th:each="city:${cities}"
-                                        th:value="${city.name}"
-                                        th:text="${city.name}"></option>
+                            <label class="characteristics">Is Booked</label>
+                            <select name="isBooked" th:field="*{booked}" required>
+                                <option th:value="true">True</option>
+                                <option th:value="false">False</option>
                             </select><br>
                         </div>
                     </div>
-                    <div class="full-field street">
-                        <div class="field input-field">
-                            <label class="characteristics">Street</label>
-                            <input th:field="*{street}" type="text" name = "street" placeholder="Street" class="street" id="street" required>
-                        </div>
-                    </div>
-                    <div class="field button-field input-field button" style="margin-top:40px;" id="button">
+
+
+                    <div class="field button-field input-field button" id="button">
                         <button type="submit">Update</button>
                     </div>
                     <div class="form-link">
-                        <span> <a href="/admin/cinemas" class="link login-link">Back to Cinemas List</a></span>
+                        <span> <a th:href="@{/admin/seats/{hallId}(hallId=${hallId})}" class="link login-link">Back to Seats List</a></span>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </section>
-
 </body>
-
 </html>

@@ -50,7 +50,7 @@ public class CinemaRepositoryImpl implements CinemaRepository {
     public List<Cinema> getCinemasByCity(int cityId) {
         String query = """
             SELECT cinemas.id, cinemas.name, cinemas.city_id, cities.name AS city_name, cinemas.street FROM cinemas
-            INNER JOIN cities ON cinemas.city_id = cities.id WHERE cinemas.city_id=:cityId
+            INNER JOIN cities ON cinemas.city_id = cities.id WHERE cinemas.city_id=:cityId ORDER BY cinemas.id
             """;
 
         SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()

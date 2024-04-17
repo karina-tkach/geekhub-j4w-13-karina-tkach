@@ -65,7 +65,7 @@ public class MovieRepositoryImpl implements MovieRepository {
     @Override
     public List<Movie> getMoviesByGenre(Genre genre) {
         String query = """
-            SELECT * FROM movies WHERE genre=:genre
+            SELECT * FROM movies WHERE genre=:genre ORDER BY id
             """;
 
         SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
@@ -82,6 +82,7 @@ public class MovieRepositoryImpl implements MovieRepository {
         String query = """
             SELECT * FROM movies
             WHERE (releaseDate BETWEEN COALESCE(:from,releaseDate) AND COALESCE(:to,releaseDate))
+            ORDER BY id
             """;
 
         SqlParameterSource parameters = new MapSqlParameterSource()

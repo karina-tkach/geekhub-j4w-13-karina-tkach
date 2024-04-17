@@ -76,7 +76,7 @@ public class HallController {
     }
 
     @PostMapping("/{cinemaId}/updateHall")
-    public String updateCinema(@PathVariable int cinemaId, @ModelAttribute("hall") Hall hall, Model model) {
+    public String updateHall(@PathVariable int cinemaId, @ModelAttribute("hall") Hall hall, Model model) {
         int hallId = hall.getId();
 
         Hall updatedHall = hallService.updateHallById(hall, cinemaId, hallId);
@@ -89,8 +89,8 @@ public class HallController {
             "You have successfully updated hall", "update_hall");
     }
 
-    @GetMapping("/{cinemaId}/deleteCinema/{id}")
-    public String deleteCity(@PathVariable int cinemaId, @PathVariable(value = "id") int id, Model model) {
+    @GetMapping("/{cinemaId}/deleteHall/{id}")
+    public String deleteHall(@PathVariable int cinemaId, @PathVariable(value = "id") int id, Model model) {
         boolean result = hallService.deleteHallById(id);
         if (!result) {
             return setAttributesAndGetProperPage(model, "error",

@@ -40,7 +40,7 @@
     </div>
 </header>
 
-<section class="container forms" style="height:160vh;">
+<section class="container forms" style="height:143vh;">
     <div class="form signup">
         <div class="form-content">
             <div th:if="${message != null}">
@@ -60,7 +60,7 @@
             <header class="header">Update Movie</header>
             <form action="#" th:action="@{/admin/movies/updateMovie}" th:object="${movie}" method="POST" enctype="multipart/form-data" class="subform">
                 <div class="full-field id-field">
-                    <div class="field input-field">
+                    <div class="field input-field" style="height: 0;">
                         <input type="hidden" th:field="*{id}" />
                     </div>
                 </div>

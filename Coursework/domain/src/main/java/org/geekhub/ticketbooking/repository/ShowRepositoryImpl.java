@@ -55,7 +55,7 @@ public class ShowRepositoryImpl implements ShowRepository {
             SELECT shows.id, shows.price, shows.start_time, shows.end_time,
             shows.movie_id, movies.title, movies.description, movies.duration,
              movies.releaseDate, movies.country, movies.ageLimit, movies.genres, shows.hall_id FROM shows
-            INNER JOIN movies ON shows.movie_id = movies.id WHERE shows.movie_id=:id
+            INNER JOIN movies ON shows.movie_id = movies.id WHERE shows.movie_id=:id ORDER BY shows.id
             """;
         SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
             .addValue("id", movieId);
@@ -69,7 +69,7 @@ public class ShowRepositoryImpl implements ShowRepository {
             SELECT shows.id, shows.price, shows.start_time, shows.end_time,
             shows.movie_id, movies.title, movies.description, movies.duration,
              movies.releaseDate, movies.country, movies.ageLimit, movies.genres, shows.hall_id FROM shows
-            INNER JOIN movies ON shows.movie_id = movies.id WHERE shows.hall_id=:id
+            INNER JOIN movies ON shows.movie_id = movies.id WHERE shows.hall_id=:id ORDER BY shows.id
             """;
         SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
             .addValue("id", hallId);

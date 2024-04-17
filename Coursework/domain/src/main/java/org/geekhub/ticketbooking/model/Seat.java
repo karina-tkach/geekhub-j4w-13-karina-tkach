@@ -5,20 +5,20 @@ import java.util.Objects;
 public class Seat {
     private int id;
     private int number;
-    private boolean isBooked;
+    private boolean booked;
     private int hallId;
 
     public Seat() {
         this.id = -1;
         this.number = 0;
-        this.isBooked = false;
+        this.booked = false;
         this.hallId = -1;
     }
 
     public Seat(int id, int number, boolean isBooked, int hallId) {
         this.id = id;
         this.number = number;
-        this.isBooked = isBooked;
+        this.booked = isBooked;
         this.hallId = hallId;
     }
 
@@ -39,11 +39,11 @@ public class Seat {
     }
 
     public boolean isBooked() {
-        return isBooked;
+        return booked;
     }
 
     public void setBooked(boolean booked) {
-        isBooked = booked;
+        this.booked = booked;
     }
 
     public int getHallId() {
@@ -60,12 +60,12 @@ public class Seat {
         if (o == null || getClass() != o.getClass()) return false;
         Seat seat = (Seat) o;
         return id == seat.id && number == seat.number &&
-            isBooked == seat.isBooked && hallId == seat.hallId;
+            booked == seat.booked && hallId == seat.hallId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, number, isBooked, hallId);
+        return Objects.hash(id, number, booked, hallId);
     }
 
     @Override
@@ -73,7 +73,7 @@ public class Seat {
         return "Seat{" +
             "id=" + id +
             ", number=" + number +
-            ", isBooked=" + isBooked +
+            ", isBooked=" + booked +
             ", hallId=" + hallId +
             '}';
     }
