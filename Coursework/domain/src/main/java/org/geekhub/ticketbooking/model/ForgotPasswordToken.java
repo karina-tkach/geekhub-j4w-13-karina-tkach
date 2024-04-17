@@ -1,6 +1,7 @@
 package org.geekhub.ticketbooking.model;
 
 import java.time.OffsetDateTime;
+import java.util.Objects;
 
 public class ForgotPasswordToken {
     private int id;
@@ -63,5 +64,30 @@ public class ForgotPasswordToken {
 
     public void setUsed(boolean used) {
         isUsed = used;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ForgotPasswordToken that = (ForgotPasswordToken) o;
+        return id == that.id && isUsed == that.isUsed && Objects.equals(token, that.token) &&
+            Objects.equals(user, that.user) && Objects.equals(expireTime, that.expireTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, token, user, expireTime, isUsed);
+    }
+
+    @Override
+    public String toString() {
+        return "ForgotPasswordToken{" +
+            "id=" + id +
+            ", token='" + token + '\'' +
+            ", user=" + user +
+            ", expireTime=" + expireTime +
+            ", isUsed=" + isUsed +
+            '}';
     }
 }

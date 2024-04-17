@@ -2,6 +2,7 @@ package org.geekhub.ticketbooking.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Cinema {
     private int id;
@@ -65,5 +66,30 @@ public class Cinema {
 
     public void setHalls(List<Hall> halls) {
         this.halls = halls;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Cinema cinema = (Cinema) o;
+        return id == cinema.id && Objects.equals(name, cinema.name) && Objects.equals(city, cinema.city) &&
+            Objects.equals(street, cinema.street) && Objects.equals(halls, cinema.halls);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, city, street, halls);
+    }
+
+    @Override
+    public String toString() {
+        return "Cinema{" +
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", city=" + city +
+            ", street='" + street + '\'' +
+            ", halls=" + halls +
+            '}';
     }
 }

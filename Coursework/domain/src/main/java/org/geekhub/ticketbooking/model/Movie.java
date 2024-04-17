@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.Objects;
 
 @SuppressWarnings("java:S107")
 public class Movie {
@@ -134,5 +136,37 @@ public class Movie {
 
     public String getImageDataBase64() {
         return new String(Base64.encodeBase64(image));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Movie movie = (Movie) o;
+        return id == movie.id && durationInMins == movie.durationInMins && ageLimit == movie.ageLimit &&
+            Objects.equals(title, movie.title) && Objects.equals(description, movie.description) &&
+            Objects.equals(releaseDate, movie.releaseDate) && Objects.equals(country, movie.country) &&
+            genre == movie.genre && Objects.deepEquals(image, movie.image);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, description, durationInMins, releaseDate, country,
+            ageLimit, genre, Arrays.hashCode(image));
+    }
+
+    @Override
+    public String toString() {
+        return "Movie{" +
+            "id=" + id +
+            ", title='" + title + '\'' +
+            ", description='" + description + '\'' +
+            ", durationInMins=" + durationInMins +
+            ", releaseDate=" + releaseDate +
+            ", country='" + country + '\'' +
+            ", ageLimit=" + ageLimit +
+            ", genre=" + genre +
+            ", image=" + Arrays.toString(image) +
+            '}';
     }
 }

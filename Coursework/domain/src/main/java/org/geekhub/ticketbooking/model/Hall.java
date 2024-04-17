@@ -2,6 +2,7 @@ package org.geekhub.ticketbooking.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Hall {
     private int id;
@@ -11,6 +12,16 @@ public class Hall {
     private List<Seat> seats;
     private int cinemaId;
     private List<Show> shows;
+
+    public Hall() {
+        this.id = -1;
+        this.name = null;
+        this.rows = 0;
+        this.columns = 0;
+        this.seats = initializeSeats(0);
+        this.cinemaId = -1;
+        this.shows = new ArrayList<>();
+    }
 
     public Hall(int id, String name, int rows, int columns, List<Seat> seats,
                 int cinemaId, List<Show> shows) {
@@ -33,20 +44,14 @@ public class Hall {
         this.shows = shows;
     }
 
-    public Hall() {
-        this.id = -1;
-        this.name = null;
-        this.rows = 0;
-        this.columns = 0;
-        this.seats = initializeSeats(0);
-        this.cinemaId = -1;
-        this.shows = new ArrayList<>();
-    }
-
     public List<Seat> initializeSeats(int numberOfSeats) {
         List<Seat> seatsList = new ArrayList<>(numberOfSeats);
         for (int i = 0; i < numberOfSeats; i++) {
-            seatsList.add(Seat.builder().number(i + 1).hallId(id).build());
+            Seat seat = new Seat();
+            seat.setNumber(i + 1);
+            seat.setHallId(id);
+
+            seatsList.add(seat);
         }
         return seatsList;
     }
@@ -105,5 +110,33 @@ public class Hall {
 
     public void setShows(List<Show> shows) {
         this.shows = shows;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Hall hall = (Hall) o;
+        return id == hall.id && rows == hall.rows && columns == hall.columns &&
+            cinemaId == hall.cinemaId && Objects.equals(name, hall.name) &&
+            Objects.equals(seats, hall.seats) && Objects.equals(shows, hall.shows);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, rows, columns, seats, cinemaId, shows);
+    }
+
+    @Override
+    public String toString() {
+        return "Hall{" +
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", rows=" + rows +
+            ", columns=" + columns +
+            ", seats=" + seats +
+            ", cinemaId=" + cinemaId +
+            ", shows=" + shows +
+            '}';
     }
 }
