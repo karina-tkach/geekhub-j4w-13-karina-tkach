@@ -82,11 +82,11 @@
                 </div>
                 <div class="full-field" sec:authorize="hasAuthority('SUPER_ADMIN')">
                     <div class="field input-field">
-                        <select name="operationType" th:field="*{role}" required>
-                            <option th:each="roleValue:
-${T(org.geekhub.ticketbooking.model.Role).values()}"
-                                    th:value="${roleValue}"
-                                    th:text="${roleValue.name}"></option>
+                        <select name="role" th:field="*{role}" required>
+                            <option th:value="${T(org.geekhub.ticketbooking.model.Role).USER}"
+                                    th:text="${T(org.geekhub.ticketbooking.model.Role).USER.name}"></option>
+                            <option th:value="${T(org.geekhub.ticketbooking.model.Role).ADMIN}"
+                                    th:text="${T(org.geekhub.ticketbooking.model.Role).ADMIN.name}"></option>
                         </select><br>
                     </div>
                 </div>

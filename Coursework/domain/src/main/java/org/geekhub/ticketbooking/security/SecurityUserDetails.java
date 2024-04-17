@@ -1,6 +1,5 @@
 package org.geekhub.ticketbooking.security;
 
-import lombok.EqualsAndHashCode;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.geekhub.ticketbooking.model.User;
 import org.springframework.security.core.GrantedAuthority;
@@ -8,9 +7,9 @@ import org.springframework.security.core.GrantedAuthority;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 @SuppressWarnings("java:S1948")
-@EqualsAndHashCode
 public class SecurityUserDetails implements UserDetails {
     private final User user;
 
@@ -55,5 +54,18 @@ public class SecurityUserDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SecurityUserDetails that = (SecurityUserDetails) o;
+        return Objects.equals(user, that.user);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(user);
     }
 }

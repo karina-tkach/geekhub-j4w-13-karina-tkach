@@ -10,7 +10,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -181,5 +183,25 @@ public class MovieService {
             logger.warn("Movies rows count weren't fetched\n{}", exception.getMessage());
             return -1;
         }
+    }
+
+    public boolean setMovieForUpdate(Movie movie, MultipartFile file) {
+        Movie oldMovie = this.getMovieById(movie.getId());
+
+        if (movie.getReleaseDate() == null) {
+            movie.setReleaseDate(oldMovie.getReleaseDate());
+        }
+
+        try {
+            if (file.isEmpty()) {
+                movie.setImage(oldMovie.getImage());
+            } else {
+                movie.setImage(file.getBytes());
+            }
+        } catch (IOException e) {
+            return false;
+        }
+
+        return true;
     }
 }

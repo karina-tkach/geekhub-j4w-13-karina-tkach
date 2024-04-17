@@ -38,12 +38,12 @@
                 <p>[[${error}]]</p>
             </div>
         </div>
-        <div class = "table">
+        <div class = "table" th:if="${error == null}">
             <h1 style="font-size: 40px;">Halls List</h1>
             <div class ="addUser">
-                <a th:href = "@{{cinemaId}/showNewHallForm(cinemaId=${cinemaId})}"> Add Hall </a> <!--check-->
+                <a th:href = "@{{cinemaId}/showNewHallForm(cinemaId=${cinemaId})}"> Add Hall </a>
             </div>
-            <div th:if="${error == null}">
+            <div>
                 <table>
                     <thead>
                     <tr>
@@ -61,10 +61,10 @@
                         <td th:text="${hall.rows}"></td>
                         <td th:text="${hall.columns}"></td>
                         <td>
-                            <a style="background-color: #0078e0" th:href="@{/admin/cinemas/{id}/halls(id=${hall.id})}">View Seats</a>
+                            <a style="background-color: #0078e0" th:href="@{/admin/seats/{hallId}(hallId=${hall.id})}">View Seats</a>
                         </td>
                         <td>
-                            <a style="background-color: #0078e0" th:href="@{/admin/cinemas/{id}/halls(id=${hall.id})}">View Shows</a>
+                            <a style="background-color: #0078e0" th:href="@{/admin/shows/{hallId}(hallId=${hall.id})}">View Shows</a>
                         </td>
                         <td><a th:href="@{/admin/halls/{cinemaId}/showFormForUpdate/{id}(cinemaId=${cinemaId}, id=${hall.id})}">Update</a>
                             <a th:href="@{/admin/halls/{cinemaId}/deleteCinema/{id}(cinemaId=${cinemaId}, id=${hall.id})}">Delete</a>

@@ -86,22 +86,13 @@ public class MovieController {
     public String updateMovie(@ModelAttribute("movie") Movie movie,
                               @RequestPart("file") MultipartFile file, Model model) {
         int movieId = movie.getId();
-        Movie oldMovie = movieService.getMovieById(movieId);
 
-        if (movie.getReleaseDate() == null) {
-            movie.setReleaseDate(oldMovie.getReleaseDate());
-        }
-        try {
-            if (file.isEmpty()) {
-                movie.setImage(oldMovie.getImage());
-            } else {
-                movie.setImage(file.getBytes());
-            }
-        } catch (IOException e) {
+        boolean result = movieService.setMovieForUpdate(movie, file);
+
+        if (!result) {
             return setAttributesAndGetProperPage(model, "message",
                 "Cannot set image to movie", "update_movie");
         }
-
 
         Movie updatedMovie = movieService.updateMovieById(movie, movieId);
 

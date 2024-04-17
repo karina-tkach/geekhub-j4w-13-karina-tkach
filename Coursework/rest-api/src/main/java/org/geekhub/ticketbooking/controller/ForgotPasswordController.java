@@ -68,7 +68,6 @@ public class ForgotPasswordController {
 
     @GetMapping("/reset-password")
     public String resetPassword(@Param(value = "token") String token, Model model, HttpSession session) {
-
         session.setAttribute("token", token);
         ForgotPasswordToken forgotPasswordToken = forgotPasswordService.getTokenByValue(token);
         String errorMessage = forgotPasswordService.checkValidity(forgotPasswordToken);

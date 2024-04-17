@@ -75,15 +75,15 @@ public class UserController {
     public String updateUser(@ModelAttribute("user") User user, Model model, Principal principal) {
         User oldUser = userService.getUserById(user.getId());
         User executor = userService.getUserByEmail(principal.getName());
+        Role oldRole = oldUser.getRole();
 
-        if ((executor.getRole() != Role.SUPER_ADMIN) && (oldUser.getRole() == Role.SUPER_ADMIN)) {
+        if ((executor.getRole() != Role.SUPER_ADMIN) && (oldRole == Role.SUPER_ADMIN)) {
             return setAttributesAndGetProperPage(model, "message",
                 "Cannot change super admin", "update_user");
         }
 
-        if ((executor.getRole() != Role.SUPER_ADMIN) && (oldUser.getRole() != user.getRole())) {
-            return setAttributesAndGetProperPage(model, "message",
-                "Only super admin can change roles", "update_user");
+        if ((executor.getRole() != Role.SUPER_ADMIN) && (oldRole != user.getRole())) {
+            user.setRole(oldRole);
         }
 
         String password = user.getPassword();
