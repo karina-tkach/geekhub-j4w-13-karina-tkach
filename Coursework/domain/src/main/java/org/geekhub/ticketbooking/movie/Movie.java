@@ -128,7 +128,8 @@ public class Movie {
 
     public String getFormattedReleaseDate() {
         if (releaseDate != null) {
-            return releaseDate.format(DateTimeFormatter.ISO_DATE_TIME);
+            String str = releaseDate.format(DateTimeFormatter.ISO_DATE_TIME);
+            return str.substring(0, str.length() - 1);
         } else {
             return "";
         }

@@ -146,7 +146,7 @@ public class ShowService {
             if (showToUpdate == null) {
                 throw new ShowValidationException("Show with id '" + showId + "' not found");
             }
-            showValidator.validate(show);
+
 
             Movie movie = movieService.getMovieByTitle(show.getMovie().getTitle());
 
@@ -154,6 +154,9 @@ public class ShowService {
                 throw new ShowValidationException("Show movie was incorrect");
             }
             int movieId = movie.getId();
+            show.setMovie(movie);
+
+            showValidator.validate(show);
 
             showRepository.updateShowById(show, movieId, hallId, showId);
             logger.info("Show was updated:\n{}", show);

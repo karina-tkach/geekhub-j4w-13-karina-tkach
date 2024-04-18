@@ -21,7 +21,7 @@ public class SeatController {
         this.seatService = seatService;
     }
 
-    @GetMapping("/{hallId}")
+    @GetMapping("/{hallId}/{showId}")
     public String viewHallSeats(@PathVariable int hallId,
                                 @RequestParam(defaultValue = "1") int page,
                                 @RequestParam(defaultValue = "6") int pageSize, Model model) {

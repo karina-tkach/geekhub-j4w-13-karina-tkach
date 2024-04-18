@@ -3,6 +3,7 @@ package org.geekhub.ticketbooking.controller.admin;
 import org.geekhub.ticketbooking.cinema.Cinema;
 import org.geekhub.ticketbooking.cinema.CinemaService;
 import org.geekhub.ticketbooking.hall.Hall;
+import org.geekhub.ticketbooking.hall.HallService;
 import org.geekhub.ticketbooking.movie.Movie;
 import org.geekhub.ticketbooking.movie.MovieService;
 import org.geekhub.ticketbooking.show.Show;
@@ -27,11 +28,13 @@ public class ShowController {
     private final ShowService showService;
     private final CinemaService cinemaService;
     private final MovieService movieService;
+    private final HallService hallService;
 
-    public ShowController(ShowService showService, CinemaService cinemaService, MovieService movieService) {
+    public ShowController(ShowService showService, CinemaService cinemaService, MovieService movieService, HallService hallService) {
         this.showService = showService;
         this.cinemaService = cinemaService;
         this.movieService = movieService;
+        this.hallService = hallService;
     }
 
     @GetMapping
@@ -49,6 +52,9 @@ public class ShowController {
                                              @RequestParam(defaultValue = "3") int pageSize, Model model) {
         List<Show> shows = showService.getShowsByHallWithPagination(hallId, page, pageSize);
         int rows = showService.getShowsByHallRowsCount(hallId);
+
+        int cinemaId = hallService.getHallById(hallId).getCinemaId();
+        model.addAttribute("cinemaId", cinemaId);
 
         return setAttributesAndReturnMainPage(shows, rows, model, "Can't load shows for this hall",
             page, pageSize, "halls_shows");
@@ -77,6 +83,92 @@ public class ShowController {
             "You have successfully added show", "new_show");
     }
 
+    @GetMapping("/showFormForUpdate/{id}")
+    public String showFormForUpdate(@PathVariable(value = "id") int id, Model model) {
+        Show show = showService.getShowById(id);
+
+        if (show == null) {
+            return setAttributesAndGetProperPage(model, "error",
+                "Cannot get show by this id", "update_show");
+        }
+
+        setMovies(model);
+        model.addAttribute("show", show);
+
+        return "update_show";
+    }
+
+    @GetMapping("{hallId}/showFormForUpdate/{id}")
+    public String showFormForUpdate(@PathVariable(value = "hallId") int hallId, @PathVariable(value = "id") int id, Model model) {
+        Show show = showService.getShowById(id);
+
+        if (show == null) {
+            return setAttributesAndGetProperPage(model, "error",
+                "Cannot get show by this id", "hall_update_show");
+        }
+
+        setMovies(model);
+        setHallsSelect(model, hallId);
+        model.addAttribute("show", show);
+        model.addAttribute("hallRedirect", "");
+
+        return "hall_update_show";
+    }
+
+    @PostMapping("/updateShow")
+    public String updateShow(@ModelAttribute("show") Show show, Model model) {
+        int showId = show.getId();
+        setMovies(model);
+        setHallsSelect(model, show.getHallId());
+
+        Show updatedShow = showService.updateShowById(show, show.getHallId(), showId);
+
+        if (updatedShow == null) {
+            return setAttributesAndGetProperPage(model, "message",
+                "Invalid show parameters", "update_show");
+        }
+        return setAttributesAndGetProperPage(model, "message",
+            "You have successfully updated show", "update_show");
+    }
+
+    @PostMapping("{hallId}/updateShow")
+    public String updateShow(@PathVariable(value = "hallId") int hallId, @ModelAttribute("show") Show show, Model model) {
+        int showId = show.getId();
+        setMovies(model);
+        setHallsSelect(model, hallId);
+
+        Show updatedShow = showService.updateShowById(show, show.getHallId(), showId);
+
+        if (updatedShow == null) {
+            return setAttributesAndGetProperPage(model, "message",
+                "Invalid show parameters", "hall_update_show");
+        }
+        return setAttributesAndGetProperPage(model, "message",
+            "You have successfully updated show", "hall_update_show");
+    }
+
+    @GetMapping("/deleteShow/{id}")
+    public String deleteShow(@PathVariable(value = "id") int id, Model model) {
+        boolean result = showService.deleteShowById(id);
+
+        if (!result) {
+            return setAttributesAndGetProperPage(model, "error",
+                "Cannot delete show by this id", "update_show");
+        }
+        return "redirect:/admin/shows";
+    }
+
+    @GetMapping("{hallId}/deleteShow/{id}")
+    public String deleteShow(@PathVariable(value = "hallId") int hallId, @PathVariable(value = "id") int id, Model model) {
+        boolean result = showService.deleteShowById(id);
+
+        if (!result) {
+            return setAttributesAndGetProperPage(model, "error",
+                "Cannot delete show by this id", "update_show");
+        }
+        return "redirect:/admin/shows/" + hallId;
+    }
+
     private String setAttributesAndGetProperPage(Model model, String attributeName,
                                                  String attributeValue, String page) {
         model.addAttribute(attributeName, attributeValue);
@@ -98,7 +190,6 @@ public class ShowController {
     }
 
     private void setMoviesCinemasAndHallsToSelect(Model model) {
-        List<Movie> movies = movieService.getAllMovies();
         List<Cinema> cinemas = cinemaService.getAllCinemas();
         Map<Integer, List<Hall>> hallsByCinema = new HashMap<>();
 
@@ -106,8 +197,20 @@ public class ShowController {
             hallsByCinema.put(cinema.getId(), cinema.getHalls());
         }
 
-        model.addAttribute("movies", movies);
+        setMovies(model);
         model.addAttribute("cinemas", cinemas);
         model.addAttribute("hallsByCinema", hallsByCinema);
+    }
+
+    private void setMovies(Model model) {
+        List<Movie> movies = movieService.getAllMovies();
+
+        model.addAttribute("movies", movies);
+    }
+
+    private void setHallsSelect(Model model, int hallId) {
+        Hall hall = hallService.getHallById(hallId);
+        List<Hall> halls = hallService.getHallsByCinema(hall.getCinemaId());
+        model.addAttribute("halls", halls);
     }
 }

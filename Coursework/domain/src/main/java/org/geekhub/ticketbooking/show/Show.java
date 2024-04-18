@@ -108,7 +108,8 @@ public class Show {
 
     public String getFormattedStartDate() {
         if (start != null) {
-            return start.format(DateTimeFormatter.ISO_DATE_TIME);
+            String str = start.format(DateTimeFormatter.ISO_DATE_TIME);
+            return str.substring(0, str.length() - 1);
         } else {
             return "";
         }
@@ -124,7 +125,8 @@ public class Show {
 
     public String getFormattedEndDate() {
         if (end != null) {
-            return end.format(DateTimeFormatter.ISO_DATE_TIME);
+            String str = end.format(DateTimeFormatter.ISO_DATE_TIME);
+            return str.substring(0, str.length() - 1);
         } else {
             return "";
         }

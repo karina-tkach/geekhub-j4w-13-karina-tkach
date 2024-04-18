@@ -184,10 +184,6 @@ public class MovieService {
     public boolean setMovieForUpdate(Movie movie, MultipartFile file) {
         Movie oldMovie = this.getMovieById(movie.getId());
 
-        if (movie.getReleaseDate() == null) {
-            movie.setReleaseDate(oldMovie.getReleaseDate());
-        }
-
         try {
             if (file.isEmpty()) {
                 movie.setImage(oldMovie.getImage());

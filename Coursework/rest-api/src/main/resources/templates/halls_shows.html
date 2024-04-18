@@ -37,9 +37,9 @@
                 <p>[[${error}]]</p>
             </div>
         </div>
-        <div class = "table">
+        <div class = "table" th:if="${error == null}">
             <h1 style="font-size: 40px; margin-bottom:10px;">Shows List For Hall</h1>
-            <div th:if="${error == null}">
+            <div>
                 <table>
                     <thead>
                     <tr>
@@ -58,12 +58,12 @@
                         <td th:text="${show.end}"></td>
                         <td th:text="${show.price}"></td>
                         <td>
-                            <a style="background-color: #0078e0" th:href="@{/admin/showseats/{showId}(showId=${show.id})}">View Seats</a>
+                            <a style="background-color: #0078e0" th:href="@{/admin/seats/{hallId}/{showId}(hallId=${hallId}, showId=${show.id})}">View Seats</a>
                         </td>
                         <td>
                             <div>
-                                <!--a style="float: left;" th:href="@{/admin/movies/showFormForUpdate/{id}(id=${movie.id})}">Update</a>
-                                <a style="float: left;" th:href="@{/admin/movies/deleteMovie/{id}(id=${movie.id})}">Delete</a-->
+                                <a style="float: left;" th:href="@{/admin/shows/{hallId}/showFormForUpdate/{id}(hallId = ${hallId}, id=${show.id})}">Update</a>
+                                <a style="float: left;" th:href="@{/admin/shows/{hallId}/deleteShow/{id}(hallId = ${hallId}, id=${show.id})}">Delete</a>
                             </div>
                         </td>
                     </tr>
@@ -80,6 +80,9 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="pgButton table" style="display: block;">
+            <a th:href="@{/admin/halls/{cinemaId}(cinemaId = ${cinemaId})}">Back to Hall</a>
         </div>
     </div>
 </div>

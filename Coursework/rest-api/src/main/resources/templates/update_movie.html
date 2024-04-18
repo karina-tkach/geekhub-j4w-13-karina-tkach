@@ -82,11 +82,10 @@
                         <input th:field="*{durationInMins}" type="number" value="60" min="1" max="300" name = "durationInMins" placeholder="Duration In Mins" class="durationInMins" id="durationInMins" required>
                     </div>
                 </div>
-                <span style="font-size: 20px;"><h4 style="color:gray; margin-top: 38px;">Leave empty so not to update release date</h4></span>
                 <div class="full-field releaseDate">
                     <div class="field input-field">
                         <label class="characteristics">Release date</label>
-                        <input type="datetime-local" th:field="*{formattedReleaseDate}" name="date">
+                        <input type="datetime-local" th:field="*{formattedReleaseDate}" name="date" required>
                     </div>
                 </div>
                 <div class="full-field country-field">

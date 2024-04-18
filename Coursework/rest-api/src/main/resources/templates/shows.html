@@ -50,7 +50,6 @@
                         <th>Start Time</th>
                         <th>End Time</th>
                         <th>Price</th>
-                        <th>Seats</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
@@ -61,12 +60,9 @@
                         <td th:text="${show.end}"></td>
                         <td th:text="${show.price}"></td>
                         <td>
-                            <a style="background-color: #0078e0" th:href="@{/admin/showseats/{showId}(showId=${show.id})}">View Seats</a>
-                        </td>
-                        <td>
                             <div>
-                                <!--a style="float: left;" th:href="@{/admin/movies/showFormForUpdate/{id}(id=${movie.id})}">Update</a>
-                                <a style="float: left;" th:href="@{/admin/movies/deleteMovie/{id}(id=${movie.id})}">Delete</a-->
+                                <a style="float: left;" th:href="@{/admin/shows/showFormForUpdate/{id}(id=${show.id})}">Update</a>
+                                <a style="float: left;" th:href="@{/admin/shows/deleteShow/{id}(id=${show.id})}">Delete</a>
                             </div>
                         </td>
                     </tr>
