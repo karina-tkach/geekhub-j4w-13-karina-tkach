@@ -89,10 +89,10 @@ public class ForgotPasswordTokenService {
         try {
             logger.info("Try to get token by value");
             ForgotPasswordToken passwordToken = forgotPasswordRepository.getTokenByValue(token);
-            logger.info("Token was fetched successfully");
+            logger.info("Token was fetched by value successfully");
             return passwordToken;
         } catch (DataAccessException exception) {
-            logger.warn("Token wasn't fetched\n{}", exception.getMessage());
+            logger.warn("Token wasn't fetched by value\n{}", exception.getMessage());
             return null;
         }
     }

@@ -97,7 +97,7 @@ public class UserController {
             if (updatedUser != null) {
                 boolean result = userService.sendPasswordResetEmail(password, updatedUser.getEmail());
 
-                if(!result) {
+                if (!result) {
                     return setAttributesAndGetProperPage(model, "message",
                         "Cannot send email to user, but user was updated", "update_user");
                 }

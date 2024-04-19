@@ -29,8 +29,8 @@ public class TokenValidator {
     }
 
     private void validateToken(String token) {
-        if (token == null) {
-            throw new TokenValidationException("Token value was null");
+        if (token == null || token.isBlank()) {
+            throw new TokenValidationException("Token value was null or empty");
         }
     }
 

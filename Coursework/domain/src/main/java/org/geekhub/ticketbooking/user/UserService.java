@@ -77,10 +77,10 @@ public class UserService {
         try {
             logger.info("Try to get user by email");
             User user = userRepository.getUserByEmail(email);
-            logger.info("User was fetched successfully");
+            logger.info("User was fetched by email successfully");
             return user;
         } catch (DataAccessException exception) {
-            logger.warn("User wasn't fetched\n{}", exception.getMessage());
+            logger.warn("User wasn't fetched by email\n{}", exception.getMessage());
             return null;
         }
     }

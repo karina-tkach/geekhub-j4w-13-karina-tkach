@@ -98,11 +98,11 @@ public class UserValidator {
         if (password.isBlank()) {
             throw new UserValidationException("User password was empty");
         }
-        if (!validateSymbols(password)) {
-            throw new UserValidationException("User password didn't match password pattern");
-        }
         if (password.length() > 20 || password.length() < 8) {
             throw new UserValidationException("User password had wrong length");
+        }
+        if (!validateSymbols(password)) {
+            throw new UserValidationException("User password didn't match password pattern");
         }
     }
 
