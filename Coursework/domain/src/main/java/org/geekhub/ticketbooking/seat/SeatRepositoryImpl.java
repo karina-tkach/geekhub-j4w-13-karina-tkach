@@ -77,35 +77,4 @@ public class SeatRepositoryImpl implements SeatRepository {
 
         jdbcTemplate.update(query, mapSqlParameterSource);
     }
-
-    @Override
-    public List<Seat> getSeatsByHallWithPagination(int hallId, int pageNumber, int limit) {
-        String query = """
-            SELECT * FROM seats WHERE hall_id=:id
-            ORDER BY id
-            LIMIT :limit
-            OFFSET :offset
-            """;
-
-        SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
-            .addValue("id", hallId)
-            .addValue("limit", limit)
-            .addValue("offset", getOffset(pageNumber, limit));
-
-        return jdbcTemplate.query(query, mapSqlParameterSource, SeatMapper::mapToPojo);
-    }
-
-    @Override
-    public int getSeatsByHallRowsCount(int hallId) {
-        String query = "SELECT COUNT(*) FROM seats WHERE hall_id=:id";
-
-        SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
-            .addValue("id", hallId);
-
-        return jdbcTemplate.queryForObject(query, mapSqlParameterSource, Integer.class);
-    }
-
-    private static int getOffset(int pageNumber, int pageSize) {
-        return (pageNumber - 1) * pageSize;
-    }
 }

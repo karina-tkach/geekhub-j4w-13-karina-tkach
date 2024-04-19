@@ -1,11 +1,7 @@
 package org.geekhub.ticketbooking.hall;
 
-import org.geekhub.ticketbooking.seat.Seat;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class HallMapper {
     private HallMapper() {
@@ -17,16 +13,6 @@ public class HallMapper {
             rs.getString("name"),
             rs.getInt("rows"),
             rs.getInt("columns"),
-            initializeSeats(rs.getInt("rows") * rs.getInt("columns")),
-            rs.getInt("cinema_id"),
-            null);
-    }
-
-    private static List<Seat> initializeSeats(int numberOfSeats) {
-        List<Seat> seatsList = new ArrayList<>(numberOfSeats);
-        for (int i = 0; i < numberOfSeats; i++) {
-            seatsList.add(new Seat());
-        }
-        return seatsList;
+            rs.getInt("cinema_id"));
     }
 }

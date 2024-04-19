@@ -13,6 +13,8 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -21,31 +23,24 @@ public class ShowService {
     private final ShowRepository showRepository;
     private final ShowValidator showValidator;
     private final MovieService movieService;
-    private final ShowSeatService showSeatService;
     private final SeatService seatService;
+    private final ShowSeatService showSeatService;
 
     private final Logger logger = LoggerFactory.getLogger(ShowService.class);
 
     public ShowService(ShowRepository showRepository, ShowValidator showValidator,
-                       MovieService movieService, ShowSeatService showSeatService,
-                       SeatService seatService) {
+                       MovieService movieService, SeatService seatService, ShowSeatService showSeatService) {
         this.showRepository = showRepository;
         this.showValidator = showValidator;
         this.movieService = movieService;
-        this.showSeatService = showSeatService;
         this.seatService = seatService;
+        this.showSeatService = showSeatService;
     }
 
     public List<Show> getAllShows() {
         try {
             logger.info("Try to get shows");
             List<Show> shows = showRepository.getAllShows();
-
-            if (shows != null) {
-                for (Show show : shows) {
-                    setShowSeats(show);
-                }
-            }
 
             logger.info("Shows were fetched successfully");
             return shows;
@@ -60,10 +55,6 @@ public class ShowService {
             logger.info("Try to get show by id");
             Show show = showRepository.getShowById(showId);
 
-            if (show != null) {
-                setShowSeats(show);
-            }
-
             logger.info("Show was fetched successfully");
             return show;
         } catch (DataAccessException exception) {
@@ -76,12 +67,6 @@ public class ShowService {
         try {
             logger.info("Try to get shows by hall");
             List<Show> shows = showRepository.getShowsByHall(hallId);
-
-            if (shows != null) {
-                for (Show show : shows) {
-                    setShowSeats(show);
-                }
-            }
 
             logger.info("Shows by hall were fetched successfully");
             return shows;
@@ -96,12 +81,6 @@ public class ShowService {
             logger.info("Try to get shows by hall with pagination");
             List<Show> shows = showRepository.getShowsByHallWithPagination(hallId, pageNumber, limit);
 
-            if (shows != null) {
-                for (Show show : shows) {
-                    setShowSeats(show);
-                }
-            }
-
             logger.info("Shows by hall were fetched successfully with pagination");
             return shows;
         } catch (DataAccessException exception) {
@@ -113,6 +92,8 @@ public class ShowService {
     public Show addShow(Show show, int hallId) {
         try {
             logger.info("Try to add show");
+
+            checkOverlapForShowAdd(show, hallId);
             Movie movie = movieService.getMovieByTitle(show.getMovie().getTitle());
 
             if (movie == null) {
@@ -147,6 +128,7 @@ public class ShowService {
                 throw new ShowValidationException("Show with id '" + showId + "' not found");
             }
 
+            checkOverlapForShowUpdate(show, hallId, showId);
 
             Movie movie = movieService.getMovieByTitle(show.getMovie().getTitle());
 
@@ -192,12 +174,6 @@ public class ShowService {
             logger.info("Try to get shows with pagination");
             List<Show> shows = showRepository.getShowsWithPagination(pageNumber, limit);
 
-            if (shows != null) {
-                for (Show show : shows) {
-                    setShowSeats(show);
-                }
-            }
-
             logger.info("Shows were fetched with pagination successfully");
             return shows;
         } catch (IllegalArgumentException | DataAccessException exception) {
@@ -230,20 +206,49 @@ public class ShowService {
         }
     }
 
-    private void setShowSeats(Show show) {
-        List<ShowSeat> seats = showSeatService.getSeatsByHallAndShow(show.getHallId(), show.getId());
-        show.setSeats(seats);
-    }
-
     private void addShowSeats(int showId, int hallId) {
         List<Seat> seats = seatService.getSeatsByHall(hallId);
 
         for (Seat seat : seats) {
-            ShowSeat showSeat = new ShowSeat();
-            showSeat.setNumber(seat.getNumber());
-            showSeat.setHallId(hallId);
-            showSeat.setShowId(showId);
+            ShowSeat showSeat = new ShowSeat(seat.getNumber(), hallId, showId);
             showSeatService.addSeat(showSeat, hallId, showId);
+        }
+    }
+
+    private void checkOverlapForShowAdd(Show show, int hallId) {
+        List<Show> shows = this.getShowsByHall(hallId);
+        shows.add(show);
+
+        checkOverlapForShow(shows);
+    }
+
+    private void checkOverlapForShowUpdate(Show show, int hallId, int showId) {
+        List<Show> shows = this.getShowsByHall(hallId);
+        show.setId(0);
+        shows.add(show);
+
+        Iterator<Show> iterator = shows.iterator();
+        while (iterator.hasNext()) {
+            Show showToCheck = iterator.next();
+            if (showToCheck.getId() == showId) {
+                iterator.remove();
+                break;
+            }
+        }
+
+        checkOverlapForShow(shows);
+    }
+
+    private void checkOverlapForShow(List<Show> shows) {
+        shows.sort(Comparator.comparing(Show::getStart));
+
+        for (int i = 0; i < shows.size() - 1; i++) {
+            Show currentShow = shows.get(i);
+            Show nextShow = shows.get(i + 1);
+
+            if (nextShow.getStart().minusMinutes(10).isBefore(currentShow.getEnd())) {
+                throw new ShowValidationException("Show time overlaps with existing one");
+            }
         }
     }
 }

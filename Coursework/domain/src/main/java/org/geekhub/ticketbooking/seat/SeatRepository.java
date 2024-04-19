@@ -10,8 +10,4 @@ public interface SeatRepository {
     int addSeat(Seat seat, int hallId);
 
     void deleteSeatById(int seatId);
-
-    List<Seat> getSeatsByHallWithPagination(int hallId, int pageNumber, int limit);
-
-    int getSeatsByHallRowsCount(int hallId);
 }

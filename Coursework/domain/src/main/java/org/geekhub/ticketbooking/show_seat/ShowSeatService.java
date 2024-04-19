@@ -63,23 +63,6 @@ public class ShowSeatService {
         }
     }
 
-    public boolean deleteSeatById(int seatId) {
-        ShowSeat seatToDel = getSeatById(seatId);
-        try {
-            logger.info("Try to delete show seat");
-            if (seatToDel == null) {
-                throw new SeatValidationException("Show seat with id '" + seatId + "' not found");
-            }
-
-            seatRepository.deleteSeatById(seatId);
-            logger.info("Show seat was deleted:\n{}", seatToDel);
-            return true;
-        } catch (SeatValidationException | DataAccessException exception) {
-            logger.warn("Show seat wasn't deleted: {}\n{}", seatToDel, exception.getMessage());
-            return false;
-        }
-    }
-
     public ShowSeat updateSeatById(ShowSeat seat, int seatId, int hallId, int showId) {
         ShowSeat seatToUpdate = getSeatById(seatId);
         try {

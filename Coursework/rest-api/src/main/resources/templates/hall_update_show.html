@@ -92,12 +92,9 @@
                             </select><br>
                         </div>
                     </div>
-                    <div class="full-field hall">
-                        <div class="field input-field">
-                            <label class="characteristics">Hall</label>
-                            <select id="hallSelect" th:field="*{hallId}" required>
-                                <option th:each="hall : ${halls}" th:value="${hall.id}" th:text="${hall.hallName}"></option>
-                            </select>
+                    <div class="full-field hallId-field">
+                        <div class="field input-field" style="height: 0;">
+                            <input type="hidden" th:field="*{hallId}" />
                         </div>
                     </div>
                     <div class="field button-field input-field button" id="button">

@@ -71,17 +71,6 @@ public class ShowSeatRepositoryImpl implements ShowSeatRepository {
     }
 
     @Override
-    public void deleteSeatById(int seatId) {
-        String query = """
-            DELETE FROM show_seats WHERE id=:id
-            """;
-        SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
-            .addValue("id", seatId);
-
-        jdbcTemplate.update(query, mapSqlParameterSource);
-    }
-
-    @Override
     public void updateSeatById(ShowSeat seat, int seatId, int hallId, int showId) {
         String query = """
             UPDATE show_seats SET

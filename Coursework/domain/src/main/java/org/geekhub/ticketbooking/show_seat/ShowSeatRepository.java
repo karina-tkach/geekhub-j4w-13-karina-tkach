@@ -9,8 +9,6 @@ public interface ShowSeatRepository {
 
     int addSeat(ShowSeat seat, int hallId, int showId);
 
-    void deleteSeatById(int seatId);
-
     void updateSeatById(ShowSeat seat, int seatId, int hallId, int showId);
 
     List<ShowSeat> getSeatsByHallAndShowWithPagination(int hallId, int showId, int pageNumber, int limit);

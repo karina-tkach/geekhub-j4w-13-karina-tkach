@@ -26,7 +26,6 @@ public class ShowMapper {
                 rs.getInt("ageLimit"),
                 Genre.valueOf(rs.getString("genre")),
                 rs.getBytes("image")),
-            rs.getInt("hall_id"),
-            null);
+            rs.getInt("hall_id"));
     }
 }

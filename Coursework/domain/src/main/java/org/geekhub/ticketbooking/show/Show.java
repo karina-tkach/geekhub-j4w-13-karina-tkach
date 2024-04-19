@@ -1,15 +1,12 @@
 package org.geekhub.ticketbooking.show;
 
 import org.geekhub.ticketbooking.movie.Movie;
-import org.geekhub.ticketbooking.show_seat.ShowSeat;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class Show {
@@ -19,7 +16,6 @@ public class Show {
     private OffsetDateTime end;
     private Movie movie;
     private int hallId;
-    private List<ShowSeat> seats;
 
     public Show() {
         this.id = -1;
@@ -28,18 +24,16 @@ public class Show {
         this.end = null;
         this.movie = new Movie();
         this.hallId = -1;
-        seats = new ArrayList<>();
     }
 
     public Show(int id, BigDecimal price, OffsetDateTime start, OffsetDateTime end,
-                Movie movie, int hallId, List<ShowSeat> seats) {
+                Movie movie, int hallId) {
         this.id = id;
         this.price = price;
         this.start = start;
         this.end = end;
         this.movie = movie;
         this.hallId = hallId;
-        this.seats = seats;
     }
 
     public int getId() {
@@ -90,14 +84,6 @@ public class Show {
         this.hallId = hallId;
     }
 
-    public List<ShowSeat> getSeats() {
-        return seats;
-    }
-
-    public void setSeats(List<ShowSeat> seats) {
-        this.seats = seats;
-    }
-
     public void setFormattedStartDate(String date) {
         if (!date.isEmpty()) {
             this.start = LocalDateTime.parse(date, DateTimeFormatter.ISO_DATE_TIME).atOffset(ZoneOffset.UTC);
@@ -139,12 +125,12 @@ public class Show {
         Show show = (Show) o;
         return id == show.id && hallId == show.hallId &&
             Objects.equals(price, show.price) && Objects.equals(start, show.start) &&
-            Objects.equals(end, show.end) && Objects.equals(movie, show.movie) && Objects.equals(seats, show.seats);
+            Objects.equals(end, show.end) && Objects.equals(movie, show.movie);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, price, start, end, movie, hallId, seats);
+        return Objects.hash(id, price, start, end, movie, hallId);
     }
 
     @Override
@@ -156,7 +142,6 @@ public class Show {
             ", end=" + end +
             ", movie=" + movie +
             ", hallId=" + hallId +
-            ", seats=" + seats +
             '}';
     }
 }

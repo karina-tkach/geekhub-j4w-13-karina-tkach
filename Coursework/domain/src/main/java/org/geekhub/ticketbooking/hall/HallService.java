@@ -17,25 +17,22 @@ import java.util.List;
 public class HallService {
     private final HallRepository hallRepository;
     private final HallValidator hallValidator;
-    private final SeatService seatService;
     private final ShowService showService;
+    private final SeatService seatService;
     private final Logger logger = LoggerFactory.getLogger(HallService.class);
 
-    public HallService(HallRepository hallRepository, HallValidator hallValidator,
-                       SeatService seatService, ShowService showService) {
+    public HallService(HallRepository hallRepository, HallValidator hallValidator, ShowService showService,
+                       SeatService seatService) {
         this.hallRepository = hallRepository;
         this.hallValidator = hallValidator;
-        this.seatService = seatService;
         this.showService = showService;
+        this.seatService = seatService;
     }
 
     public Hall getHallById(int hallId) {
         try {
             logger.info("Try to get hall by id");
             Hall hall = hallRepository.getHallById(hallId);
-            if (hall != null) {
-                setHallProperties(hall);
-            }
             logger.info("Hall was fetched successfully");
             return hall;
         } catch (HallValidationException | DataAccessException exception) {
@@ -48,11 +45,6 @@ public class HallService {
         try {
             logger.info("Try to get halls by cinema");
             List<Hall> halls = hallRepository.getHallsByCinema(cinemaId);
-            if (halls != null) {
-                for (Hall hall : halls) {
-                    setHallProperties(hall);
-                }
-            }
             logger.info("Halls were fetched successfully");
             return halls;
         } catch (HallValidationException | DataAccessException exception) {
@@ -66,15 +58,12 @@ public class HallService {
             logger.info("Try to add hall");
             hallValidator.validate(hall);
 
-            hall.setSeats();
-
             int id = hallRepository.addHall(hall, cinemaId);
             if (id == -1) {
                 throw new HallValidationException("Unable to retrieve the generated key");
             }
 
             setHallSeats(hall, id);
-            setHallShows(hall, id);
 
             logger.info("Hall was added:\n{}", hall);
             return getHallById(id);
@@ -86,28 +75,28 @@ public class HallService {
 
     public Hall updateHallById(Hall hall, int cinemaId, int hallId) {
         Hall hallToUpdate = getHallById(hallId);
+
         try {
             logger.info("Try to update hall");
             if (hallToUpdate == null) {
                 throw new HallValidationException("Hall with id '" + hallId + "' not found");
             }
 
-
             hallValidator.validate(hall);
-            hall.setSeats();
-
             hallRepository.updateHallById(hall, cinemaId, hallId);
 
             if (!(hallToUpdate.getRows() == hall.getRows() && hallToUpdate.getColumns() == hall.getColumns())) {
-                for (Seat seat : hallToUpdate.getSeats()) {
-                    seatService.deleteSeatById(seat.getId());
-                }
-                for (Show show : hallToUpdate.getShows()) {
+                List<Show> hallShows = showService.getShowsByHall(hallId);
+                List<Seat> hallSeats = seatService.getSeatsByHall(hallToUpdate.getId());
+
+                for (Show show : hallShows) {
                     showService.deleteShowById(show.getId());
+                }
+                for (Seat seat : hallSeats) {
+                    seatService.deleteSeatById(seat.getId());
                 }
 
                 setHallSeats(hall, hallId);
-                setHallShows(hall, hallId);
             }
             logger.info("Hall was updated:\n{}", hall);
             return getHallById(hallId);
@@ -168,29 +157,15 @@ public class HallService {
     }
 
     private void setHallSeats(Hall hall, int hallId) {
-        List<Seat> hallSeats = hall.getSeats();
-        for (Seat seat : hallSeats) {
+        int seatsNumber = hall.getRows() * hall.getColumns();
+
+        for (int i = 0; i < seatsNumber; i++) {
+            Seat seat = new Seat();
+
+            seat.setNumber(i + 1);
+            seat.setHallId(hallId);
+
             seatService.addSeat(seat, hallId);
         }
-    }
-
-    private void setHallShows(Hall hall, int hallId) {
-        List<Show> hallShows = hall.getShows();
-        if (hallShows != null) {
-            for (Show show : hallShows) {
-                showService.addShow(show, hallId);
-            }
-        }
-    }
-
-    private void setHallProperties(Hall hall) {
-        List<Seat> seats = seatService.getSeatsByHall(hall.getId());
-        List<Seat> hallSeats = hall.getSeats();
-        for (int i = 0; i < seats.size(); i++) {
-            hallSeats.set(i, seats.get(i));
-        }
-
-        List<Show> shows = showService.getShowsByHall(hall.getId());
-        hall.setShows(shows);
     }
 }

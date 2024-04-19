@@ -108,7 +108,6 @@ public class ShowController {
         }
 
         setMovies(model);
-        setHallsSelect(model, hallId);
         model.addAttribute("show", show);
         model.addAttribute("hallRedirect", "");
 
@@ -119,7 +118,6 @@ public class ShowController {
     public String updateShow(@ModelAttribute("show") Show show, Model model) {
         int showId = show.getId();
         setMovies(model);
-        setHallsSelect(model, show.getHallId());
 
         Show updatedShow = showService.updateShowById(show, show.getHallId(), showId);
 
@@ -135,9 +133,8 @@ public class ShowController {
     public String updateShow(@PathVariable(value = "hallId") int hallId, @ModelAttribute("show") Show show, Model model) {
         int showId = show.getId();
         setMovies(model);
-        setHallsSelect(model, hallId);
 
-        Show updatedShow = showService.updateShowById(show, show.getHallId(), showId);
+        Show updatedShow = showService.updateShowById(show, hallId, showId);
 
         if (updatedShow == null) {
             return setAttributesAndGetProperPage(model, "message",
@@ -194,7 +191,9 @@ public class ShowController {
         Map<Integer, List<Hall>> hallsByCinema = new HashMap<>();
 
         for (Cinema cinema : cinemas) {
-            //hallsByCinema.put(cinema.getId(), cinema.getHalls());
+            int cinemaId = cinema.getId();
+            List<Hall> halls = hallService.getHallsByCinema(cinemaId);
+            hallsByCinema.put(cinema.getId(), halls);
         }
 
         setMovies(model);
@@ -206,11 +205,5 @@ public class ShowController {
         List<Movie> movies = movieService.getAllMovies();
 
         model.addAttribute("movies", movies);
-    }
-
-    private void setHallsSelect(Model model, int hallId) {
-        Hall hall = hallService.getHallById(hallId);
-        List<Hall> halls = hallService.getHallsByCinema(hall.getCinemaId());
-        model.addAttribute("halls", halls);
     }
 }

@@ -25,6 +25,14 @@ public class ShowSeat {
         this.showId = showId;
     }
 
+    public ShowSeat(int number, int hallId, int showId) {
+        this.id = -1;
+        this.number = number;
+        this.booked = false;
+        this.hallId = hallId;
+        this.showId = showId;
+    }
+
     public int getId() {
         return id;
     }
