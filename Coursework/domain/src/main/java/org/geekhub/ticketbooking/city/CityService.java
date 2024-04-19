@@ -49,10 +49,10 @@ public class CityService {
             logger.info("Try to get city by name");
             cityValidator.validateName(name);
             City city = cityRepository.getCityByName(name);
-            logger.info("City was fetched successfully");
+            logger.info("City by name was fetched successfully");
             return city;
         } catch (CityValidationException | DataAccessException exception) {
-            logger.warn("City wasn't fetched\n{}", exception.getMessage());
+            logger.warn("City by name wasn't fetched\n{}", exception.getMessage());
             return null;
         }
     }
