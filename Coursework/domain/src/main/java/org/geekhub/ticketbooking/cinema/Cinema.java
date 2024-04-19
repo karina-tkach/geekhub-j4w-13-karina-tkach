@@ -61,13 +61,13 @@ public class Cinema {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Cinema cinema = (Cinema) o;
-        return id == cinema.id && Objects.equals(name, cinema.name) && Objects.equals(city, cinema.city) &&
+        return Objects.equals(name, cinema.name) && Objects.equals(city, cinema.city) &&
             Objects.equals(street, cinema.street);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, city, street);
+        return Objects.hash(name, city, street);
     }
 
     @Override

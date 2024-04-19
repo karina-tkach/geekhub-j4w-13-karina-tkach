@@ -144,7 +144,7 @@ public class Movie {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Movie movie = (Movie) o;
-        return id == movie.id && durationInMins == movie.durationInMins && ageLimit == movie.ageLimit &&
+        return durationInMins == movie.durationInMins && ageLimit == movie.ageLimit &&
             Objects.equals(title, movie.title) && Objects.equals(description, movie.description) &&
             Objects.equals(releaseDate, movie.releaseDate) && Objects.equals(country, movie.country) &&
             genre == movie.genre && Objects.deepEquals(image, movie.image);
@@ -152,7 +152,7 @@ public class Movie {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, description, durationInMins, releaseDate, country,
+        return Objects.hash(title, description, durationInMins, releaseDate, country,
             ageLimit, genre, Arrays.hashCode(image));
     }
 

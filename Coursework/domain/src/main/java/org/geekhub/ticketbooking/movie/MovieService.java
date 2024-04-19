@@ -57,10 +57,10 @@ public class MovieService {
                 throw new MovieValidationException("Title must not be null");
             }
             Movie movie = movieRepository.getMovieByTitle(title);
-            logger.info("Movie was fetched successfully");
+            logger.info("Movie was fetched by title successfully");
             return movie;
         } catch (MovieValidationException | DataAccessException exception) {
-            logger.warn("Movie wasn't fetched\n{}", exception.getMessage());
+            logger.warn("Movie wasn't fetched by title\n{}", exception.getMessage());
             return null;
         }
     }
@@ -72,10 +72,10 @@ public class MovieService {
                 throw new MovieValidationException("Genre must not be null");
             }
             List<Movie> movies = movieRepository.getMoviesByGenre(genre);
-            logger.info("Movies were fetched successfully");
+            logger.info("Movies were fetched by genre successfully");
             return movies;
         } catch (MovieValidationException | DataAccessException exception) {
-            logger.warn("Movies weren't fetched\n{}", exception.getMessage());
+            logger.warn("Movies weren't fetched by genre\n{}", exception.getMessage());
             return Collections.emptyList();
         }
     }
@@ -87,10 +87,10 @@ public class MovieService {
                 throw new MovieValidationException("'From' date must be before 'to' date");
             }
             List<Movie> movies = movieRepository.getMoviesInDateRange(from, to);
-            logger.info("Movies were fetched successfully");
+            logger.info("Movies in date range were fetched successfully");
             return movies;
         } catch (MovieValidationException | DataAccessException exception) {
-            logger.warn("Movies weren't fetched\n{}", exception.getMessage());
+            logger.warn("Movies in date range weren't fetched\n{}", exception.getMessage());
             return Collections.emptyList();
         }
     }
