@@ -2,9 +2,7 @@ package org.geekhub.ticketbooking.cinema;
 
 import org.geekhub.ticketbooking.exception.CinemaValidationException;
 import org.geekhub.ticketbooking.city.City;
-import org.geekhub.ticketbooking.hall.Hall;
 import org.geekhub.ticketbooking.city.CityService;
-import org.geekhub.ticketbooking.hall.HallService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
@@ -18,26 +16,18 @@ public class CinemaService {
     private final CinemaRepository cinemaRepository;
     private final CinemaValidator cinemaValidator;
     private final CityService cityService;
-    private final HallService hallService;
     private final Logger logger = LoggerFactory.getLogger(CinemaService.class);
 
-    public CinemaService(CinemaRepository cinemaRepository, CinemaValidator cinemaValidator, CityService cityService, HallService hallService) {
+    public CinemaService(CinemaRepository cinemaRepository, CinemaValidator cinemaValidator, CityService cityService) {
         this.cinemaRepository = cinemaRepository;
         this.cinemaValidator = cinemaValidator;
         this.cityService = cityService;
-        this.hallService = hallService;
     }
 
     public List<Cinema> getAllCinemas() {
         try {
             logger.info("Try to get cinemas");
             List<Cinema> cinemas = cinemaRepository.getAllCinemas();
-            if (cinemas != null) {
-                for (Cinema cinema : cinemas) {
-                    List<Hall> halls = hallService.getHallsByCinema(cinema.getId());
-                    cinema.setHalls(halls);
-                }
-            }
             logger.info("Cinemas were fetched successfully");
             return cinemas;
         } catch (DataAccessException exception) {
@@ -50,10 +40,6 @@ public class CinemaService {
         try {
             logger.info("Try to get cinema by id");
             Cinema cinema = cinemaRepository.getCinemaById(cinemaId);
-            if (cinema != null) {
-                List<Hall> halls = hallService.getHallsByCinema(cinemaId);
-                cinema.setHalls(halls);
-            }
             logger.info("Cinema was fetched successfully");
             return cinema;
         } catch (DataAccessException exception) {
@@ -66,16 +52,10 @@ public class CinemaService {
         try {
             logger.info("Try to get cinemas by city");
             List<Cinema> cinemas = cinemaRepository.getCinemasByCity(cityId);
-            if (cinemas != null) {
-                for (Cinema cinema : cinemas) {
-                    List<Hall> halls = hallService.getHallsByCinema(cinema.getId());
-                    cinema.setHalls(halls);
-                }
-            }
-            logger.info("Cinemas were fetched successfully");
+            logger.info("Cinemas by city were fetched successfully");
             return cinemas;
         } catch (DataAccessException exception) {
-            logger.warn("Cinemas weren't fetched\n{}", exception.getMessage());
+            logger.warn("Cinemas by city weren't fetched\n{}", exception.getMessage());
             return Collections.emptyList();
         }
     }
@@ -94,13 +74,6 @@ public class CinemaService {
             int id = cinemaRepository.addCinema(cinema, cityId);
             if (id == -1) {
                 throw new CinemaValidationException("Unable to retrieve the generated key");
-            }
-
-            List<Hall> cinemaHalls = cinema.getHalls();
-            if (cinemaHalls != null) {
-                for (Hall hall : cinemaHalls) {
-                    hallService.addHall(hall, id);
-                }
             }
 
             logger.info("Cinema was added:\n{}", cinema);
@@ -126,16 +99,6 @@ public class CinemaService {
             }
             int cityId = city.getId();
 
-            for (Hall hall : cinemaToUpdate.getHalls()) {
-                hallService.deleteHallById(hall.getId());
-            }
-
-            List<Hall> cinemaHalls = cinema.getHalls();
-            if (cinemaHalls != null) {
-                for (Hall hall : cinemaHalls) {
-                    hallService.addHall(hall, cinemaId);
-                }
-            }
             cinemaRepository.updateCinemaById(cinema, cinemaId, cityId);
             logger.info("Cinema was updated:\n{}", cinema);
             return getCinemaById(cinemaId);

@@ -4,6 +4,8 @@ import org.geekhub.ticketbooking.cinema.Cinema;
 import org.geekhub.ticketbooking.city.City;
 import org.geekhub.ticketbooking.cinema.CinemaService;
 import org.geekhub.ticketbooking.city.CityService;
+import org.geekhub.ticketbooking.hall.Hall;
+import org.geekhub.ticketbooking.hall.HallService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,10 +23,12 @@ import java.util.List;
 public class CinemaController {
     private final CinemaService cinemaService;
     private final CityService cityService;
+    private final HallService hallService;
 
-    public CinemaController(CinemaService cinemaService, CityService cityService) {
+    public CinemaController(CinemaService cinemaService, CityService cityService, HallService hallService) {
         this.cinemaService = cinemaService;
         this.cityService = cityService;
+        this.hallService = hallService;
     }
 
     @GetMapping
@@ -46,13 +50,15 @@ public class CinemaController {
     @GetMapping("/showNewCinemaForm")
     public String showNewCinemaForm(Model model) {
         Cinema cinema = new Cinema();
+        Hall hall = new Hall();
         addCities(model);
         model.addAttribute("cinema", cinema);
+        model.addAttribute("hall", hall);
         return "new_cinema";
     }
 
     @PostMapping("/saveCinema")
-    public String saveCinema(@ModelAttribute("cinema") Cinema cinema, Model model) {
+    public String saveCinema(@ModelAttribute("cinema") Cinema cinema, @ModelAttribute("hall") Hall hall, Model model) {
         Cinema addedCinema = cinemaService.addCinema(cinema);
 
         addCities(model);
@@ -61,6 +67,16 @@ public class CinemaController {
             return setAttributesAndGetProperPage(model, "message",
                 "Invalid cinema parameters", "new_cinema");
         }
+        int cinemaId = addedCinema.getId();
+        Hall addedHall = hallService.addHall(hall, cinemaId);
+
+        if (addedHall == null) {
+            cinemaService.deleteCinemaById(cinemaId);
+            return setAttributesAndGetProperPage(model, "message",
+                "Invalid hall parameters", "new_cinema");
+        }
+
+
         return setAttributesAndGetProperPage(model, "message",
             "You have successfully added cinema", "new_cinema");
     }
@@ -84,8 +100,6 @@ public class CinemaController {
         addCities(model);
 
         int cinemaId = cinema.getId();
-        Cinema oldCinema = cinemaService.getCinemaById(cinemaId);
-        cinema.setHalls(oldCinema.getHalls());
 
         Cinema updatedCinema = cinemaService.updateCinemaById(cinema, cinemaId);
 

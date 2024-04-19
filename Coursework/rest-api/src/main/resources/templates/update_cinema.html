@@ -52,13 +52,14 @@
                 <form action="#" th:action="@{/admin/cinemas/updateCinema}" th:object="${cinema}" method="POST">
                     <div class="full-field id-field">
                         <div class="field input-field" style="height: 0;">
-                            <input type="hidden" th:field="*{id}" />
+                            <input type="hidden" th:field="*{id}"/>
                         </div>
                     </div>
                     <div class="full-field name-field">
                         <div class="field input-field">
                             <label class="characteristics">Name</label>
-                            <input th:field="*{name}" type="text" name = "name" placeholder="Name" class="input name" id="name" required>
+                            <input th:field="*{name}" type="text" name="name" placeholder="Name" class="input name"
+                                   id="name" required>
                         </div>
                     </div>
                     <div class="full-field city">
@@ -74,7 +75,8 @@
                     <div class="full-field street">
                         <div class="field input-field">
                             <label class="characteristics">Street</label>
-                            <input th:field="*{street}" type="text" name = "street" placeholder="Street" class="street" id="street" required>
+                            <input th:field="*{street}" type="text" name="street" placeholder="Street" class="street"
+                                   id="street" required>
                         </div>
                     </div>
                     <div class="field button-field input-field button" style="margin-top:40px;" id="button">

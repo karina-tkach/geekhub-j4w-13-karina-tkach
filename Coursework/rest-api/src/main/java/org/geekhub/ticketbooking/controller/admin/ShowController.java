@@ -194,7 +194,7 @@ public class ShowController {
         Map<Integer, List<Hall>> hallsByCinema = new HashMap<>();
 
         for (Cinema cinema : cinemas) {
-            hallsByCinema.put(cinema.getId(), cinema.getHalls());
+            //hallsByCinema.put(cinema.getId(), cinema.getHalls());
         }
 
         setMovies(model);

@@ -3,11 +3,8 @@ package org.geekhub.ticketbooking.cinema;
 import org.geekhub.ticketbooking.exception.CinemaValidationException;
 import org.geekhub.ticketbooking.exception.CityValidationException;
 import org.geekhub.ticketbooking.city.City;
-import org.geekhub.ticketbooking.hall.Hall;
 import org.geekhub.ticketbooking.city.CityValidator;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class CinemaValidator {
@@ -22,8 +19,9 @@ public class CinemaValidator {
             throw new CinemaValidationException("Cinema was null");
         }
 
+        validateName(cinema.getName());
         validateCity(cinema.getCity());
-        validateHalls(cinema.getHalls());
+        validateName(cinema.getStreet());
     }
 
     private void validateCity(City city) {
@@ -34,9 +32,9 @@ public class CinemaValidator {
         }
     }
 
-    private void validateHalls(List<Hall> halls) {
-        if (halls == null || halls.isEmpty()) {
-            throw new CinemaValidationException("Halls were null or empty");
+    private void validateName(String name) {
+        if (name == null || name.isBlank() || name.length() > 50) {
+            throw new CinemaValidationException("Cinema name or street cannot be null or empty and must be less than 50 characters");
         }
     }
 }

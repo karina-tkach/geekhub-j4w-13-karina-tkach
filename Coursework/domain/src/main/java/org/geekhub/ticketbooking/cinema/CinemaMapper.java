@@ -16,7 +16,6 @@ public class CinemaMapper {
         return new Cinema(rs.getInt("id"),
             rs.getString("name"),
             new City(rs.getInt("city_id"), rs.getString("city_name")),
-            rs.getString("street"),
-            null);
+            rs.getString("street"));
     }
 }

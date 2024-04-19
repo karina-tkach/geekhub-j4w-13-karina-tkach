@@ -96,7 +96,7 @@
                         <div class="field input-field">
                             <label class="characteristics">Hall</label>
                             <select id="hallSelect" th:field="*{hallId}" required>
-                                <option th:each="hall : ${halls}" th:value="${hall.id}" th:text="${hall.name}"></option>
+                                <option th:each="hall : ${halls}" th:value="${hall.id}" th:text="${hall.hallName}"></option>
                             </select>
                         </div>
                     </div>

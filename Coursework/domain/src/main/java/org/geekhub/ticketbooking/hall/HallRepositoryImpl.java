@@ -55,7 +55,7 @@ public class HallRepositoryImpl implements HallRepository {
 
         KeyHolder generatedKeyHolder = new GeneratedKeyHolder();
         SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
-            .addValue("name", hall.getName())
+            .addValue("name", hall.getHallName())
             .addValue("rows", hall.getRows())
             .addValue("columns", hall.getColumns())
             .addValue("cinema_id", cinemaId);
@@ -77,7 +77,7 @@ public class HallRepositoryImpl implements HallRepository {
             name=:name, rows=:rows, columns=:columns, cinema_id=:cinemaId WHERE id=:id
             """;
         SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
-            .addValue("name", hall.getName())
+            .addValue("name", hall.getHallName())
             .addValue("rows", hall.getRows())
             .addValue("columns", hall.getColumns())
             .addValue("cinemaId", cinemaId)

@@ -9,7 +9,7 @@ import java.util.Objects;
 
 public class Hall {
     private int id;
-    private String name;
+    private String hallName;
     private int rows;
     private int columns;
     private List<Seat> seats;
@@ -18,7 +18,7 @@ public class Hall {
 
     public Hall() {
         this.id = -1;
-        this.name = null;
+        this.hallName = null;
         this.rows = 0;
         this.columns = 0;
         this.seats = initializeSeats(0);
@@ -26,10 +26,10 @@ public class Hall {
         this.shows = new ArrayList<>();
     }
 
-    public Hall(int id, String name, int rows, int columns, List<Seat> seats,
+    public Hall(int id, String hallName, int rows, int columns, List<Seat> seats,
                 int cinemaId, List<Show> shows) {
         this.id = id;
-        this.name = name;
+        this.hallName = hallName;
         this.rows = rows;
         this.columns = columns;
         this.seats = seats;
@@ -39,7 +39,7 @@ public class Hall {
 
     public Hall(int id, String name, int rows, int columns, int cinemaId, List<Show> shows) {
         this.id = id;
-        this.name = name;
+        this.hallName = name;
         this.rows = rows;
         this.columns = columns;
         this.seats = initializeSeats(rows * columns);
@@ -67,12 +67,12 @@ public class Hall {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getHallName() {
+        return hallName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setHallName(String hallName) {
+        this.hallName = hallName;
     }
 
     public int getRows() {
@@ -121,20 +121,20 @@ public class Hall {
         if (o == null || getClass() != o.getClass()) return false;
         Hall hall = (Hall) o;
         return id == hall.id && rows == hall.rows && columns == hall.columns &&
-            cinemaId == hall.cinemaId && Objects.equals(name, hall.name) &&
+            cinemaId == hall.cinemaId && Objects.equals(hallName, hall.hallName) &&
             Objects.equals(seats, hall.seats) && Objects.equals(shows, hall.shows);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, rows, columns, seats, cinemaId, shows);
+        return Objects.hash(id, hallName, rows, columns, seats, cinemaId, shows);
     }
 
     @Override
     public String toString() {
         return "Hall{" +
             "id=" + id +
-            ", name='" + name + '\'' +
+            ", name='" + hallName + '\'' +
             ", rows=" + rows +
             ", columns=" + columns +
             ", seats=" + seats +

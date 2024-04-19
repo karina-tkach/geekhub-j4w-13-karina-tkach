@@ -21,6 +21,7 @@ public class HallValidator {
             throw new HallValidationException("Hall was null");
         }
 
+        validateRowsAndCols(hall.getRows(), hall.getColumns());
         validateSeats(hall, hall.getSeats());
     }
 
@@ -35,6 +36,12 @@ public class HallValidator {
             }
         } catch (SeatValidationException exception) {
             throw new HallValidationException(exception.getMessage());
+        }
+    }
+
+    private void validateRowsAndCols(int rows, int columns) {
+        if (rows < 1 || columns < 1) {
+            throw new HallValidationException("Rows or columns were less than 1");
         }
     }
 }

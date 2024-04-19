@@ -38,10 +38,10 @@
                 <p>[[${error}]]</p>
             </div>
         </div>
-        <div class = "table">
+        <div class="table">
             <h1 style="font-size: 40px;">Cinemas List</h1>
-            <div class ="addUser">
-                <a th:href = "@{/admin/cinemas/showNewCinemaForm}"> Add Cinema </a>
+            <div class="addUser">
+                <a th:href="@{/admin/cinemas/showNewCinemaForm}"> Add Cinema </a>
             </div>
             <div th:if="${error == null}">
                 <table>
@@ -60,7 +60,8 @@
                         <td th:text="${cinema.city.name}"></td>
                         <td th:text="${cinema.street}"></td>
                         <td>
-                            <a style="background-color: #0078e0" th:href="@{/admin/halls/{cinemaId}(cinemaId=${cinema.id})}">View Halls</a>
+                            <a style="background-color: #0078e0"
+                               th:href="@{/admin/halls/{cinemaId}(cinemaId=${cinema.id})}">View Halls</a>
                         </td>
                         <td><a th:href="@{/admin/cinemas/showFormForUpdate/{id}(id=${cinema.id})}">Update</a>
                             <a th:href="@{/admin/cinemas/deleteCinema/{id}(id=${cinema.id})}">Delete</a>

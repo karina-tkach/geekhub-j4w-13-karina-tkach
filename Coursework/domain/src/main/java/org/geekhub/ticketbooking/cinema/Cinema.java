@@ -1,10 +1,7 @@
 package org.geekhub.ticketbooking.cinema;
 
 import org.geekhub.ticketbooking.city.City;
-import org.geekhub.ticketbooking.hall.Hall;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class Cinema {
@@ -12,23 +9,19 @@ public class Cinema {
     private String name;
     private City city;
     private String street;
-    private List<Hall> halls;
 
     public Cinema() {
         this.id = -1;
         this.name = null;
         this.city = new City();
         this.street = null;
-        this.halls = new ArrayList<>();
-        halls.add(new Hall());
     }
 
-    public Cinema(int id, String name, City city, String street, List<Hall> halls) {
+    public Cinema(int id, String name, City city, String street) {
         this.id = id;
         this.name = name;
         this.city = city;
         this.street = street;
-        this.halls = halls;
     }
 
     public int getId() {
@@ -63,26 +56,18 @@ public class Cinema {
         this.street = street;
     }
 
-    public List<Hall> getHalls() {
-        return halls;
-    }
-
-    public void setHalls(List<Hall> halls) {
-        this.halls = halls;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Cinema cinema = (Cinema) o;
         return id == cinema.id && Objects.equals(name, cinema.name) && Objects.equals(city, cinema.city) &&
-            Objects.equals(street, cinema.street) && Objects.equals(halls, cinema.halls);
+            Objects.equals(street, cinema.street);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, city, street, halls);
+        return Objects.hash(id, name, city, street);
     }
 
     @Override
@@ -92,7 +77,6 @@ public class Cinema {
             ", name='" + name + '\'' +
             ", city=" + city +
             ", street='" + street + '\'' +
-            ", halls=" + halls +
             '}';
     }
 }
