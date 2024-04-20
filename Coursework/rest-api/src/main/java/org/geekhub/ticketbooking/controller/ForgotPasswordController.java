@@ -99,7 +99,7 @@ public class ForgotPasswordController {
         User updatedUser = userService.updateUserById(user, user.getId());
         if (updatedUser == null) {
             return setAttributesAndGetProperPage(model, "message",
-                "Password must be at least 8 characters long and contain at least 1 uppercase letter and 1 digit.",
+                "Password must be at least 8 characters long and contain at least 1 uppercase letter and 1 digit. Special characters are allowed.",
                 "reset-password");
         }
         forgotPasswordService.updateTokenById(forgotPasswordToken, forgotPasswordToken.getId());

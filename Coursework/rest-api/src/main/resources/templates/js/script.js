@@ -6,7 +6,7 @@ pwShowHide.forEach(eyeIcon => {
         let pwFields = eyeIcon.parentElement.parentElement.querySelectorAll(".password, .cPassword");
 
         pwFields.forEach(password => {
-            if(password.type === "password"){
+            if (password.type === "password") {
                 password.type = "text";
                 eyeIcon.classList.replace("bx-hide", "bx-show");
                 return;
@@ -74,9 +74,9 @@ function resetErrorById(id) {
 }
 
 function checkFirstName() {
-    let regExp = /^([A-Za-z-]){2,100}$/;
+    let regExp = /^[A-Z][a-zA-Z]*(-[a-zA-Z]+)*$/;
     let firstName = document.getElementById("firstName").value;
-    if (!regExp.test(firstName)) {
+    if (firstName.length > 30 || firstName.length < 2 || !regExp.test(firstName)) {
         document.getElementById("error_firstName").innerHTML = "Invalid data";
         return false;
     }
@@ -84,9 +84,9 @@ function checkFirstName() {
 }
 
 function checkLastName() {
-    let regExp = /^([A-Za-z-]){2,100}$/;
+    let regExp = /^[A-Z][a-zA-Z]*(-[a-zA-Z]+)*$/;
     let lastName = document.getElementById("lastName").value;
-    if (!regExp.test(lastName)) {
+    if (lastName.length > 30 || lastName.length < 2 || !regExp.test(lastName)) {
         document.getElementById("error_lastName").innerHTML = "Invalid data";
         return false;
     }
@@ -104,10 +104,21 @@ function checkEmail() {
 }
 
 function checkPassword() {
-    let regExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/;
     let pass = document.getElementById("password").value;
-    if (!regExp.test(pass)) {
-        document.getElementById("error_pass").innerHTML = "Password must be at least 8 character long and contain at least 1 uppercase letter and 1 digit.";
+    if (pass.length > 20 || pass.length < 8 || !validateSymbols(pass)) {
+        document.getElementById("error_pass").innerHTML = "Password must be at least 8 characters long and contain at least 1 uppercase letter and 1 digit. Special characters are allowed.";
+        return false;
+    }
+    return true;
+}
+
+function validateSymbols(str) {
+
+    if (str.search(/\d/) === -1) {
+        return false;
+    } else if (str.search(/[A-Z]/) === -1) {
+        return false;
+    } else if (str.search(/[a-z]/) === -1) {
         return false;
     }
     return true;

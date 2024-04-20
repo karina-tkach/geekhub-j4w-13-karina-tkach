@@ -72,7 +72,7 @@ public class UserValidator {
         if (name.isBlank()) {
             throw new UserValidationException("User " + propertyName + " was empty");
         }
-        if (name.length() > 100 || name.length() < 2) {
+        if (name.length() > 30 || name.length() < 2) {
             throw new UserValidationException("User " + propertyName + " had wrong length");
         }
         Pattern pattern = Pattern.compile("^[A-Z][a-zA-Z]*(-[a-zA-Z]+)*$");
