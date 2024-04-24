@@ -6,13 +6,20 @@ import org.geekhub.ticketbooking.movie.MovieService;
 import org.geekhub.ticketbooking.show.Show;
 import org.geekhub.ticketbooking.show.ShowService;
 import org.geekhub.ticketbooking.show.ShowUtilityService;
+import org.geekhub.ticketbooking.show_seat.ShowSeat;
+import org.geekhub.ticketbooking.user.User;
+import org.geekhub.ticketbooking.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
@@ -23,12 +30,14 @@ public class UserShowsController {
     private final MovieService movieService;
     private final ShowService showService;
     private final ShowUtilityService showUtilityService;
+    private final UserService userService;
 
     public UserShowsController(MovieService movieService, ShowService showService,
-                               ShowUtilityService showUtilityService) {
+                               ShowUtilityService showUtilityService, UserService userService) {
         this.movieService = movieService;
         this.showService = showService;
         this.showUtilityService = showUtilityService;
+        this.userService = userService;
     }
 
     @GetMapping
@@ -65,11 +74,25 @@ public class UserShowsController {
         }
         else {
             Map<Integer, String> cinemaAndHallNames = showUtilityService.getShowsSelectOptions(shows);
+            Map<Integer, List<ShowSeat>> seats = showUtilityService.getShowsSeats(shows);
+            Map<Integer, List<Integer>> layout = showUtilityService.getSeatsLayoutForShow(shows);
             model.addAttribute("cinemaAndHallNames", cinemaAndHallNames);
+            model.addAttribute("showSeatMap", seats);
+            model.addAttribute("seatLayoutMap", layout);
             model.addAttribute("shows", shows);
             model.addAttribute("booking", new Booking());
         }
 
         return "show_details";
+    }
+
+    @PostMapping("/book")
+    public String book(@ModelAttribute("booking") Booking booking, Principal principal, RedirectAttributes attributes) {
+        //validate
+        User user = userService.getUserByEmail(principal.getName());
+        booking.setUser(user);
+        attributes.addFlashAttribute("booking", booking);
+        System.out.println(booking);
+        return "redirect:/shows/xxxxxxxxx";
     }
 }
