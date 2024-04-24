@@ -20,9 +20,9 @@ public class ShowValidator {
         validateTime(show, show.getStart(), show.getEnd());
     }
 
-    private void validatePrice(BigDecimal price) {
-        if (price.compareTo(BigDecimal.valueOf(0)) < 0) {
-            throw new ShowValidationException("Show price was negative");
+    private void validatePrice(Long price) {
+        if (price < 20) {
+            throw new ShowValidationException("Show price was less than 20");
         }
     }
 
