@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="css/home.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Shows</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/responsive.css}">
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+    <style>
+        ::-webkit-scrollbar {
+            display: none;
+        }
+         .error-message {
+             color: #fff;
+             padding: 10px;
+             border-radius: 3px;
+             text-align: center;
+             margin-bottom: 15px;
+             margin-top: 10px;
+             font-size: 23px;
+         }
+    </style>
+</head>
+<body>
+<header class="logoClass">
+    <a href="/main" class="img"><img th:src="@{/img/logo.png}" class="image-logo" alt="logo"></a>
+    <div class="links">
+        <a sec:authorize="hasAnyAuthority('ADMIN', 'SUPER_ADMIN')" href="/admin/users">Admin Panel</a>
+        <a href="/shows">Shows</a>
+        <a href="/cinemas">Cinemas</a>
+        <a href="/about">About Us</a>
+        <a sec:authorize="isAnonymous()" class="active" href="/login">Login</a>
+        <a sec:authorize="hasAnyAuthority('USER', 'ADMIN', 'SUPER_ADMIN')" class="active" href="/logout">Logout</a>
+    </div>
+</header>
+<div class="container list">
+    <div th:if="${error != null}">
+        <div class="error-message"
+             th:style="'background-color: #d93025;'">
+            <p>[[${error}]]</p>
+        </div>
+    </div>
+    <div class="products-box" th:if="${error == null}">
+        <div class="row special-list">
+            <div class="col-lg-3 col-md-6 special-grid" th:each="movie : ${movies}">
+                    <div class="products-single fix">
+                        <div class="box-img-hover">
+                            <img th:src="@{'data:image/jpeg;base64,'+${movie.getImageDataBase64()}}" class="img-fluid" alt="Image">
+                            <div class="mask-icon table" style="border-bottom: 0;">
+                                <input type = "hidden" th:value = "${movie.id}" name = "id" class = "form-control">
+                                <div class="pgButton">
+                                    <a th:href="@{/shows/{id}/details((id=${movie.id}))}">View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="why-text">
+                            <h4 th:text="${movie.title}"></h4>
+                        </div>
+                    </div>
+            </div>
+        </div>
+        <div class="paginationButtons table" style="display:flex;
+    flex-direction: row; gap:4px; margin:25px 10px; border: 0;">
+            <div class="pgButton" id="prev" th:if="${page != 1}">
+                <a th:href="@{/shows(page=@{{page}(page=${page}-1)},pageSize=12)}">Previous</a>
+            </div>
+            <div></div>
+            <div class="pgButton" id="next" th:if="${page != (totalPages)}">
+                <a th:href="@{/shows(page=@{{page}(page=${page}+1)},pageSize=12)}">Next</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

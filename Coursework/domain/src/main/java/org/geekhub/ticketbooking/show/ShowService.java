@@ -76,6 +76,19 @@ public class ShowService {
         }
     }
 
+    public List<Show> getShowsByMovie(int movieId) {
+        try {
+            logger.info("Try to get shows by movie");
+            List<Show> shows = showRepository.getShowsByMovie(movieId);
+
+            logger.info("Shows by movie were fetched successfully");
+            return shows;
+        } catch (DataAccessException exception) {
+            logger.warn("Shows by movie weren't fetched\n{}", exception.getMessage());
+            return Collections.emptyList();
+        }
+    }
+
     public List<Show> getShowsByHallWithPagination(int hallId, int pageNumber, int limit) {
         try {
             logger.info("Try to get shows by hall with pagination");

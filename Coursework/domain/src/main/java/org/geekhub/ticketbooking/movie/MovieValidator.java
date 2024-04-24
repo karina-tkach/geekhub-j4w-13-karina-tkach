@@ -14,8 +14,8 @@ public class MovieValidator {
             throw new MovieValidationException("Movie was null");
         }
 
-        validateNames(movie.getTitle());
-        validateNames(movie.getDescription());
+        validateTitle(movie.getTitle());
+        validateDescription(movie.getDescription());
         validateDuration(movie.getDurationInMins());
         validateReleaseDate(movie.getReleaseDate());
         validateCountry(movie.getCountry());
@@ -61,9 +61,14 @@ public class MovieValidator {
         }
     }
 
-    private void validateNames(String title) {
-        if (title == null || title.isEmpty()) {
-            throw new MovieValidationException("Movie title or description was null or empty");
+    private void validateTitle(String title) {
+        if (title == null || title.isEmpty() || title.length() > 26) {
+            throw new MovieValidationException("Movie title was null or empty or more than 26 characters");
+        }
+    }
+    private void validateDescription(String description) {
+        if (description == null || description.isEmpty()) {
+            throw new MovieValidationException("Movie description was null or empty");
         }
     }
 }

@@ -11,6 +11,8 @@ public interface ShowRepository {
 
     List<Show> getShowsByHallWithPagination(int hallId, int pageNumber, int limit);
 
+    List<Show> getShowsByMovie(int movieId);
+
     int addShow(Show show, int movieId, int hallId);
 
     void updateShowById(Show show, int movieId, int hallId, int showId);

@@ -223,3 +223,7 @@ th, td {
 .pgButton a {
     background-color: #7d011f;
 }
+.list {
+    padding: 0 55px;
+}
+.list img { object-fit: cover;}

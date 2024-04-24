@@ -8,7 +8,6 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
-import java.time.OffsetDateTime;
 import java.util.List;
 
 @Repository
@@ -68,24 +67,6 @@ public class MovieRepositoryImpl implements MovieRepository {
             .addValue("genre", genre.toString());
 
         return jdbcTemplate.query(query, mapSqlParameterSource, MovieMapper::mapToPojo);
-    }
-
-    @Override
-    public List<Movie> getMoviesInDateRange(OffsetDateTime from, OffsetDateTime to) {
-        Timestamp fromTime = (from == null) ? null : Timestamp.from(from.toInstant());
-        Timestamp toTime = (to == null) ? null : Timestamp.from(to.toInstant());
-
-        String query = """
-            SELECT * FROM movies
-            WHERE (releaseDate BETWEEN COALESCE(:from,releaseDate) AND COALESCE(:to,releaseDate))
-            ORDER BY id
-            """;
-
-        SqlParameterSource parameters = new MapSqlParameterSource()
-            .addValue("from", fromTime)
-            .addValue("to", toTime);
-
-        return jdbcTemplate.query(query, parameters, MovieMapper::mapToPojo);
     }
 
     @Override
@@ -149,6 +130,24 @@ public class MovieRepositoryImpl implements MovieRepository {
     }
 
     @Override
+    public List<Movie> getByTitleIgnoreCaseWithPagination(String keyword, int pageNumber, int limit) {
+        String query = """
+            SELECT * FROM movies
+            WHERE title iLIKE concat('%', :keyword, '%')
+            ORDER BY id
+            LIMIT :limit
+            OFFSET :offset
+            """;
+
+        SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
+            .addValue("keyword", keyword)
+            .addValue("limit", limit)
+            .addValue("offset", getOffset(pageNumber, limit));
+
+        return jdbcTemplate.query(query, mapSqlParameterSource, MovieMapper::mapToPojo);
+    }
+
+    @Override
     public List<Movie> getMoviesWithPagination(int pageNumber, int limit) {
         String query = """
             SELECT * FROM movies
@@ -167,6 +166,16 @@ public class MovieRepositoryImpl implements MovieRepository {
     public int getMoviesRowsCount() {
         String query = "SELECT COUNT(*) FROM movies";
         return jdbcTemplate.queryForObject(query, new MapSqlParameterSource(), Integer.class);
+    }
+
+    @Override
+    public int getMoviesByTitleRowsCount(String keyword) {
+        String query = "SELECT COUNT(*) FROM movies WHERE title iLIKE concat('%', :keyword, '%')";
+
+        SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
+            .addValue("keyword", keyword);
+
+        return jdbcTemplate.queryForObject(query, mapSqlParameterSource, Integer.class);
     }
 
     private static int getOffset(int pageNumber, int pageSize) {

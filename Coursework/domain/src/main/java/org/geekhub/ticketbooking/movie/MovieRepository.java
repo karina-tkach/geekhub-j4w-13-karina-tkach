@@ -1,9 +1,5 @@
 package org.geekhub.ticketbooking.movie;
 
-
-import org.springframework.lang.Nullable;
-
-import java.time.OffsetDateTime;
 import java.util.List;
 
 public interface MovieRepository {
@@ -15,8 +11,6 @@ public interface MovieRepository {
 
     List<Movie> getMoviesByGenre(Genre genre);
 
-    List<Movie> getMoviesInDateRange(@Nullable OffsetDateTime from, @Nullable OffsetDateTime to);
-
     int addMovie(Movie movie);
 
     void updateMovieById(Movie movie, int movieId);
@@ -26,4 +20,8 @@ public interface MovieRepository {
     List<Movie> getMoviesWithPagination(int pageNumber, int limit);
 
     int getMoviesRowsCount();
+
+    List<Movie> getByTitleIgnoreCaseWithPagination(String keyword, int pageNumber, int limit);
+
+    int getMoviesByTitleRowsCount(String keyword);
 }

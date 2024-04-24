@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="css/home.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Show Details</title>
+    <link rel="stylesheet" th:href="@{/css/mdb.min.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/responsive.css}">
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+    <style>
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        .error-message {
+            color: #fff;
+            padding: 10px;
+            border-radius: 3px;
+            text-align: center;
+            margin-bottom: 15px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<header class="logoClass">
+    <a href="/main" class="img"><img th:src="@{/img/logo.png}" class="image-logo" alt="logo"></a>
+    <div class="links">
+        <a sec:authorize="hasAnyAuthority('ADMIN', 'SUPER_ADMIN')" href="/admin/users">Admin Panel</a>
+        <a href="/shows">Shows</a>
+        <a href="/cinemas">Cinemas</a>
+        <a href="/about">About Us</a>
+        <a sec:authorize="isAnonymous()" class="active" href="/login">Login</a>
+        <a sec:authorize="hasAnyAuthority('USER', 'ADMIN', 'SUPER_ADMIN')" class="active" href="/logout">Logout</a>
+    </div>
+</header>
+<div class="container" style="padding: 0 45px;">
+
+    <form th:action="@{saveShow}" th:object="${movie}" method="POST" class="subform">
+        <section class="py-5">
+            <div class="row gx-5">
+                <aside class="col-lg-6">
+                    <img style="max-width: 100%; max-height: 500px; margin: auto;" class="rounded-4 fit"
+                         th:src="@{'data:image/jpeg;base64,'+${movie.getImageDataBase64()}}"/>
+                </aside>
+                <main class="col-lg-6" style="color:white; font-size:20px;">
+                    <div class="ps-lg-3">
+                        <h4 class="title" th:text="${movie.title}"
+                            style="color:white; font-size:35px; margin-bottom: 10px;"></h4>
+
+                        <p th:text="${movie.description}" style="margin-bottom: 10px;"></p>
+
+                        <div class="row">
+                            <dt class="col-3">Duration in minutes:</dt>
+                            <dd class="col-9" th:text="${movie.durationInMins}"></dd>
+
+                            <dt class="col-3">Release date:</dt>
+                            <dd class="col-9"
+                                th:text="${#strings.replace(movie.getFormattedReleaseDate(), 'T', ' ')}"></dd>
+
+                            <dt class="col-3">Country:</dt>
+                            <dd class="col-9" th:text="${movie.country}"></dd>
+
+                            <dt class="col-3">Age limit:</dt>
+                            <dd class="col-9" th:text="${#strings.toString(movie.ageLimit) + '+'}"></dd>
+
+                            <dt class="col-3">Genre:</dt>
+                            <dd class="col-9" th:text="${movie.genre}"></dd>
+                        </div>
+
+                        <hr/>
+
+                        <div th:if="${error != null}">
+                            <div class="error-message"
+                                 th:style="'background-color: #d93025;'">
+                                <p>[[${error}]]</p>
+                            </div>
+                        </div>
+
+                        <div th:if="${error == null}">
+                            <div class="col mb-4" style="display:flex; justify-content:center;">
+                                <div class="col-md-4 col-6" style="font-size:27px;  width:400px;">
+                                    <div class="full-field show">
+                                        <div class="field input-field">
+                                            <label class="mb-2">Shows</label>
+                                            <select name="show" id="showSelect" class="show" required
+                                                    style="font-size:23px; height:40px;" onchange="updatePrice()">
+                                                <option value='0' disabled selected>Select Show</option>
+                                                <option th:each="show :${shows}"
+                                                        th:value="${show.id}"
+                                                        th:text="${cinemaAndHallNames.get(show.id)}"></option>
+                                            </select><br>
+                                            <div id="priceDiv"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table pgButton" style="border: 0;">
+                                <a href="#">Book Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+
+        </section>
+
+    </form>
+
+</div>
+
+<script th:inline="javascript">
+    var shows = /*[[${shows}]]*/ [];
+
+    function updatePrice() {
+        var selectedShowId = document.getElementById("showSelect").value;
+
+        for (var i = 0; i < shows.length; i++) {
+            if (shows[i].id == selectedShowId) {
+                document.getElementById("priceDiv").innerText = "Price: " + shows[i].price;
+                break;
+            }
+        }
+    }
+</script>
+
+</body>
+</html>

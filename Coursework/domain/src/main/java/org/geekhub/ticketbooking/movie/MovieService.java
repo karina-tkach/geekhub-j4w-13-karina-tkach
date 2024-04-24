@@ -4,15 +4,12 @@ import org.geekhub.ticketbooking.exception.MovieValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @SuppressWarnings("java:S1192")
@@ -76,21 +73,6 @@ public class MovieService {
             return movies;
         } catch (MovieValidationException | DataAccessException exception) {
             logger.warn("Movies weren't fetched by genre\n{}", exception.getMessage());
-            return Collections.emptyList();
-        }
-    }
-
-    public List<Movie> getMoviesInDateRange(@Nullable OffsetDateTime from, @Nullable OffsetDateTime to) {
-        try {
-            logger.info("Try to get movies in date range");
-            if (!(Objects.isNull(from) || Objects.isNull(to) || from.isBefore(to))) {
-                throw new MovieValidationException("'From' date must be before 'to' date");
-            }
-            List<Movie> movies = movieRepository.getMoviesInDateRange(from, to);
-            logger.info("Movies in date range were fetched successfully");
-            return movies;
-        } catch (MovieValidationException | DataAccessException exception) {
-            logger.warn("Movies in date range weren't fetched\n{}", exception.getMessage());
             return Collections.emptyList();
         }
     }
@@ -195,5 +177,32 @@ public class MovieService {
         }
 
         return true;
+    }
+
+    public List<Movie> getByTitleIgnoreCaseWithPagination(String keyword, int pageNumber, int limit) {
+        try {
+            logger.info("Try to get movies by title");
+            if (keyword == null || keyword.isBlank()) {
+                return getMoviesWithPagination(pageNumber, limit);
+            }
+            List<Movie> movies = movieRepository.getByTitleIgnoreCaseWithPagination(keyword, pageNumber, limit);
+            logger.info("Movies by title were fetched by genre successfully");
+            return movies;
+        } catch (DataAccessException exception) {
+            logger.warn("Movies by title weren't fetched by genre\n{}", exception.getMessage());
+            return Collections.emptyList();
+        }
+    }
+
+    public int getMoviesByTitleRowsCount(String keyword) {
+        try {
+            logger.info("Try to get movies by title rows count");
+            int count = movieRepository.getMoviesByTitleRowsCount(keyword);
+            logger.info("Movies by title rows count were fetched successfully");
+            return count;
+        } catch (DataAccessException | NullPointerException exception) {
+            logger.warn("Movies by title rows count weren't fetched\n{}", exception.getMessage());
+            return -1;
+        }
     }
 }
