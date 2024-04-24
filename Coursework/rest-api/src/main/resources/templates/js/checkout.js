@@ -9,7 +9,9 @@ const request = {
 
 let elements;
 
-initialize();
+localStorage.setItem('booking', JSON.stringify(booking));
+
+initialize()
 checkStatus();
 
 document
@@ -65,7 +67,6 @@ async function handleSubmit(e) {
     const { error } = await stripe.confirmPayment({
         elements,
         confirmParams: {
-            // Make sure to change this to your payment completion page
             return_url: "http://localhost:8080/main",
             receipt_email: emailAddress
         },
@@ -99,7 +100,6 @@ async function checkStatus() {
 
     switch (paymentIntent.status) {
         case "succeeded":
-
             showMessage("Payment succeeded!");
             break;
         case "processing":
