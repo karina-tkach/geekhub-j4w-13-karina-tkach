@@ -34,15 +34,13 @@
     <div class="links">
         <a sec:authorize="hasAnyAuthority('ADMIN', 'SUPER_ADMIN')" href="/admin/users">Admin Panel</a>
         <a href="/shows">Shows</a>
-        <a href="/cinemas">Cinemas</a>
-        <a href="/about">About Us</a>
         <a sec:authorize="isAnonymous()" class="active" href="/login">Login</a>
         <a sec:authorize="hasAnyAuthority('USER', 'ADMIN', 'SUPER_ADMIN')" class="active" href="/logout">Logout</a>
     </div>
 </header>
 <div class="container" style="padding: 0 45px;">
 
-    <form th:action="@{saveShow}" th:object="${movie}" method="POST" class="subform">
+    <form th:action="@{saveShow}" th:object="${booking}" method="POST" class="subform">
         <section class="py-5">
             <div class="row gx-5">
                 <aside class="col-lg-6">
@@ -90,7 +88,7 @@
                                         <div class="field input-field">
                                             <label class="mb-2">Shows</label>
                                             <select name="show" id="showSelect" class="show" required
-                                                    style="font-size:23px; height:40px;" onchange="updatePrice()">
+                                                    style="font-size:23px; height:40px;" th:field="*{showId}" onchange="updatePrice()">
                                                 <option value='0' disabled selected>Select Show</option>
                                                 <option th:each="show :${shows}"
                                                         th:value="${show.id}"

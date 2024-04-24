@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
@@ -14,8 +13,6 @@
     <div class="links">
         <a sec:authorize="hasAnyAuthority('ADMIN', 'SUPER_ADMIN')" href="/admin/users">Admin Panel</a>
         <a href="/shows">Shows</a>
-        <a href="/cinemas">Cinemas</a>
-        <a href="/about">About Us</a>
         <a sec:authorize="isAnonymous()" class="active" href="/login">Login</a>
         <a sec:authorize="hasAnyAuthority('USER', 'ADMIN', 'SUPER_ADMIN')" class="active" href="/logout">Logout</a>
     </div>

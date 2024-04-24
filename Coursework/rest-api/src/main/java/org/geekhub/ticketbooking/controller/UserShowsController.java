@@ -1,5 +1,6 @@
 package org.geekhub.ticketbooking.controller;
 
+import org.geekhub.ticketbooking.booking.Booking;
 import org.geekhub.ticketbooking.movie.Movie;
 import org.geekhub.ticketbooking.movie.MovieService;
 import org.geekhub.ticketbooking.show.Show;
@@ -17,6 +18,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/shows")
+@SuppressWarnings("java:S1192")
 public class UserShowsController {
     private final MovieService movieService;
     private final ShowService showService;
@@ -65,6 +67,7 @@ public class UserShowsController {
             Map<Integer, String> cinemaAndHallNames = showUtilityService.getShowsSelectOptions(shows);
             model.addAttribute("cinemaAndHallNames", cinemaAndHallNames);
             model.addAttribute("shows", shows);
+            model.addAttribute("booking", new Booking());
         }
 
         return "show_details";

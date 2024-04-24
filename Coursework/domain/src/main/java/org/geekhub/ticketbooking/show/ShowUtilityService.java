@@ -4,8 +4,11 @@ import org.geekhub.ticketbooking.cinema.Cinema;
 import org.geekhub.ticketbooking.cinema.CinemaService;
 import org.geekhub.ticketbooking.hall.Hall;
 import org.geekhub.ticketbooking.hall.HallService;
+import org.geekhub.ticketbooking.show_seat.ShowSeat;
+import org.geekhub.ticketbooking.show_seat.ShowSeatService;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -14,10 +17,12 @@ import java.util.stream.Collectors;
 public class ShowUtilityService {
     private final HallService hallService;
     private final CinemaService cinemaService;
+    private final ShowSeatService showSeatService;
 
-    public ShowUtilityService(HallService hallService, CinemaService cinemaService) {
+    public ShowUtilityService(HallService hallService, CinemaService cinemaService, ShowSeatService showSeatService) {
         this.hallService = hallService;
         this.cinemaService = cinemaService;
+        this.showSeatService = showSeatService;
     }
 
     public Map<Integer, String> getShowsSelectOptions(List<Show> shows) {
@@ -34,5 +39,15 @@ public class ShowUtilityService {
                     return cityName + " " + cinemaName + " " + hallName;
                 }
             ));
+    }
+
+    public Map<Integer, List<ShowSeat>> getShowsSeats(List<Show> shows) {
+        Map<Integer, List<ShowSeat>> seatsByShow = new HashMap<>();
+
+        for (Show show : shows) {
+            List<ShowSeat> seats = showSeatService.getSeatsByHallAndShow(show.getHallId(), show.getId());
+            seatsByShow.put(show.getId(), seats);
+        }
+        return seatsByShow;
     }
 }
