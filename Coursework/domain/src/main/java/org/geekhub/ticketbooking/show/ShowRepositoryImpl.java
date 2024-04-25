@@ -20,17 +20,6 @@ public class ShowRepositoryImpl implements ShowRepository {
     }
 
     @Override
-    public List<Show> getAllShows() {
-        String query = """
-            SELECT shows.id, shows.price, shows.start_time, shows.end_time,
-            shows.movie_id, movies.title, movies.description, movies.duration,
-             movies.releaseDate, movies.country, movies.ageLimit, movies.genre, movies.image FROM shows
-            INNER JOIN movies ON shows.movie_id = movies.id ORDER BY shows.id
-            """;
-        return jdbcTemplate.query(query, ShowMapper::mapToPojo);
-    }
-
-    @Override
     public Show getShowById(int showId) {
         String query = """
             SELECT shows.id, shows.price, shows.start_time, shows.end_time,

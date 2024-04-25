@@ -39,8 +39,8 @@
 
         .seat label {
             display: block;
-            width: 30px;
-            height: 30px;
+            width: 41px;
+            height: 40px;
             background-color: dimgray;
             border: 1px solid #ccc;
             text-align: center;
@@ -137,7 +137,7 @@
                                             <div id="priceDiv"></div>
                                             <div class="seats-container" id="seatsContainer"></div>
                                             <input type="hidden" th:field="*{seatId}" id="selectedSeatId" style="height: 0;">
-                                            <button type="submit" class="btn btn-primary mt-3">Book Now</button>
+                                            <button type="submit" class="btn btn-primary mt-3">Buy Ticket Now</button>
                                         </div>
                                     </div>
                                 </div>
@@ -156,7 +156,7 @@
 <script th:inline="javascript">
     var shows = /*[[${shows}]]*/ [];
     var seatMap = /*[[${showSeatMap}]]*/ {};
-    var seatLayoutMap = /*[[${seatLayoutMap}]]*/ {}; // Map of showId to [rows, columns]
+    var seatLayoutMap = /*[[${seatLayoutMap}]]*/ {};
 
     function updatePriceAndSeats() {
         var selectedShowId = document.getElementById("showId").value;
@@ -172,7 +172,7 @@
             }
 
             var seatsContainer = document.getElementById('seatsContainer');
-            seatsContainer.innerHTML = ''; // Clear previous seats
+            seatsContainer.innerHTML = '';
 
             // Generate radio buttons grouped by rows and columns
             var seatIndex = 0;
@@ -200,7 +200,7 @@
             });
         } else {
             document.getElementById("priceDiv").innerText = "Price: N/A";
-            document.getElementById('seatsContainer').innerHTML = ''; // Clear seats if no seats available
+            document.getElementById('seatsContainer').innerHTML = '';
         }
     }
 </script>

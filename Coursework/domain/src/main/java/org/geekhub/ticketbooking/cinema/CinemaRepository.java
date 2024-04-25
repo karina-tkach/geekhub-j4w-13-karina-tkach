@@ -7,8 +7,6 @@ public interface CinemaRepository {
 
     Cinema getCinemaById(int cinemaId);
 
-    List<Cinema> getCinemasByCity(int cityId);
-
     int addCinema(Cinema cinema, int cityId);
 
     void updateCinemaById(Cinema cinema, int cinemaId, int cityId);

@@ -3,8 +3,6 @@ package org.geekhub.ticketbooking.show;
 import java.util.List;
 
 public interface ShowRepository {
-    List<Show> getAllShows();
-
     Show getShowById(int showId);
 
     List<Show> getShowsByHall(int hallId);

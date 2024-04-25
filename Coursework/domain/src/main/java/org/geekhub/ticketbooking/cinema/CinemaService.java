@@ -48,18 +48,6 @@ public class CinemaService {
         }
     }
 
-    public List<Cinema> getCinemasByCity(int cityId) {
-        try {
-            logger.info("Try to get cinemas by city");
-            List<Cinema> cinemas = cinemaRepository.getCinemasByCity(cityId);
-            logger.info("Cinemas by city were fetched successfully");
-            return cinemas;
-        } catch (DataAccessException exception) {
-            logger.warn("Cinemas by city weren't fetched\n{}", exception.getMessage());
-            return Collections.emptyList();
-        }
-    }
-
     public Cinema addCinema(Cinema cinema) {
         try {
             logger.info("Try to add cinema");

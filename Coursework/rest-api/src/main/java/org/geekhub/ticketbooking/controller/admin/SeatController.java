@@ -28,7 +28,7 @@ public class SeatController {
                                        @PathVariable int showId,
                                 @RequestParam(defaultValue = "1") int page,
                                 @RequestParam(defaultValue = "6") int pageSize, Model model) {
-        List<ShowSeat> seats = showSeatService.getSeatsByHallAndShow(hallId, showId);
+        List<ShowSeat> seats = showSeatService.getSeatsByHallAndShowWithPagination(hallId, showId, page, pageSize);
         int rows = showSeatService.getSeatsByHallAndShowRowsCount(hallId, showId);
 
         if (rows == -1 || seats.isEmpty()) {

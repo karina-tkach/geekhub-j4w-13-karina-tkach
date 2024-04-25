@@ -1,22 +1,14 @@
 package org.geekhub.ticketbooking.stripe;
 
-import jakarta.validation.constraints.*;
-
 public class Request {
-    @NotNull
     private Long amount;
-
-    @Email
     private String email;
-
-    @NotBlank
-    @Size(min = 5, max = 200)
     private String productName;
 
     public Request() {
         this.amount = 0L;
-        this.email = "xyz@gmail.com";
-        this.productName = "null";
+        this.email = null;
+        this.productName = null;
     }
 
     public Request(Long amount, String email, String productName) {

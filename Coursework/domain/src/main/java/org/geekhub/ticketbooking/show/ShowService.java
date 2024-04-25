@@ -37,19 +37,6 @@ public class ShowService {
         this.showSeatService = showSeatService;
     }
 
-    public List<Show> getAllShows() {
-        try {
-            logger.info("Try to get shows");
-            List<Show> shows = showRepository.getAllShows();
-
-            logger.info("Shows were fetched successfully");
-            return shows;
-        } catch (DataAccessException exception) {
-            logger.warn("Shows weren't fetched\n{}", exception.getMessage());
-            return Collections.emptyList();
-        }
-    }
-
     public Show getShowById(int showId) {
         try {
             logger.info("Try to get show by id");
