@@ -4,7 +4,6 @@ import org.geekhub.ticketbooking.exception.ShowValidationException;
 import org.geekhub.ticketbooking.movie.Movie;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 @Component

@@ -16,7 +16,7 @@ public class HallValidator {
     }
 
     private void validateRowsAndCols(int rows, int columns) {
-        if (rows < 1 || columns < 1 || rows * columns > 999) {
+        if (rows < 1 || columns < 1 || columns > 15 || rows > 100 || rows * columns > 999) {
             throw new HallValidationException("Rows/columns were less than 1 or total seats were more than 999");
         }
     }

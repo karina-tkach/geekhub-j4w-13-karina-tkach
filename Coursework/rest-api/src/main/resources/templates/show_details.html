@@ -80,7 +80,7 @@
 </header>
 <div class="container" style="padding: 0 45px; overflow: auto;">
 
-    <form th:action="@{/book}" th:object="${booking}" method="POST" class="subform">
+    <form th:action="@{/buyTicket}" th:object="${booking}" method="POST" class="subform">
         <section class="py-5">
             <div class="row gx-5">
                 <aside class="col-lg-6">
@@ -125,7 +125,7 @@
                             <div class="col mb-4" style="display:flex; justify-content:center;">
                                 <div class="col-md-4 col-6" style="font-size:27px;  width:400px;">
                                     <div class="full-field show">
-                                        <div class="field input-field">
+                                        <div class="field input-field" style="margin-top: 80px;">
                                             <label class="mb-2">Shows</label>
                                             <select name="showId" id="showId" class="show" required
                                                     style="font-size:23px; height:40px;" onchange="updatePriceAndSeats()">
@@ -134,7 +134,7 @@
                                                         th:value="${show.id}"
                                                         th:text="${cinemaAndHallNames.get(show.id)}"></option>
                                             </select><br>
-                                            <div id="priceDiv"></div>
+                                            <div id="priceDiv" style="margin-top: 20px;"></div>
                                             <div class="seats-container" id="seatsContainer"></div>
                                             <input type="hidden" th:field="*{seatId}" id="selectedSeatId" style="height: 0;">
                                             <button type="submit" class="btn btn-primary mt-3">Buy Ticket Now</button>
@@ -204,8 +204,5 @@
         }
     }
 </script>
-
-
-
 </body>
 </html>

@@ -17,7 +17,7 @@ public class Booking {
         this.showId = -1;
         this.seatId = -1;
         this.user = null;
-        this.uuid = UUID.randomUUID();
+        this.uuid = null;
         this.showDetails = null;
     }
 

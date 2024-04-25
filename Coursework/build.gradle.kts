@@ -6,7 +6,6 @@ subprojects {
     val mailVersion = "3.2.4"
     val codecVersion = "1.16.1"
     val stripeVersion = "25.3.0"
-    val validationVersion = "3.2.5"
 
 
     dependencies {
@@ -15,7 +14,6 @@ subprojects {
         implementation("org.springframework.boot:spring-boot-starter-mail:$mailVersion")
         implementation("commons-codec:commons-codec:$codecVersion")
         implementation("com.stripe:stripe-java:$stripeVersion")
-        implementation("org.springframework.boot:spring-boot-starter-validation:$validationVersion")
 
 
         implementation("org.postgresql:postgresql:$postgresqlVersion")

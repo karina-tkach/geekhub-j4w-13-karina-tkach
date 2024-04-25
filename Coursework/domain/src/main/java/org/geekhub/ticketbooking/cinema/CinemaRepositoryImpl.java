@@ -50,7 +50,6 @@ public class CinemaRepositoryImpl implements CinemaRepository {
             VALUES (:name,:cityId, :street)
             """;
 
-
         KeyHolder generatedKeyHolder = new GeneratedKeyHolder();
         SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
             .addValue("name", cinema.getName())
