@@ -17,42 +17,11 @@
         <a sec:authorize="hasAnyAuthority('USER', 'ADMIN', 'SUPER_ADMIN')" class="active" href="/logout">Logout</a>
     </div>
 </header>
-<div class="container">
+<div class="container" style="flex-direction: column; color:white;">
+    <div style="background: rgba(0, 0, 0, 0.75); box-shadow: 0px 2px 14px -4px white; padding: 20px;">
+    <div style="font-size: 60px;">Welcome to the cinema!</div>
+    <div style="font-size: 40px;">Observe available shows and buy ticket</div>
+    </div>
 </div>
-
-<script>
-    // Perform the status check when the page loads
-    window.onload = function() {
-        checkStatus();
-    };
-
-    // Function to check payment status
-    async function checkStatus() {
-        const clientSecret = new URLSearchParams(window.location.search).get(
-            "payment_intent_client_secret"
-        );
-
-        if (!clientSecret) {
-            return;
-        }
-
-        try {
-            const booking = localStorage.getItem('booking');
-            const response = await fetch("/save-booking", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: booking,
-            });
-            localStorage.removeItem('booking');
-            if (response.ok) {
-                console.log("Payment status checked successfully.");
-            } else {
-                console.error("Failed to check payment status.");
-            }
-        } catch (error) {
-            console.error("Error checking payment status:", error);
-        }
-    }
-</script>
 </body>
 </html>

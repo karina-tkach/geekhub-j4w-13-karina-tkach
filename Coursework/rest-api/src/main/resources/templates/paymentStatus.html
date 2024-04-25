@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"/>
+    <link rel="stylesheet" href="css/home.css">
+    <title>Status</title>
+    <style>
+        .message {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            padding: 20px;
+            margin: 20px;
+            font-size: 23px;
+        }
+
+        .loading {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+<div class="loading" id="loading">Loading...</div>
+<header class="logoClass">
+    <a href="/main" class="img"><img src="img/logo.png" class="image-logo" alt="logo"></a>
+    <div class="links">
+        <a sec:authorize="hasAnyAuthority('ADMIN', 'SUPER_ADMIN')" href="/admin/users">Admin Panel</a>
+        <a href="/shows">Shows</a>
+        <a sec:authorize="isAnonymous()" class="active" href="/login">Login</a>
+        <a sec:authorize="hasAnyAuthority('USER', 'ADMIN', 'SUPER_ADMIN')" class="active" href="/logout">Logout</a>
+    </div>
+</header>
+<div class="container">
+    <div class="form login">
+        <div class="form-content message">
+            <div class="message">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Perform the status check when the page loads
+    window.onload = function () {
+        checkStatus();
+    };
+
+    // Function to show loading indicator
+    function showLoading() {
+        document.getElementById('loading').style.display = 'flex';
+    }
+
+    // Function to hide loading indicator
+    function hideLoading() {
+        document.getElementById('loading').style.display = 'none';
+    }
+
+    // Function to check payment status
+    async function checkStatus() {
+         // Show loading indicator before making the request
+        const clientSecret = new URLSearchParams(window.location.search).get(
+            "payment_intent_client_secret"
+        );
+
+        if (!clientSecret) {
+            //hideLoading(); // Hide loading indicator if no client secret is found
+            return;
+        }
+
+        showLoading();
+        try {
+            const booking = localStorage.getItem('booking');
+            const response = await fetch("/save-booking", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: booking,
+            });
+            localStorage.removeItem('booking');
+            if (response.ok) {
+                displayMessage("Payment status checked successfully.", true);
+            } else {
+                displayMessage("Failed to check payment status.", false);
+            }
+        } catch (error) {
+            displayMessage("Error checking payment status: " + error, false);
+        } finally {
+            hideLoading(); // Hide loading indicator after the request is completed
+        }
+    }
+
+    // Function to display message in error div
+    function displayMessage(message, isSuccess) {
+        const errorDiv = document.querySelector('.message');
+        errorDiv.textContent = message;
+        errorDiv.style.backgroundColor = isSuccess ? 'green' : 'red';
+    }
+</script>
+</body>
+</html>
