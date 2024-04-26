@@ -50,8 +50,9 @@ public class PaymentController {
         if (user == null || show == null) {
             return error(model);
         }
-        String showDetails = showUtilityService.getShowsSelectOptions(Collections.singletonList(show))
-            .get(booking.getShowId()) + "; Seat:" + showSeatService.getSeatById(booking.getSeatId()).getNumber();
+        String showDetails = "Movie: " + show.getMovie().getTitle() + "; " +showUtilityService.getShowsSelectOptions(Collections.singletonList(show))
+            .get(booking.getShowId()) + "; Seat:" + showSeatService.getSeatById(booking.getSeatId()).getNumber()
+            + "Start time: " + show.getFormattedStartDate().replace('T', ' ');
         booking.setShowDetails(showDetails);
         booking.setUuid(UUID.randomUUID());
 

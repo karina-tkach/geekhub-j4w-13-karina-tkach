@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="ISO-8859-1">
     <title>Bookings Management</title>
@@ -39,24 +40,25 @@
                 <p>[[${error}]]</p>
             </div>
         </div>
-        <div class = "table">
-            <h1 style="font-size: 40px;">Cities List</h1>
-            <div class ="addUser">
-                <a th:href = "@{/admin/cities/showNewCityForm}"> Add City </a>
-            </div>
-            <div th:if="${error == null}">
+        <div class = "table" th:if="${error == null}">
+            <h1 style="font-size: 40px;">Bookings List</h1>
+            <div>
                 <table>
                     <thead>
                     <tr>
-                        <th>City Name</th>
-                        <th>Actions</th>
+                        <th>User Email</th>
+                        <th>UUID</th>
+                        <th>Details</th>
+                        <th sec:authorize="hasAnyAuthority('SUPER_ADMIN')">Action</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="city : ${listCities}">
-                        <td th:text="${city.name}"></td>
-                        <td><a th:href="@{/admin/cities/showFormForUpdate/{id}(id=${city.id})}">Update</a>
-                            <a th:href="@{/admin/cities/deleteCity/{id}(id=${city.id})}">Delete</a>
+                    <tr th:each="booking : ${listBookings}">
+                        <td th:text="${booking.user.email}"></td>
+                        <td th:text="${booking.uuid}"></td>
+                        <td th:text="${booking.showDetails}"></td>
+                        <td sec:authorize="hasAnyAuthority('SUPER_ADMIN')">
+                            <a th:href="@{/admin/bookings/deleteBooking/{id}(id=${booking.id})}">Delete</a>
                         </td>
                     </tr>
                     </tbody>
@@ -64,11 +66,11 @@
                 <div class="paginationButtons" style="display:flex;
     flex-direction: row; gap:4px; margin:25px 10px;">
                     <div class="pgButton" id="prev" th:if="${page != 1}">
-                        <a th:href="@{/admin/cities(page=@{{page}(page=${page}-1)},pageSize=7)}">Previous</a>
+                        <a th:href="@{/admin/bookings(page=@{{page}(page=${page}-1)},pageSize=7)}">Previous</a>
                     </div>
                     <div></div>
                     <div class="pgButton" id="next" th:if="${page != (totalPages)}">
-                        <a th:href="@{/admin/cities(page=@{{page}(page=${page}+1)},pageSize=7)}">Next</a>
+                        <a th:href="@{/admin/bookings(page=@{{page}(page=${page}+1)},pageSize=7)}">Next</a>
                     </div>
                 </div>
             </div>
