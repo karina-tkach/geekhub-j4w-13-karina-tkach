@@ -13,8 +13,7 @@
     <div class="links">
         <a sec:authorize="hasAnyAuthority('ADMIN', 'SUPER_ADMIN')" href="/admin/users">Admin Panel</a>
         <a href="/shows">Shows</a>
-        <a sec:authorize="isAnonymous()" class="active" href="/login">Login</a>
-        <a sec:authorize="hasAnyAuthority('USER', 'ADMIN', 'SUPER_ADMIN')" class="active" href="/logout">Logout</a>
+        <a class="active" href="/logout">Logout</a>
     </div>
 </header>
 <div class="container" style="flex-direction: column; color:white;">

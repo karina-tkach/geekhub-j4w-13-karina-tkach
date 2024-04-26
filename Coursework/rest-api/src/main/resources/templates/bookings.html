@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="ISO-8859-1">
-    <title>Cinemas Management</title>
+    <title>Bookings Management</title>
     <link rel="stylesheet" href="css/home.css" th:href="@{/css/home.css}">
     <style>
         .error-message {
@@ -39,33 +39,24 @@
                 <p>[[${error}]]</p>
             </div>
         </div>
-        <div class="table">
-            <h1 style="font-size: 40px;">Cinemas List</h1>
-            <div class="addUser">
-                <a th:href="@{/admin/cinemas/showNewCinemaForm}"> Add Cinema </a>
+        <div class = "table">
+            <h1 style="font-size: 40px;">Cities List</h1>
+            <div class ="addUser">
+                <a th:href = "@{/admin/cities/showNewCityForm}"> Add City </a>
             </div>
             <div th:if="${error == null}">
                 <table>
                     <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>City</th>
-                        <th>Street</th>
-                        <th>Halls</th>
+                        <th>City Name</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="cinema : ${listCinemas}">
-                        <td th:text="${cinema.name}"></td>
-                        <td th:text="${cinema.city.name}"></td>
-                        <td th:text="${cinema.street}"></td>
-                        <td>
-                            <a style="background-color: #0078e0"
-                               th:href="@{/admin/halls/{cinemaId}(cinemaId=${cinema.id})}">View Halls</a>
-                        </td>
-                        <td><a th:href="@{/admin/cinemas/showFormForUpdate/{id}(id=${cinema.id})}">Update</a>
-                            <a th:href="@{/admin/cinemas/deleteCinema/{id}(id=${cinema.id})}">Delete</a>
+                    <tr th:each="city : ${listCities}">
+                        <td th:text="${city.name}"></td>
+                        <td><a th:href="@{/admin/cities/showFormForUpdate/{id}(id=${city.id})}">Update</a>
+                            <a th:href="@{/admin/cities/deleteCity/{id}(id=${city.id})}">Delete</a>
                         </td>
                     </tr>
                     </tbody>
@@ -73,11 +64,11 @@
                 <div class="paginationButtons" style="display:flex;
     flex-direction: row; gap:4px; margin:25px 10px;">
                     <div class="pgButton" id="prev" th:if="${page != 1}">
-                        <a th:href="@{/admin/cinemas(page=@{{page}(page=${page}-1)},pageSize=5)}">Previous</a>
+                        <a th:href="@{/admin/cities(page=@{{page}(page=${page}-1)},pageSize=7)}">Previous</a>
                     </div>
                     <div></div>
                     <div class="pgButton" id="next" th:if="${page != (totalPages)}">
-                        <a th:href="@{/admin/cinemas(page=@{{page}(page=${page}+1)},pageSize=5)}">Next</a>
+                        <a th:href="@{/admin/cities(page=@{{page}(page=${page}+1)},pageSize=7)}">Next</a>
                     </div>
                 </div>
             </div>
