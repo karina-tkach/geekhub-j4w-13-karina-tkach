@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"/>
+    <link rel="stylesheet" href="css/home.css">
+    <title>Error</title>
+</head>
+<body>
+<header class="logoClass">
+    <a href="/main" class="img"><img src="img/logo.png" class="image-logo" alt="logo"></a>
+    <div class="links">
+        <a sec:authorize="hasAnyAuthority('ADMIN', 'SUPER_ADMIN')" href="/admin/users">Admin Panel</a>
+        <a href="/shows">Shows</a>
+        <a sec:authorize="isAnonymous()" class="active" href="/login">Login</a>
+        <a sec:authorize="hasAnyAuthority('USER', 'ADMIN', 'SUPER_ADMIN')" class="active" href="/logout">Logout</a>
+    </div>
+</header>
+<div class="container" style="flex-direction: column; color:white;">
+    <div style="background: rgba(0, 0, 0, 0.75); box-shadow: 0px 2px 14px -4px white; padding: 20px;">
+        <div style="font-size: 60px;">Something went wrong...</div>
+    </div>
+</div>
+</body>
+</html>

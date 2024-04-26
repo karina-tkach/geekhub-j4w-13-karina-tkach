@@ -71,7 +71,7 @@ public class PaymentController {
 
     @GetMapping("/paymentStatus")
     public String status() {
-        return "paymentStatus";
+        return "payment_status";
     }
 
     private String error(Model model) {
