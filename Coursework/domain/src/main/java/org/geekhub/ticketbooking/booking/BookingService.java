@@ -126,6 +126,11 @@ public class BookingService {
             }
 
             bookingRepository.deleteBookingById(bookingId);
+
+            ShowSeat seat = showSeatService.getSeatById(bookingToDel.getSeatId());
+            seat.setBooked(false);
+
+            showSeatService.updateSeatById(seat, seat.getId(), seat.getHallId(), seat.getShowId());
             logger.info("Booking was deleted:\n{}", bookingToDel);
             return true;
         } catch (BookingValidationException | DataAccessException exception) {
