@@ -35,9 +35,18 @@ public class UserShowsController {
 
     @GetMapping
     public String shows(@RequestParam(defaultValue = "1") int page,
-                        @RequestParam(defaultValue = "12") int pageSize, Model model) {
-        List<Movie> movies = movieService.getMoviesWithPagination(page, pageSize);
-        int rows = movieService.getMoviesRowsCount();
+                        @RequestParam(defaultValue = "12") int pageSize,
+                        @RequestParam(name = "keyword", required = false) String keyword,
+                        Model model) {
+        List<Movie> movies;
+        int rows;
+        if (keyword == null || keyword.isBlank()) {
+            movies = movieService.getMoviesWithPagination(page, pageSize);
+            rows = movieService.getMoviesRowsCount();
+        } else {
+            movies = movieService.getByTitleIgnoreCaseWithPagination(keyword, page, pageSize);
+            rows = movieService.getMoviesByTitleRowsCount(keyword);
+        }
 
         if (rows == -1 || movies.isEmpty()) {
             model.addAttribute("error", "Sorry, now shows are unavailable");
@@ -45,6 +54,7 @@ public class UserShowsController {
             model.addAttribute("page", page);
             model.addAttribute("totalPages", Math.ceil(rows / (float) pageSize));
             model.addAttribute("movies", movies);
+            model.addAttribute("keyword", keyword);
         }
 
         return "shows_list";

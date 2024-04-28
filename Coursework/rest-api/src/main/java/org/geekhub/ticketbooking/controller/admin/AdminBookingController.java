@@ -2,9 +2,7 @@ package org.geekhub.ticketbooking.controller.admin;
 
 import org.geekhub.ticketbooking.booking.Booking;
 import org.geekhub.ticketbooking.booking.BookingService;
-import org.geekhub.ticketbooking.user.Role;
-import org.geekhub.ticketbooking.user.User;
-import org.geekhub.ticketbooking.user.UserService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,18 +10,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.security.Principal;
 import java.util.List;
 
 @Controller
 @RequestMapping("admin/bookings")
 public class AdminBookingController {
     private final BookingService bookingService;
-    private final UserService userService;
 
-    public AdminBookingController(BookingService bookingService, UserService userService) {
+    public AdminBookingController(BookingService bookingService) {
         this.bookingService = bookingService;
-        this.userService = userService;
     }
 
     @GetMapping
@@ -43,13 +38,9 @@ public class AdminBookingController {
         return "bookings";
     }
 
+    @PreAuthorize("hasAuthority('SUPER_ADMIN')")
     @GetMapping("/deleteBooking/{id}")
-    public String deleteBooking(@PathVariable(value = "id") int id, Model model, Principal principal) {
-        User user = userService.getUserByEmail(principal.getName());
-        if(user.getRole() != Role.SUPER_ADMIN) {
-            return setAttributesAndGetProperPage(model, "Only super admin can delete bookings");
-        }
-
+    public String deleteBooking(@PathVariable(value = "id") int id, Model model) {
         boolean result = bookingService.deleteBookingById(id);
         if(!result) {
             return setAttributesAndGetProperPage(model, "Cannot delete booking by this id");

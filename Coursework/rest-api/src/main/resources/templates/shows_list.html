@@ -45,6 +45,15 @@
         </div>
     </div>
     <div class="products-box" th:if="${error == null}">
+        <form th:action="@{/shows}" method="get">
+            <input type="text" name="keyword" id="keyword" size="50" th:value="${keyword}" required style="background-color: rgba(0,0,0,0.8);"/>
+            <input type="hidden" name="page" id="page" th:value="${1}" style="height: 0; width:0;"/>
+            <input type="hidden" name="pageSize" id="pageSize" th:value="${12}" style="height: 0; width:0;"/>
+            &nbsp;
+            <input type="submit" value="Search" style="background-color: #7d011f"/>
+            &nbsp;
+            <input type="button" value="Clear" id="btnClear" style="background-color: #7d011f" onclick="clearSearch()" />
+        </form>
         <div class="row special-list">
             <div class=" special-grid" style="width: 321.5px; height: 496px; padding: 15px;" th:each="movie : ${movies}">
                     <div class="products-single fix">
@@ -66,15 +75,19 @@
         <div class="paginationButtons table" style="display:flex;
     flex-direction: row; gap:4px; margin:25px 10px; border: 0;">
             <div class="pgButton" id="prev" th:if="${page != 1}">
-                <a th:href="@{/shows(page=@{{page}(page=${page}-1)},pageSize=12)}">Previous</a>
+                <a th:href="@{/shows(page=@{{page}(page=${page}-1)},pageSize=12, keyword=${keyword})}">Previous</a>
             </div>
             <div></div>
             <div class="pgButton" id="next" th:if="${page != (totalPages)}">
-                <a th:href="@{/shows(page=@{{page}(page=${page}+1)},pageSize=12)}">Next</a>
+                <a th:href="@{/shows(page=@{{page}(page=${page}+1)},pageSize=12, keyword=${keyword})}">Next</a>
             </div>
         </div>
     </div>
 </div>
-
+<script type="text/javascript">
+    function clearSearch() {
+        window.location = "[[@{/shows}]]";
+    }
+</script>
 </body>
 </html>
