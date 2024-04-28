@@ -5,6 +5,18 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"/>
     <link rel="stylesheet" href="css/home.css">
+    <script src="https://js.stripe.com/v3/"></script>
+
+    <script th:inline="javascript">
+
+        /*<![CDATA[*/
+
+        var publicKey = /*[[${publicKey}]]*/ null;
+
+        /*]]>*/
+    </script>
+
+    <script src="js/status.js" defer></script>
     <title>Status</title>
     <style>
         .message {
@@ -46,67 +58,10 @@
 <div class="container">
     <div class="form login">
         <div class="form-content message">
-            <div class="message">
+            <div class="message" id="message">
             </div>
         </div>
     </div>
 </div>
-
-<script>
-    // Perform the status check when the page loads
-    window.onload = function () {
-        checkStatus();
-    };
-
-    // Function to show loading indicator
-    function showLoading() {
-        document.getElementById('loading').style.display = 'flex';
-    }
-
-    // Function to hide loading indicator
-    function hideLoading() {
-        document.getElementById('loading').style.display = 'none';
-    }
-
-    // Function to check payment status
-    async function checkStatus() {
-         // Show loading indicator before making the request
-        const clientSecret = new URLSearchParams(window.location.search).get(
-            "payment_intent_client_secret"
-        );
-
-        if (!clientSecret) {
-            //hideLoading(); // Hide loading indicator if no client secret is found
-            return;
-        }
-
-        showLoading();
-        try {
-            const booking = localStorage.getItem('booking');
-            const response = await fetch("/save-booking", {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: booking,
-            });
-            localStorage.removeItem('booking');
-            if (response.ok) {
-                displayMessage("Payment status checked successfully.", true);
-            } else {
-                displayMessage("Failed to check payment status.", false);
-            }
-        } catch (error) {
-            displayMessage("Error checking payment status: " + error, false);
-        } finally {
-            hideLoading(); // Hide loading indicator after the request is completed
-        }
-    }
-
-    // Function to display message in error div
-    function displayMessage(message, isSuccess) {
-        const errorDiv = document.querySelector('.message');
-        errorDiv.textContent = message;
-        errorDiv.style.backgroundColor = isSuccess ? 'green' : 'red';
-    }
-</script>
 </body>
 </html>

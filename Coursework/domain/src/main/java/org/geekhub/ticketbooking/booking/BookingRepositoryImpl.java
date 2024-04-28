@@ -84,6 +84,17 @@ public class BookingRepositoryImpl implements BookingRepository {
         return -1;
     }
 
+    @Override
+    public void deleteBookingById(int bookingId) {
+        String query = """
+            DELETE FROM bookings WHERE id=:id
+            """;
+        SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
+            .addValue("id", bookingId);
+
+        jdbcTemplate.update(query, mapSqlParameterSource);
+    }
+
     private static int getOffset(int pageNumber, int pageSize) {
         return (pageNumber - 1) * pageSize;
     }

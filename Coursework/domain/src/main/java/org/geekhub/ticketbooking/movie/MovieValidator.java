@@ -62,12 +62,12 @@ public class MovieValidator {
     }
 
     private void validateTitle(String title) {
-        if (title == null || title.isEmpty() || title.length() > 26) {
+        if (title == null || title.isBlank() || title.length() > 26) {
             throw new MovieValidationException("Movie title was null or empty or more than 26 characters");
         }
     }
     private void validateDescription(String description) {
-        if (description == null || description.isEmpty()) {
+        if (description == null || description.isBlank()) {
             throw new MovieValidationException("Movie description was null or empty");
         }
     }

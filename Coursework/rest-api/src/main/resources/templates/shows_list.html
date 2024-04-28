@@ -46,7 +46,7 @@
     </div>
     <div class="products-box" th:if="${error == null}">
         <div class="row special-list">
-            <div class="col-lg-3 col-md-6 special-grid" th:each="movie : ${movies}">
+            <div class=" special-grid" style="width: 321.5px; height: 496px; padding: 15px;" th:each="movie : ${movies}">
                     <div class="products-single fix">
                         <div class="box-img-hover">
                             <img th:src="@{'data:image/jpeg;base64,'+${movie.getImageDataBase64()}}" class="img-fluid" alt="Image">

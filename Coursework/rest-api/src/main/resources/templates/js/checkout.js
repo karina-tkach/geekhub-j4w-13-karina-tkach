@@ -9,9 +9,7 @@ const request = {
 
 let elements;
 
-localStorage.setItem('booking', JSON.stringify(booking));
-
-initialize()
+initialize();
 checkStatus();
 
 document
@@ -64,6 +62,8 @@ async function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);
 
+    localStorage.setItem('booking', JSON.stringify(booking));
+
     const { error } = await stripe.confirmPayment({
         elements,
         confirmParams: {
@@ -72,6 +72,7 @@ async function handleSubmit(e) {
         },
     });
 
+    localStorage.removeItem('booking');
     // This point will only be reached if there is an immediate error when
     // confirming the payment. Otherwise, your customer will be redirected to
     // your `return_url`. For some payment methods like iDEAL, your customer will

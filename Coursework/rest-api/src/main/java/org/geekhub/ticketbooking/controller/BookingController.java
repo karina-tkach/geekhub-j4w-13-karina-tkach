@@ -17,7 +17,11 @@ public class BookingController {
 
     @PostMapping("/save-booking")
     public ResponseEntity<String> handlePaymentSuccess(@RequestBody Booking booking) {
-        bookingService.addBooking(booking);
-        return ResponseEntity.ok("POST request received and processed successfully.");
+        Booking addedBooking = bookingService.addBooking(booking);
+
+        if (addedBooking == null) {
+            return ResponseEntity.badRequest().body("Unable to add booking");
+        }
+        return ResponseEntity.ok("Booking received and processed successfully.");
     }
 }

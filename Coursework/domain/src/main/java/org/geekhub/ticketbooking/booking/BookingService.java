@@ -117,6 +117,23 @@ public class BookingService {
         }
     }
 
+    public boolean deleteBookingById(int bookingId) {
+        Booking bookingToDel = getBookingById(bookingId);
+        try {
+            logger.info("Try to delete booking");
+            if (bookingToDel == null) {
+                throw new BookingValidationException("Booking with id '" + bookingId + "' not found");
+            }
+
+            bookingRepository.deleteBookingById(bookingId);
+            logger.info("Booking was deleted:\n{}", bookingToDel);
+            return true;
+        } catch (BookingValidationException | DataAccessException exception) {
+            logger.warn("Booking wasn't deleted: {}\n{}", bookingToDel, exception.getMessage());
+            return false;
+        }
+    }
+
     private String createEmailContent(Booking booking) {
         User user = booking.getUser();
         return "<h1 style=\"text-align: center; color: black; margin-top: 20px;\">Booking Details</h1>" +

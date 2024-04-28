@@ -10,4 +10,6 @@ public interface BookingRepository {
     int getBookingsRowsCount();
 
     int addBooking(Booking booking);
+
+    void deleteBookingById(int bookingId);
 }
