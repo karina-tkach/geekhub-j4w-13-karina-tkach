@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("admin/users")
@@ -113,7 +114,11 @@ public class UserController {
     }
 
     @GetMapping("/deleteUser/{id}")
-    public String deleteUser(@PathVariable(value = "id") int id, Model model) {
+    public String deleteUser(@PathVariable(value = "id") int id, Model model, Principal principal) {
+        if (Objects.equals(userService.getUserById(id).getEmail(), principal.getName())) {
+            return setAttributesAndGetProperPage(model, "error",
+                "Cannot delete executor", "update_user");
+        }
         boolean result = userService.deleteUserById(id);
         if (!result) {
             return setAttributesAndGetProperPage(model, "error",
