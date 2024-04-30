@@ -70,6 +70,11 @@ public class ShowSeatService {
             if (seatToUpdate == null) {
                 throw new SeatValidationException("Show seat with id '" + seatId + "' not found");
             }
+
+            if (seatToUpdate.isBooked()) {
+                throw new SeatValidationException("Cannot update booked seat with id:" + seatId);
+            }
+
             seatValidator.validate(seat);
 
             seatRepository.updateSeatById(seat, seatId, hallId, showId);
