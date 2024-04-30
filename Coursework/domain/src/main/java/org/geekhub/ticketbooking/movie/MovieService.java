@@ -62,21 +62,6 @@ public class MovieService {
         }
     }
 
-    public List<Movie> getMoviesByGenre(Genre genre) {
-        try {
-            logger.info("Try to get movies by genre");
-            if (genre == null) {
-                throw new MovieValidationException("Genre must not be null");
-            }
-            List<Movie> movies = movieRepository.getMoviesByGenre(genre);
-            logger.info("Movies were fetched by genre successfully");
-            return movies;
-        } catch (MovieValidationException | DataAccessException exception) {
-            logger.warn("Movies weren't fetched by genre\n{}", exception.getMessage());
-            return Collections.emptyList();
-        }
-    }
-
     public Movie addMovie(Movie movie) {
         try {
             logger.info("Try to add movie");

@@ -58,18 +58,6 @@ public class MovieRepositoryImpl implements MovieRepository {
     }
 
     @Override
-    public List<Movie> getMoviesByGenre(Genre genre) {
-        String query = """
-            SELECT * FROM movies WHERE genre=:genre ORDER BY id
-            """;
-
-        SqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
-            .addValue("genre", genre.toString());
-
-        return jdbcTemplate.query(query, mapSqlParameterSource, MovieMapper::mapToPojo);
-    }
-
-    @Override
     public int addMovie(Movie movie) {
         String query = """
             INSERT INTO movies (title, description, duration, releaseDate, country, ageLimit, genre, image)

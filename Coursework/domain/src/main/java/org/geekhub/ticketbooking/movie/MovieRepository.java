@@ -9,8 +9,6 @@ public interface MovieRepository {
 
     Movie getMovieByTitle(String title);
 
-    List<Movie> getMoviesByGenre(Genre genre);
-
     int addMovie(Movie movie);
 
     void updateMovieById(Movie movie, int movieId);
